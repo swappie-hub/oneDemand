@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "956244940807",
+    "project_id": "tgm---notifications",
+    "storage_bucket": "tgm---notifications.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:956244940807:android:79d4f77dc329526ddbb2a2",
+        "android_client_info": {
+          "package_name": "com.ondemand.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAB37opTvG5zLfQsDzfYV3EnD4jksDbvlA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

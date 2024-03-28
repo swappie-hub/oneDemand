@@ -28,6 +28,8 @@ mixin _$SignupRequest {
   String? get lastname => throw _privateConstructorUsedError;
   @JsonKey(name: "firstname")
   String? get firstname => throw _privateConstructorUsedError;
+  @JsonKey(name: "device_token")
+  String? get devicetoken => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -45,7 +47,8 @@ abstract class $SignupRequestCopyWith<$Res> {
       {@JsonKey(name: "email") String? email,
       @JsonKey(name: "password") String? password,
       @JsonKey(name: "lastname") String? lastname,
-      @JsonKey(name: "firstname") String? firstname});
+      @JsonKey(name: "firstname") String? firstname,
+      @JsonKey(name: "device_token") String? devicetoken});
 }
 
 /// @nodoc
@@ -65,6 +68,7 @@ class _$SignupRequestCopyWithImpl<$Res, $Val extends SignupRequest>
     Object? password = freezed,
     Object? lastname = freezed,
     Object? firstname = freezed,
+    Object? devicetoken = freezed,
   }) {
     return _then(_value.copyWith(
       email: freezed == email
@@ -83,6 +87,10 @@ class _$SignupRequestCopyWithImpl<$Res, $Val extends SignupRequest>
           ? _value.firstname
           : firstname // ignore: cast_nullable_to_non_nullable
               as String?,
+      devicetoken: freezed == devicetoken
+          ? _value.devicetoken
+          : devicetoken // ignore: cast_nullable_to_non_nullable
+              as String?,
     ) as $Val);
   }
 }
@@ -99,7 +107,8 @@ abstract class _$$SignupRequestImplCopyWith<$Res>
       {@JsonKey(name: "email") String? email,
       @JsonKey(name: "password") String? password,
       @JsonKey(name: "lastname") String? lastname,
-      @JsonKey(name: "firstname") String? firstname});
+      @JsonKey(name: "firstname") String? firstname,
+      @JsonKey(name: "device_token") String? devicetoken});
 }
 
 /// @nodoc
@@ -117,6 +126,7 @@ class __$$SignupRequestImplCopyWithImpl<$Res>
     Object? password = freezed,
     Object? lastname = freezed,
     Object? firstname = freezed,
+    Object? devicetoken = freezed,
   }) {
     return _then(_$SignupRequestImpl(
       email: freezed == email
@@ -135,6 +145,10 @@ class __$$SignupRequestImplCopyWithImpl<$Res>
           ? _value.firstname
           : firstname // ignore: cast_nullable_to_non_nullable
               as String?,
+      devicetoken: freezed == devicetoken
+          ? _value.devicetoken
+          : devicetoken // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -146,7 +160,8 @@ class _$SignupRequestImpl implements _SignupRequest {
       {@JsonKey(name: "email") this.email,
       @JsonKey(name: "password") this.password,
       @JsonKey(name: "lastname") this.lastname,
-      @JsonKey(name: "firstname") this.firstname});
+      @JsonKey(name: "firstname") this.firstname,
+      @JsonKey(name: "device_token") this.devicetoken});
 
   factory _$SignupRequestImpl.fromJson(Map<String, dynamic> json) =>
       _$$SignupRequestImplFromJson(json);
@@ -163,10 +178,13 @@ class _$SignupRequestImpl implements _SignupRequest {
   @override
   @JsonKey(name: "firstname")
   final String? firstname;
+  @override
+  @JsonKey(name: "device_token")
+  final String? devicetoken;
 
   @override
   String toString() {
-    return 'SignupRequest(email: $email, password: $password, lastname: $lastname, firstname: $firstname)';
+    return 'SignupRequest(email: $email, password: $password, lastname: $lastname, firstname: $firstname, devicetoken: $devicetoken)';
   }
 
   @override
@@ -180,13 +198,15 @@ class _$SignupRequestImpl implements _SignupRequest {
             (identical(other.lastname, lastname) ||
                 other.lastname == lastname) &&
             (identical(other.firstname, firstname) ||
-                other.firstname == firstname));
+                other.firstname == firstname) &&
+            (identical(other.devicetoken, devicetoken) ||
+                other.devicetoken == devicetoken));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, email, password, lastname, firstname);
+  int get hashCode => Object.hash(
+      runtimeType, email, password, lastname, firstname, devicetoken);
 
   @JsonKey(ignore: true)
   @override
@@ -207,7 +227,8 @@ abstract class _SignupRequest implements SignupRequest {
           {@JsonKey(name: "email") final String? email,
           @JsonKey(name: "password") final String? password,
           @JsonKey(name: "lastname") final String? lastname,
-          @JsonKey(name: "firstname") final String? firstname}) =
+          @JsonKey(name: "firstname") final String? firstname,
+          @JsonKey(name: "device_token") final String? devicetoken}) =
       _$SignupRequestImpl;
 
   factory _SignupRequest.fromJson(Map<String, dynamic> json) =
@@ -225,6 +246,9 @@ abstract class _SignupRequest implements SignupRequest {
   @override
   @JsonKey(name: "firstname")
   String? get firstname;
+  @override
+  @JsonKey(name: "device_token")
+  String? get devicetoken;
   @override
   @JsonKey(ignore: true)
   _$$SignupRequestImplCopyWith<_$SignupRequestImpl> get copyWith =>
