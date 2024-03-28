@@ -6,12 +6,15 @@ import 'package:ondemand/core/api_client.dart';
 import 'package:ondemand/core/constants.dart';
 import 'package:ondemand/core/exceptions.dart';
 import 'package:ondemand/data/home/home_repo.dart';
+import 'package:ondemand/data/home/models/add_playlist_model.dart';
 import 'package:ondemand/data/home/models/feature_playlist_model.dart';
+import 'package:ondemand/data/home/models/get_playlist_model.dart';
 import 'package:ondemand/data/home/models/get_tags_model.dart';
 import 'package:ondemand/data/home/models/home_model.dart';
 import 'package:ondemand/data/home/models/library_list_model.dart';
 import 'package:ondemand/data/home/models/save_model.dart';
 import 'package:ondemand/data/home/models/saved_videos_model.dart';
+import 'package:ondemand/data/home/models/search_video_models.dart';
 import 'package:ondemand/utils/utils.dart';
 
 class HomeRepoImpl implements HomeRepo {
@@ -40,7 +43,7 @@ class HomeRepoImpl implements HomeRepo {
           sendCookies: true,
           "${AppConstants.baseUrl}/library/single/page/video",
           libraryListRequestToJson(libraryListRequest));
-      print("this is response" + response.data.toString());
+      print("this is response for library" + response.data.toString());
       return Right(LibraryListResponse.fromJson(response.data));
     } catch (e) {
       Logger.write(e.toString());
@@ -135,6 +138,52 @@ class HomeRepoImpl implements HomeRepo {
           sendCookies: true, "${AppConstants.baseUrl}/get/tags");
       print("this is response" + response.data.toString());
       return Right(getTagsResponseFromJson(jsonEncode(response.data)));
+    } catch (e) {
+      Logger.write(e.toString());
+      return Left(ApiException(e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<ApiException, SearchListResponse>> searchVideo(
+      String query) async {
+    try {
+      final response = await _apiClient.get(
+          sendCookies: true,
+          "${AppConstants.baseUrl}/search/video?query=${query}&sort_by=&endIndex=500&startIndex=0&userId=${AppConstants.userId}");
+      print("this is response" + response.data.toString());
+      return Right(SearchListResponse.fromJson(response.data));
+    } catch (e) {
+      Logger.write(e.toString());
+      return Left(ApiException(e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<ApiException, List<GetAllPlaylistResponse>>>
+      getPlaylistList() async {
+    try {
+      final response = await _apiClient.get(
+          sendCookies: true,
+          "${AppConstants.baseUrl}/personalvideo/fetch/all/${AppConstants.userId}");
+      print("this is response" + response.data.toString());
+      return Right(getAllPlaylistResponseFromJson(jsonEncode(response.data)));
+    } catch (e) {
+      Logger.write(e.toString());
+      return Left(ApiException(e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<ApiException, AddPlaylistResponse>> addToPlaylist(
+      AddPlaylistRequest addPlaylistRequest) async {
+    try {
+      final response = await _apiClient.post(
+          sendCookies: true,
+          "${AppConstants.baseUrl}/personalvideo/playlist/add",
+          addPlaylistRequestToJson(addPlaylistRequest));
+      print("this is response" + response.data.toString());
+      return Right(AddPlaylistResponse.fromJson(response.data));
     } catch (e) {
       Logger.write(e.toString());
       return Left(ApiException(e.toString()));

@@ -1,13 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:custom_sliding_segmented_control/custom_sliding_segmented_control.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:ondemand/core/core.dart';
+import 'package:ondemand/data/home/models/get_playlist_model.dart';
 import 'package:ondemand/data/home/models/library_list_model.dart';
-import 'package:ondemand/utils/app_sizes.dart';
-import 'package:ondemand/utils/colors.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 import 'package:ondemand/utils/utils.dart';
@@ -53,6 +49,8 @@ class _LibraryViewState extends ConsumerState<LibraryView> with BaseScreenView {
 
         // )
       );
+      await _viewModel.getPlaylistList();
+
       _viewModel.durations.clear();
       _viewModel.focus.clear();
       _viewModel.strength.clear();
@@ -208,1287 +206,8 @@ class _LibraryViewState extends ConsumerState<LibraryView> with BaseScreenView {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    InkWell(
-                      onTap: () {
-                        showDialog(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return StatefulBuilder(
-                                builder: (BuildContext context, setSt) {
-                              return AlertDialog(
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(16)),
-                                insetPadding: EdgeInsets.zero,
-                                titlePadding: EdgeInsets.zero,
-                                backgroundColor: Color(0xFF171718),
-                                surfaceTintColor: Color(0xFF171718),
-                                actions: <Widget>[
-                                  TextButton(
-                                    child: Container(
-                                        padding: EdgeInsets.symmetric(
-                                            vertical: 8, horizontal: 16),
-                                        decoration: BoxDecoration(
-                                            color: Color(0xFF008BC3),
-                                            borderRadius:
-                                                BorderRadius.circular(9)),
-                                        child: const Text(
-                                          'RESET',
-                                          style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 15),
-                                        )),
-                                    onPressed: () {
-                                      _viewModel.durations.clear();
-                                      _viewModel.focus.clear();
-                                      _viewModel.strength.clear();
-
-                                      _viewModel.setSortBy(
-                                          _viewModel.sortBy ??
-                                              AppConstants.latest,
-                                          val,
-                                          context);
-                                      // Handle the submit action
-                                    },
-                                  ),
-                                  TextButton(
-                                    child: Container(
-                                        padding: EdgeInsets.symmetric(
-                                            vertical: 8, horizontal: 16),
-                                        decoration: BoxDecoration(
-                                            color: Color(0xFF008BC3),
-                                            borderRadius:
-                                                BorderRadius.circular(9)),
-                                        child: const Text(
-                                          'SAVE',
-                                          style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 15),
-                                        )),
-                                    onPressed: () {
-                                      _viewModel.setSortBy(
-                                          _viewModel.sortBy ??
-                                              AppConstants.latest,
-                                          val,
-                                          context);
-                                      // Handle the submit action
-                                    },
-                                  ),
-                                ],
-                                title: Column(
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.all(16.0),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Text(
-                                            'Filters'.toUpperCase(),
-                                            style: TextStyle(
-                                                color: Color(0xFF3CB4E4),
-                                                fontSize: 16),
-                                          ),
-                                          InkWell(
-                                              onTap: () {
-                                                context.pop();
-                                              },
-                                              child: Icon(Icons.close))
-                                        ],
-                                      ),
-                                    ),
-                                    Container(
-                                      height: 2,
-                                      decoration: BoxDecoration(
-                                          color: Color(0xFF27272A)),
-                                    )
-                                  ],
-                                ),
-                                content: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    InkWell(
-                                      onTap: () {
-                                        isDurationOpen = !isDurationOpen;
-                                        setSt(() {});
-                                      },
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Text(
-                                            "Duration",
-                                            style: TextStyle(
-                                                color: Color(0xFF3CB4E4),
-                                                fontSize: 14),
-                                          ),
-                                          Icon(
-                                            isDurationOpen
-                                                ? Icons.expand_more
-                                                : Icons.arrow_forward_ios,
-                                            size: isDurationOpen ? 35 : 25,
-                                            color: Color(0xFF3CB4E4),
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                    Visibility(
-                                      visible: isDurationOpen,
-                                      child: Padding(
-                                        padding:
-                                            const EdgeInsets.only(right: 8),
-                                        child: Column(
-                                          children: [
-                                            InkWell(
-                                              onTap: () {
-                                                setSt(() {
-                                                  if (_viewModel.durations
-                                                      .contains("5")) {
-                                                    _viewModel.durations
-                                                        .remove("5");
-                                                  } else {
-                                                    _viewModel.durations
-                                                        .add("5");
-                                                  }
-                                                });
-                                              },
-                                              child: Container(
-                                                child: Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceBetween,
-                                                  children: [
-                                                    Text(">5 Minutes"),
-                                                    Container(
-                                                      height: 18,
-                                                      width: 18,
-                                                      decoration: BoxDecoration(
-                                                          borderRadius:
-                                                              BorderRadius.circular(
-                                                                  2),
-                                                          color: !_viewModel
-                                                                  .durations
-                                                                  .contains("5")
-                                                              ? Colors
-                                                                  .transparent
-                                                              : Color(
-                                                                  0xFF008BC3),
-                                                          border: Border.all(
-                                                              color: _viewModel
-                                                                      .durations
-                                                                      .contains(
-                                                                          "5")
-                                                                  ? Colors
-                                                                      .transparent
-                                                                  : Colors
-                                                                      .white)),
-                                                      child: Icon(
-                                                        Icons.check,
-                                                        size: 10,
-                                                        color: _viewModel
-                                                                .durations
-                                                                .contains("5")
-                                                            ? Colors.white
-                                                            : Colors
-                                                                .transparent,
-                                                      ),
-                                                    )
-                                                  ],
-                                                ),
-                                              ),
-                                            ),
-                                            gapH4,
-                                            InkWell(
-                                              onTap: () {
-                                                setSt(() {
-                                                  if (_viewModel.durations
-                                                      .contains("10")) {
-                                                    _viewModel.durations
-                                                        .remove("10");
-                                                  } else {
-                                                    _viewModel.durations
-                                                        .add("10");
-                                                  }
-                                                });
-                                              },
-                                              child: Container(
-                                                child: Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceBetween,
-                                                  children: [
-                                                    Text("5 - 10 Minutes"),
-                                                    Container(
-                                                      height: 18,
-                                                      width: 18,
-                                                      decoration: BoxDecoration(
-                                                          borderRadius:
-                                                              BorderRadius.circular(
-                                                                  2),
-                                                          color: !_viewModel
-                                                                  .durations
-                                                                  .contains(
-                                                                      "10")
-                                                              ? Colors
-                                                                  .transparent
-                                                              : Color(
-                                                                  0xFF008BC3),
-                                                          border: Border.all(
-                                                              color: _viewModel
-                                                                      .durations
-                                                                      .contains(
-                                                                          "10")
-                                                                  ? Colors
-                                                                      .transparent
-                                                                  : Colors
-                                                                      .white)),
-                                                      child: Icon(
-                                                        Icons.check,
-                                                        size: 10,
-                                                        color: _viewModel
-                                                                .durations
-                                                                .contains("10")
-                                                            ? Colors.white
-                                                            : Colors
-                                                                .transparent,
-                                                      ),
-                                                    )
-                                                  ],
-                                                ),
-                                              ),
-                                            ),
-                                            gapH4,
-                                            InkWell(
-                                              onTap: () {
-                                                setSt(() {
-                                                  if (_viewModel.durations
-                                                      .contains("15")) {
-                                                    _viewModel.durations
-                                                        .remove("15");
-                                                  } else {
-                                                    _viewModel.durations
-                                                        .add("15");
-                                                  }
-                                                });
-                                              },
-                                              child: Container(
-                                                child: Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceBetween,
-                                                  children: [
-                                                    Text("10 - 15 Minutes"),
-                                                    Container(
-                                                      height: 18,
-                                                      width: 18,
-                                                      decoration: BoxDecoration(
-                                                          borderRadius:
-                                                              BorderRadius.circular(
-                                                                  2),
-                                                          color: !_viewModel
-                                                                  .durations
-                                                                  .contains(
-                                                                      "15")
-                                                              ? Colors
-                                                                  .transparent
-                                                              : Color(
-                                                                  0xFF008BC3),
-                                                          border: Border.all(
-                                                              color: _viewModel
-                                                                      .durations
-                                                                      .contains(
-                                                                          "15")
-                                                                  ? Colors
-                                                                      .transparent
-                                                                  : Colors
-                                                                      .white)),
-                                                      child: Icon(
-                                                        Icons.check,
-                                                        size: 10,
-                                                        color: _viewModel
-                                                                .durations
-                                                                .contains("15")
-                                                            ? Colors.white
-                                                            : Colors
-                                                                .transparent,
-                                                      ),
-                                                    )
-                                                  ],
-                                                ),
-                                              ),
-                                            ),
-                                            gapH4,
-                                            InkWell(
-                                              onTap: () {
-                                                setSt(() {
-                                                  if (_viewModel.durations
-                                                      .contains("16")) {
-                                                    _viewModel.durations
-                                                        .remove("16");
-                                                  } else {
-                                                    _viewModel.durations
-                                                        .add("16");
-                                                  }
-                                                });
-                                              },
-                                              child: Container(
-                                                child: Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceBetween,
-                                                  children: [
-                                                    Text("< 15 Minutes"),
-                                                    Container(
-                                                      height: 18,
-                                                      width: 18,
-                                                      decoration: BoxDecoration(
-                                                          borderRadius:
-                                                              BorderRadius.circular(
-                                                                  2),
-                                                          color: !_viewModel
-                                                                  .durations
-                                                                  .contains(
-                                                                      "16")
-                                                              ? Colors
-                                                                  .transparent
-                                                              : Color(
-                                                                  0xFF008BC3),
-                                                          border: Border.all(
-                                                              color: _viewModel
-                                                                      .durations
-                                                                      .contains(
-                                                                          "16")
-                                                                  ? Colors
-                                                                      .transparent
-                                                                  : Colors
-                                                                      .white)),
-                                                      child: Icon(
-                                                        Icons.check,
-                                                        size: 10,
-                                                        color: _viewModel
-                                                                .durations
-                                                                .contains("16")
-                                                            ? Colors.white
-                                                            : Colors
-                                                                .transparent,
-                                                      ),
-                                                    )
-                                                  ],
-                                                ),
-                                              ),
-                                            )
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                    gapH8,
-                                    // InkWell(
-                                    //   onTap: () {
-                                    //     isFocusOpen = !isFocusOpen;
-                                    //     setSt(() {});
-                                    //   },
-                                    //   child: Row(
-                                    //     mainAxisAlignment:
-                                    //         MainAxisAlignment.spaceBetween,
-                                    //     children: [
-                                    //       Text(
-                                    //         "Focus",
-                                    //         style: TextStyle(
-                                    //             color: Color(0xFF3CB4E4),
-                                    //             fontSize: 14),
-                                    //       ),
-                                    //       Icon(
-                                    //         isFocusOpen
-                                    //             ? Icons.expand_more
-                                    //             : Icons.arrow_forward_ios,
-                                    //         size: isFocusOpen ? 35 : 25,
-                                    //         color: Color(0xFF3CB4E4),
-                                    //       )
-                                    //     ],
-                                    //   ),
-                                    // ),
-                                    // Visibility(
-                                    //   visible: isFocusOpen,
-                                    //   child: Padding(
-                                    //     padding:
-                                    //         const EdgeInsets.only(right: 8),
-                                    //     child: Column(
-                                    //       children: [
-                                    //         InkWell(
-                                    //           onTap: () {
-                                    //             setSt(() {
-                                    //               if (_viewModel.focus.contains(
-                                    //                   "6541eb0ff1f99641d644a37d")) {
-                                    //                 _viewModel.focus.remove(
-                                    //                     "6541eb0ff1f99641d644a37d");
-                                    //               } else {
-                                    //                 _viewModel.focus.add(
-                                    //                     "6541eb0ff1f99641d644a37d");
-                                    //               }
-                                    //             });
-                                    //           },
-                                    //           child: Container(
-                                    //             child: Row(
-                                    //               mainAxisAlignment:
-                                    //                   MainAxisAlignment
-                                    //                       .spaceBetween,
-                                    //               children: [
-                                    //                 Text("Strength"),
-                                    //                 Container(
-                                    //                   height: 18,
-                                    //                   width: 18,
-                                    //                   decoration: BoxDecoration(
-                                    //                       borderRadius:
-                                    //                           BorderRadius
-                                    //                               .circular(2),
-                                    //                       color: !_viewModel.focus
-                                    //                               .contains(
-                                    //                                   "6541eb0ff1f99641d644a37d")
-                                    //                           ? Colors
-                                    //                               .transparent
-                                    //                           : Color(
-                                    //                               0xFF008BC3),
-                                    //                       border: Border.all(
-                                    //                           color: _viewModel
-                                    //                                   .focus
-                                    //                                   .contains(
-                                    //                                       "6541eb0ff1f99641d644a37d")
-                                    //                               ? Colors
-                                    //                                   .transparent
-                                    //                               : Colors
-                                    //                                   .white)),
-                                    //                   child: Icon(
-                                    //                     Icons.check,
-                                    //                     size: 10,
-                                    //                     color: _viewModel.focus
-                                    //                             .contains(
-                                    //                                 "6541eb0ff1f99641d644a37d")
-                                    //                         ? Colors.white
-                                    //                         : Colors
-                                    //                             .transparent,
-                                    //                   ),
-                                    //                 )
-                                    //               ],
-                                    //             ),
-                                    //           ),
-                                    //         ),
-                                    //         gapH4,
-                                    //         InkWell(
-                                    //           onTap: () {
-                                    //             setSt(() {
-                                    //               if (_viewModel.focus.contains(
-                                    //                   "6565b7a5e7fe9cfc044933fc")) {
-                                    //                 _viewModel.focus.remove(
-                                    //                     "6565b7a5e7fe9cfc044933fc");
-                                    //               } else {
-                                    //                 _viewModel.focus.add(
-                                    //                     "6565b7a5e7fe9cfc044933fc");
-                                    //               }
-                                    //             });
-                                    //           },
-                                    //           child: Container(
-                                    //             child: Row(
-                                    //               mainAxisAlignment:
-                                    //                   MainAxisAlignment
-                                    //                       .spaceBetween,
-                                    //               children: [
-                                    //                 Text("Flexibility"),
-                                    //                 Container(
-                                    //                   height: 18,
-                                    //                   width: 18,
-                                    //                   decoration: BoxDecoration(
-                                    //                       borderRadius:
-                                    //                           BorderRadius
-                                    //                               .circular(2),
-                                    //                       color: !_viewModel.focus
-                                    //                               .contains(
-                                    //                                   "6565b7a5e7fe9cfc044933fc")
-                                    //                           ? Colors
-                                    //                               .transparent
-                                    //                           : Color(
-                                    //                               0xFF008BC3),
-                                    //                       border: Border.all(
-                                    //                           color: _viewModel
-                                    //                                   .focus
-                                    //                                   .contains(
-                                    //                                       "6565b7a5e7fe9cfc044933fc")
-                                    //                               ? Colors
-                                    //                                   .transparent
-                                    //                               : Colors
-                                    //                                   .white)),
-                                    //                   child: Icon(
-                                    //                     Icons.check,
-                                    //                     size: 10,
-                                    //                     color: _viewModel.focus
-                                    //                             .contains(
-                                    //                                 "6565b7a5e7fe9cfc044933fc")
-                                    //                         ? Colors.white
-                                    //                         : Colors
-                                    //                             .transparent,
-                                    //                   ),
-                                    //                 )
-                                    //               ],
-                                    //             ),
-                                    //           ),
-                                    //         ),
-                                    //         gapH4,
-                                    //         InkWell(
-                                    //           onTap: () {
-                                    //             setSt(() {
-                                    //               if (_viewModel.focus.contains(
-                                    //                   "6565f35a3e1f9b2470ce1e1d")) {
-                                    //                 _viewModel.focus.remove(
-                                    //                     "6565f35a3e1f9b2470ce1e1d");
-                                    //               } else {
-                                    //                 _viewModel.focus.add(
-                                    //                     "6565f35a3e1f9b2470ce1e1d");
-                                    //               }
-                                    //             });
-                                    //           },
-                                    //           child: Container(
-                                    //             child: Row(
-                                    //               mainAxisAlignment:
-                                    //                   MainAxisAlignment
-                                    //                       .spaceBetween,
-                                    //               children: [
-                                    //                 Text("Turns"),
-                                    //                 Container(
-                                    //                   height: 18,
-                                    //                   width: 18,
-                                    //                   decoration: BoxDecoration(
-                                    //                       borderRadius:
-                                    //                           BorderRadius
-                                    //                               .circular(2),
-                                    //                       color: !_viewModel.focus
-                                    //                               .contains(
-                                    //                                   "6565f35a3e1f9b2470ce1e1d")
-                                    //                           ? Colors
-                                    //                               .transparent
-                                    //                           : Color(
-                                    //                               0xFF008BC3),
-                                    //                       border: Border.all(
-                                    //                           color: _viewModel
-                                    //                                   .focus
-                                    //                                   .contains(
-                                    //                                       "6565f35a3e1f9b2470ce1e1d")
-                                    //                               ? Colors
-                                    //                                   .transparent
-                                    //                               : Colors
-                                    //                                   .white)),
-                                    //                   child: Icon(
-                                    //                     Icons.check,
-                                    //                     size: 10,
-                                    //                     color: _viewModel.focus
-                                    //                             .contains(
-                                    //                                 "6565f35a3e1f9b2470ce1e1d")
-                                    //                         ? Colors.white
-                                    //                         : Colors
-                                    //                             .transparent,
-                                    //                   ),
-                                    //                 )
-                                    //               ],
-                                    //             ),
-                                    //           ),
-                                    //         ),
-                                    //         gapH4,
-                                    //         InkWell(
-                                    //           onTap: () {
-                                    //             setSt(() {
-                                    //               if (_viewModel.focus.contains(
-                                    //                   "6565f35e3e1f9b2470ce1e2d")) {
-                                    //                 _viewModel.focus.remove(
-                                    //                     "6565f35e3e1f9b2470ce1e2d");
-                                    //               } else {
-                                    //                 _viewModel.focus.add(
-                                    //                     "6565f35e3e1f9b2470ce1e2d");
-                                    //               }
-                                    //             });
-                                    //           },
-                                    //           child: Container(
-                                    //             child: Row(
-                                    //               mainAxisAlignment:
-                                    //                   MainAxisAlignment
-                                    //                       .spaceBetween,
-                                    //               children: [
-                                    //                 Text("Jumps"),
-                                    //                 Container(
-                                    //                   height: 18,
-                                    //                   width: 18,
-                                    //                   decoration: BoxDecoration(
-                                    //                       borderRadius:
-                                    //                           BorderRadius
-                                    //                               .circular(2),
-                                    //                       color: !_viewModel.focus
-                                    //                               .contains(
-                                    //                                   "6565f35e3e1f9b2470ce1e2d")
-                                    //                           ? Colors
-                                    //                               .transparent
-                                    //                           : Color(
-                                    //                               0xFF008BC3),
-                                    //                       border: Border.all(
-                                    //                           color: _viewModel
-                                    //                                   .focus
-                                    //                                   .contains(
-                                    //                                       "6565f35e3e1f9b2470ce1e2d")
-                                    //                               ? Colors
-                                    //                                   .transparent
-                                    //                               : Colors
-                                    //                                   .white)),
-                                    //                   child: Icon(
-                                    //                     Icons.check,
-                                    //                     size: 10,
-                                    //                     color: _viewModel.focus
-                                    //                             .contains(
-                                    //                                 "6565f35e3e1f9b2470ce1e2d")
-                                    //                         ? Colors.white
-                                    //                         : Colors
-                                    //                             .transparent,
-                                    //                   ),
-                                    //                 )
-                                    //               ],
-                                    //             ),
-                                    //           ),
-                                    //         ),
-                                    //         gapH4,
-                                    //         InkWell(
-                                    //           onTap: () {
-                                    //             setSt(() {
-                                    //               if (_viewModel.focus.contains(
-                                    //                   "65763ac421a48327d2f79386")) {
-                                    //                 _viewModel.focus.remove(
-                                    //                     "65763ac421a48327d2f79386");
-                                    //               } else {
-                                    //                 _viewModel.focus.add(
-                                    //                     "65763ac421a48327d2f79386");
-                                    //               }
-                                    //             });
-                                    //           },
-                                    //           child: Container(
-                                    //             child: Row(
-                                    //               mainAxisAlignment:
-                                    //                   MainAxisAlignment
-                                    //                       .spaceBetween,
-                                    //               children: [
-                                    //                 Text("Warmup"),
-                                    //                 Container(
-                                    //                   height: 18,
-                                    //                   width: 18,
-                                    //                   decoration: BoxDecoration(
-                                    //                       borderRadius:
-                                    //                           BorderRadius
-                                    //                               .circular(2),
-                                    //                       color: !_viewModel.focus
-                                    //                               .contains(
-                                    //                                   "65763ac421a48327d2f79386")
-                                    //                           ? Colors
-                                    //                               .transparent
-                                    //                           : Color(
-                                    //                               0xFF008BC3),
-                                    //                       border: Border.all(
-                                    //                           color: _viewModel
-                                    //                                   .focus
-                                    //                                   .contains(
-                                    //                                       "65763ac421a48327d2f79386")
-                                    //                               ? Colors
-                                    //                                   .transparent
-                                    //                               : Colors
-                                    //                                   .white)),
-                                    //                   child: Icon(
-                                    //                     Icons.check,
-                                    //                     size: 10,
-                                    //                     color: _viewModel.focus
-                                    //                             .contains(
-                                    //                                 "65763ac421a48327d2f79386")
-                                    //                         ? Colors.white
-                                    //                         : Colors
-                                    //                             .transparent,
-                                    //                   ),
-                                    //                 )
-                                    //               ],
-                                    //             ),
-                                    //           ),
-                                    //         ),
-                                    //         gapH4,
-                                    //         InkWell(
-                                    //           onTap: () {
-                                    //             setSt(() {
-                                    //               if (_viewModel.focus.contains(
-                                    //                   "6565f37b3e1f9b2470ce1e86")) {
-                                    //                 _viewModel.focus.remove(
-                                    //                     "6565f37b3e1f9b2470ce1e86");
-                                    //               } else {
-                                    //                 _viewModel.focus.add(
-                                    //                     "6565f37b3e1f9b2470ce1e86");
-                                    //               }
-                                    //             });
-                                    //           },
-                                    //           child: Container(
-                                    //             child: Row(
-                                    //               mainAxisAlignment:
-                                    //                   MainAxisAlignment
-                                    //                       .spaceBetween,
-                                    //               children: [
-                                    //                 Text("Breakdown"),
-                                    //                 Container(
-                                    //                   height: 18,
-                                    //                   width: 18,
-                                    //                   decoration: BoxDecoration(
-                                    //                       borderRadius:
-                                    //                           BorderRadius
-                                    //                               .circular(2),
-                                    //                       color: !_viewModel.focus
-                                    //                               .contains(
-                                    //                                   "6565f37b3e1f9b2470ce1e86")
-                                    //                           ? Colors
-                                    //                               .transparent
-                                    //                           : Color(
-                                    //                               0xFF008BC3),
-                                    //                       border: Border.all(
-                                    //                           color: _viewModel
-                                    //                                   .focus
-                                    //                                   .contains(
-                                    //                                       "6565f37b3e1f9b2470ce1e86")
-                                    //                               ? Colors
-                                    //                                   .transparent
-                                    //                               : Colors
-                                    //                                   .white)),
-                                    //                   child: Icon(
-                                    //                     Icons.check,
-                                    //                     size: 10,
-                                    //                     color: _viewModel.focus
-                                    //                             .contains(
-                                    //                                 "6565f37b3e1f9b2470ce1e86")
-                                    //                         ? Colors.white
-                                    //                         : Colors
-                                    //                             .transparent,
-                                    //                   ),
-                                    //                 )
-                                    //               ],
-                                    //             ),
-                                    //           ),
-                                    //         )
-                                    //       ],
-                                    //     ),
-                                    //   ),
-                                    // ),
-                                    // gapH8,
-                                    InkWell(
-                                      onTap: () {
-                                        isStrengthOpen = !isStrengthOpen;
-                                        setSt(() {});
-                                      },
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Text(
-                                            "Level",
-                                            style: TextStyle(
-                                                color: Color(0xFF3CB4E4),
-                                                fontSize: 14),
-                                          ),
-                                          Icon(
-                                            isStrengthOpen
-                                                ? Icons.expand_more
-                                                : Icons.arrow_forward_ios,
-                                            size: isStrengthOpen ? 35 : 25,
-                                            color: Color(0xFF3CB4E4),
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                    Visibility(
-                                      visible: isStrengthOpen,
-                                      child: Padding(
-                                        padding:
-                                            const EdgeInsets.only(right: 8),
-                                        child: Column(
-                                          children: [
-                                            InkWell(
-                                              onTap: () {
-                                                setSt(() {
-                                                  if (_viewModel.strength
-                                                      .contains("Beginner")) {
-                                                    _viewModel.strength
-                                                        .remove("Beginner");
-                                                  } else {
-                                                    _viewModel.strength
-                                                        .add("Beginner");
-                                                  }
-                                                });
-                                              },
-                                              child: Container(
-                                                child: Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceBetween,
-                                                  children: [
-                                                    Text("Beginner"),
-                                                    Container(
-                                                      height: 18,
-                                                      width: 18,
-                                                      decoration: BoxDecoration(
-                                                          borderRadius:
-                                                              BorderRadius.circular(
-                                                                  2),
-                                                          color: !_viewModel
-                                                                  .strength
-                                                                  .contains(
-                                                                      "Beginner")
-                                                              ? Colors
-                                                                  .transparent
-                                                              : Color(
-                                                                  0xFF008BC3),
-                                                          border: Border.all(
-                                                              color: _viewModel
-                                                                      .strength
-                                                                      .contains(
-                                                                          "Beginner")
-                                                                  ? Colors
-                                                                      .transparent
-                                                                  : Colors
-                                                                      .white)),
-                                                      child: Icon(
-                                                        Icons.check,
-                                                        size: 10,
-                                                        color: _viewModel
-                                                                .strength
-                                                                .contains(
-                                                                    "Beginner")
-                                                            ? Colors.white
-                                                            : Colors
-                                                                .transparent,
-                                                      ),
-                                                    )
-                                                  ],
-                                                ),
-                                              ),
-                                            ),
-                                            gapH4,
-                                            InkWell(
-                                              onTap: () {
-                                                setSt(() {
-                                                  if (_viewModel.strength
-                                                      .contains(
-                                                          "Intermediate")) {
-                                                    _viewModel.strength
-                                                        .remove("Intermediate");
-                                                  } else {
-                                                    _viewModel.strength
-                                                        .add("Intermediate");
-                                                  }
-                                                });
-                                              },
-                                              child: Container(
-                                                child: Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceBetween,
-                                                  children: [
-                                                    Text("Intermediate"),
-                                                    Container(
-                                                      height: 18,
-                                                      width: 18,
-                                                      decoration: BoxDecoration(
-                                                          borderRadius:
-                                                              BorderRadius.circular(
-                                                                  2),
-                                                          color: !_viewModel
-                                                                  .strength
-                                                                  .contains(
-                                                                      "Intermediate")
-                                                              ? Colors
-                                                                  .transparent
-                                                              : Color(
-                                                                  0xFF008BC3),
-                                                          border: Border.all(
-                                                              color: _viewModel
-                                                                      .strength
-                                                                      .contains(
-                                                                          "Intermediate")
-                                                                  ? Colors
-                                                                      .transparent
-                                                                  : Colors
-                                                                      .white)),
-                                                      child: Icon(
-                                                        Icons.check,
-                                                        size: 10,
-                                                        color: _viewModel
-                                                                .strength
-                                                                .contains(
-                                                                    "Intermediate")
-                                                            ? Colors.white
-                                                            : Colors
-                                                                .transparent,
-                                                      ),
-                                                    )
-                                                  ],
-                                                ),
-                                              ),
-                                            ),
-                                            gapH4,
-                                            InkWell(
-                                              onTap: () {
-                                                setSt(() {
-                                                  if (_viewModel.strength
-                                                      .contains("Advanced")) {
-                                                    _viewModel.strength
-                                                        .remove("Advanced");
-                                                  } else {
-                                                    _viewModel.strength
-                                                        .add("Advanced");
-                                                  }
-                                                });
-                                              },
-                                              child: Container(
-                                                child: Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceBetween,
-                                                  children: [
-                                                    Text("Advanced"),
-                                                    Container(
-                                                      height: 18,
-                                                      width: 18,
-                                                      decoration: BoxDecoration(
-                                                          borderRadius:
-                                                              BorderRadius.circular(
-                                                                  2),
-                                                          color: !_viewModel
-                                                                  .strength
-                                                                  .contains(
-                                                                      "Advanced")
-                                                              ? Colors
-                                                                  .transparent
-                                                              : Color(
-                                                                  0xFF008BC3),
-                                                          border: Border.all(
-                                                              color: _viewModel
-                                                                      .strength
-                                                                      .contains(
-                                                                          "Advanced")
-                                                                  ? Colors
-                                                                      .transparent
-                                                                  : Colors
-                                                                      .white)),
-                                                      child: Icon(
-                                                        Icons.check,
-                                                        size: 10,
-                                                        color: _viewModel
-                                                                .strength
-                                                                .contains(
-                                                                    "Advanced")
-                                                            ? Colors.white
-                                                            : Colors
-                                                                .transparent,
-                                                      ),
-                                                    )
-                                                  ],
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              );
-                            });
-                          },
-                        );
-                      },
-                      child: Container(
-                          margin: EdgeInsets.only(
-                              top: 0, bottom: 8, left: 16, right: 0),
-                          padding: EdgeInsets.symmetric(
-                              vertical: 10, horizontal: 12),
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(9),
-                              border: Border.all(color: Color(0xFF71717A))),
-                          child: Image.asset(
-                            "assets/icons/filter.png",
-                            height: 15,
-                            width: 15,
-                          )),
-                    ),
-                    InkWell(
-                      onTap: () {
-                        showDialog(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return AlertDialog(
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(16)),
-                              insetPadding: EdgeInsets.zero,
-                              titlePadding: EdgeInsets.zero,
-                              backgroundColor: Color(0xFF171718),
-                              surfaceTintColor: Color(0xFF171718),
-                              content: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  InkWell(
-                                      onTap: () {
-                                        _viewModel.setSortBy(
-                                            AppConstants.latest, val, context);
-                                      },
-                                      child: gapH8),
-                                  InkWell(
-                                      onTap: () {
-                                        _viewModel.setSortBy(
-                                            AppConstants.latest, val, context);
-                                      },
-                                      child: Container(
-                                          width: double.infinity,
-                                          child: Text("Newest"))),
-                                  InkWell(
-                                      onTap: () {
-                                        _viewModel.setSortBy(
-                                            AppConstants.latest, val, context);
-                                      },
-                                      child: gapH8),
-                                  InkWell(
-                                    onTap: () {
-                                      _viewModel.setSortBy(
-                                          AppConstants.latest, val, context);
-                                    },
-                                    child: Container(
-                                      width: double.infinity,
-                                      height: 1,
-                                      color: Colors.white.withOpacity(0.1),
-                                    ),
-                                  ),
-
-                                  InkWell(
-                                      onTap: () {
-                                        _viewModel.setSortBy(
-                                            AppConstants.oldest, val, context);
-                                      },
-                                      child: gapH8),
-                                  InkWell(
-                                      onTap: () {
-                                        _viewModel.setSortBy(
-                                            AppConstants.oldest, val, context);
-                                      },
-                                      child: Container(
-                                          width: double.infinity,
-                                          child: Text("Oldest"))),
-                                  InkWell(
-                                      onTap: () {
-                                        _viewModel.setSortBy(
-                                            AppConstants.oldest, val, context);
-                                      },
-                                      child: gapH8),
-                                  InkWell(
-                                    onTap: () {
-                                      _viewModel.setSortBy(
-                                          AppConstants.oldest, val, context);
-                                    },
-                                    child: Container(
-                                      width: double.infinity,
-                                      height: 1,
-                                      color: Colors.white.withOpacity(0.1),
-                                    ),
-                                  ),
-                                  InkWell(
-                                      onTap: () {
-                                        _viewModel.setSortBy(
-                                            AppConstants.title_asc,
-                                            val,
-                                            context);
-                                      },
-                                      child: gapH8),
-                                  InkWell(
-                                      onTap: () {
-                                        _viewModel.setSortBy(
-                                            AppConstants.title_asc,
-                                            val,
-                                            context);
-                                      },
-                                      child: Container(
-                                          width: double.infinity,
-                                          child: Text("Title (A - Z)"))),
-                                  InkWell(
-                                      onTap: () {
-                                        _viewModel.setSortBy(
-                                            AppConstants.title_asc,
-                                            val,
-                                            context);
-                                      },
-                                      child: gapH8),
-                                  InkWell(
-                                    onTap: () {
-                                      _viewModel.setSortBy(
-                                          AppConstants.title_asc, val, context);
-                                    },
-                                    child: Container(
-                                      width: double.infinity,
-                                      height: 1,
-                                      color: Colors.white.withOpacity(0.1),
-                                    ),
-                                  ),
-                                  InkWell(
-                                      onTap: () {
-                                        _viewModel.setSortBy(
-                                            AppConstants.title_desc,
-                                            val,
-                                            context);
-                                      },
-                                      child: gapH8),
-                                  InkWell(
-                                      onTap: () {
-                                        _viewModel.setSortBy(
-                                            AppConstants.title_desc,
-                                            val,
-                                            context);
-                                      },
-                                      child: Container(
-                                          width: double.infinity,
-                                          child: Text("Title (Z - A)"))),
-                                  InkWell(
-                                      onTap: () {
-                                        _viewModel.setSortBy(
-                                            AppConstants.title_desc,
-                                            val,
-                                            context);
-                                      },
-                                      child: gapH8),
-                                  InkWell(
-                                    onTap: () {
-                                      _viewModel.setSortBy(
-                                          AppConstants.title_desc,
-                                          val,
-                                          context);
-                                    },
-                                    child: Container(
-                                      width: double.infinity,
-                                      height: 1,
-                                      color: Colors.white.withOpacity(0.1),
-                                    ),
-                                  ),
-                                  InkWell(
-                                      onTap: () {
-                                        _viewModel.setSortBy(
-                                            AppConstants.long_duration,
-                                            val,
-                                            context);
-                                      },
-                                      child: gapH8),
-                                  InkWell(
-                                      onTap: () {
-                                        _viewModel.setSortBy(
-                                            AppConstants.long_duration,
-                                            val,
-                                            context);
-                                      },
-                                      child: Container(
-                                          width: double.infinity,
-                                          child: Text("Longest"))),
-                                  InkWell(
-                                      onTap: () {
-                                        _viewModel.setSortBy(
-                                            AppConstants.long_duration,
-                                            val,
-                                            context);
-                                      },
-                                      child: gapH8),
-
-                                  InkWell(
-                                    onTap: () {
-                                      _viewModel.setSortBy(
-                                          AppConstants.short_duration,
-                                          val,
-                                          context);
-                                    },
-                                    child: Container(
-                                      width: double.infinity,
-                                      height: 1,
-                                      color: Colors.white.withOpacity(0.1),
-                                    ),
-                                  ),
-                                  InkWell(
-                                      onTap: () {
-                                        _viewModel.setSortBy(
-                                            AppConstants.short_duration,
-                                            val,
-                                            context);
-                                      },
-                                      child: gapH8),
-                                  InkWell(
-                                      onTap: () {
-                                        _viewModel.setSortBy(
-                                            AppConstants.short_duration,
-                                            val,
-                                            context);
-                                      },
-                                      child: Container(
-                                          width: double.infinity,
-                                          child: Text("Shortest"))),
-                                  // gapH8,
-                                  // Container(
-                                  //   width: double.infinity,
-                                  //   height: 1,
-                                  //   color: Colors.white.withOpacity(0.1),
-                                  // ),
-                                ],
-                              ),
-                            );
-                          },
-                        );
-                      },
-                      child: Container(
-                        margin: EdgeInsets.only(
-                            top: 0, bottom: 8, left: 8, right: 16),
-                        padding:
-                            EdgeInsets.symmetric(vertical: 8, horizontal: 12),
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(9),
-                            border: Border.all(color: Color(0xFF71717A))),
-                        child: Row(
-                          children: [
-                            Text(
-                              "Sort by",
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 12),
-                            ),
-                            gapW6,
-                            Text(
-                              _viewModel.sortBy == AppConstants.latest
-                                  ? "Latest"
-                                  : _viewModel.sortBy == AppConstants.oldest
-                                      ? "Oldest"
-                                      : _viewModel.sortBy ==
-                                              AppConstants.title_asc
-                                          ? "Title (A - Z)"
-                                          : _viewModel.sortBy ==
-                                                  AppConstants.title_desc
-                                              ? "Title (Z - A)"
-                                              : _viewModel.sortBy ==
-                                                      AppConstants.long_duration
-                                                  ? "Longest"
-                                                  : _viewModel.sortBy ==
-                                                          AppConstants
-                                                              .short_duration
-                                                      ? "Shortest"
-                                                      : "Latest",
-                              style: TextStyle(
-                                  color: Color(0xFF71717A),
-                                  fontWeight: FontWeight.w700,
-                                  fontSize: 10.5),
-                            ),
-                            gapW6,
-                            Icon(
-                              Icons.expand_more,
-                              color: Colors.white,
-                              size: 18,
-                            )
-                          ],
-                        ),
-                      ),
-                    ),
+                    filterSheet(context),
+                    sortbySheet(context),
                   ],
                 ),
               ],
@@ -1514,6 +233,1247 @@ class _LibraryViewState extends ConsumerState<LibraryView> with BaseScreenView {
             ),
           )
         ],
+      ),
+    );
+  }
+
+  InkWell filterSheet(BuildContext context) {
+    return InkWell(
+      onTap: () {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return StatefulBuilder(builder: (BuildContext context, setSt) {
+              return AlertDialog(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16)),
+                insetPadding: EdgeInsets.zero,
+                titlePadding: EdgeInsets.zero,
+                backgroundColor: Color(0xFF171718),
+                surfaceTintColor: Color(0xFF171718),
+                actions: <Widget>[
+                  TextButton(
+                    child: Container(
+                        padding:
+                            EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                        decoration: BoxDecoration(
+                            color: Color(0xFF008BC3),
+                            borderRadius: BorderRadius.circular(9)),
+                        child: const Text(
+                          'RESET',
+                          style: TextStyle(color: Colors.white, fontSize: 15),
+                        )),
+                    onPressed: () {
+                      _viewModel.durations.clear();
+                      _viewModel.focus.clear();
+                      _viewModel.strength.clear();
+
+                      _viewModel.setSortBy(
+                          _viewModel.sortBy ?? AppConstants.latest,
+                          val,
+                          context);
+                      // Handle the submit action
+                    },
+                  ),
+                  TextButton(
+                    child: Container(
+                        padding:
+                            EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                        decoration: BoxDecoration(
+                            color: Color(0xFF008BC3),
+                            borderRadius: BorderRadius.circular(9)),
+                        child: const Text(
+                          'SAVE',
+                          style: TextStyle(color: Colors.white, fontSize: 15),
+                        )),
+                    onPressed: () {
+                      _viewModel.setSortBy(
+                          _viewModel.sortBy ?? AppConstants.latest,
+                          val,
+                          context);
+                      // Handle the submit action
+                    },
+                  ),
+                ],
+                title: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            'Filters'.toUpperCase(),
+                            style: TextStyle(
+                                color: Color(0xFF3CB4E4), fontSize: 16),
+                          ),
+                          InkWell(
+                              onTap: () {
+                                context.pop();
+                              },
+                              child: Icon(Icons.close))
+                        ],
+                      ),
+                    ),
+                    Container(
+                      height: 2,
+                      decoration: BoxDecoration(color: Color(0xFF27272A)),
+                    )
+                  ],
+                ),
+                content: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    InkWell(
+                      onTap: () {
+                        isDurationOpen = !isDurationOpen;
+                        setSt(() {});
+                      },
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "Duration",
+                            style: TextStyle(
+                                color: Color(0xFF3CB4E4), fontSize: 14),
+                          ),
+                          Icon(
+                            isDurationOpen
+                                ? Icons.expand_more
+                                : Icons.arrow_forward_ios,
+                            size: isDurationOpen ? 35 : 25,
+                            color: Color(0xFF3CB4E4),
+                          )
+                        ],
+                      ),
+                    ),
+                    Visibility(
+                      visible: isDurationOpen,
+                      child: Padding(
+                        padding: const EdgeInsets.only(right: 8),
+                        child: Column(
+                          children: [
+                            InkWell(
+                              onTap: () {
+                                setSt(() {
+                                  if (_viewModel.durations.contains("5")) {
+                                    _viewModel.durations.remove("5");
+                                  } else {
+                                    _viewModel.durations.add("5");
+                                  }
+                                });
+                              },
+                              child: Container(
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(">5 Minutes"),
+                                    Container(
+                                      height: 18,
+                                      width: 18,
+                                      decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(2),
+                                          color: !_viewModel.durations
+                                                  .contains("5")
+                                              ? Colors.transparent
+                                              : Color(0xFF008BC3),
+                                          border: Border.all(
+                                              color: _viewModel.durations
+                                                      .contains("5")
+                                                  ? Colors.transparent
+                                                  : Colors.white)),
+                                      child: Icon(
+                                        Icons.check,
+                                        size: 10,
+                                        color:
+                                            _viewModel.durations.contains("5")
+                                                ? Colors.white
+                                                : Colors.transparent,
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ),
+                            gapH4,
+                            InkWell(
+                              onTap: () {
+                                setSt(() {
+                                  if (_viewModel.durations.contains("10")) {
+                                    _viewModel.durations.remove("10");
+                                  } else {
+                                    _viewModel.durations.add("10");
+                                  }
+                                });
+                              },
+                              child: Container(
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text("5 - 10 Minutes"),
+                                    Container(
+                                      height: 18,
+                                      width: 18,
+                                      decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(2),
+                                          color: !_viewModel.durations
+                                                  .contains("10")
+                                              ? Colors.transparent
+                                              : Color(0xFF008BC3),
+                                          border: Border.all(
+                                              color: _viewModel.durations
+                                                      .contains("10")
+                                                  ? Colors.transparent
+                                                  : Colors.white)),
+                                      child: Icon(
+                                        Icons.check,
+                                        size: 10,
+                                        color:
+                                            _viewModel.durations.contains("10")
+                                                ? Colors.white
+                                                : Colors.transparent,
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ),
+                            gapH4,
+                            InkWell(
+                              onTap: () {
+                                setSt(() {
+                                  if (_viewModel.durations.contains("15")) {
+                                    _viewModel.durations.remove("15");
+                                  } else {
+                                    _viewModel.durations.add("15");
+                                  }
+                                });
+                              },
+                              child: Container(
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text("10 - 15 Minutes"),
+                                    Container(
+                                      height: 18,
+                                      width: 18,
+                                      decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(2),
+                                          color: !_viewModel.durations
+                                                  .contains("15")
+                                              ? Colors.transparent
+                                              : Color(0xFF008BC3),
+                                          border: Border.all(
+                                              color: _viewModel.durations
+                                                      .contains("15")
+                                                  ? Colors.transparent
+                                                  : Colors.white)),
+                                      child: Icon(
+                                        Icons.check,
+                                        size: 10,
+                                        color:
+                                            _viewModel.durations.contains("15")
+                                                ? Colors.white
+                                                : Colors.transparent,
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ),
+                            gapH4,
+                            InkWell(
+                              onTap: () {
+                                setSt(() {
+                                  if (_viewModel.durations.contains("16")) {
+                                    _viewModel.durations.remove("16");
+                                  } else {
+                                    _viewModel.durations.add("16");
+                                  }
+                                });
+                              },
+                              child: Container(
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text("< 15 Minutes"),
+                                    Container(
+                                      height: 18,
+                                      width: 18,
+                                      decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(2),
+                                          color: !_viewModel.durations
+                                                  .contains("16")
+                                              ? Colors.transparent
+                                              : Color(0xFF008BC3),
+                                          border: Border.all(
+                                              color: _viewModel.durations
+                                                      .contains("16")
+                                                  ? Colors.transparent
+                                                  : Colors.white)),
+                                      child: Icon(
+                                        Icons.check,
+                                        size: 10,
+                                        color:
+                                            _viewModel.durations.contains("16")
+                                                ? Colors.white
+                                                : Colors.transparent,
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                    gapH8,
+                    InkWell(
+                      onTap: () {
+                        isFocusOpen = !isFocusOpen;
+                        setSt(() {});
+                      },
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "Focus",
+                            style: TextStyle(
+                                color: Color(0xFF3CB4E4), fontSize: 14),
+                          ),
+                          Icon(
+                            isFocusOpen
+                                ? Icons.expand_more
+                                : Icons.arrow_forward_ios,
+                            size: isFocusOpen ? 35 : 25,
+                            color: Color(0xFF3CB4E4),
+                          )
+                        ],
+                      ),
+                    ),
+                    Visibility(
+                      visible: isFocusOpen,
+                      child: Padding(
+                        padding: const EdgeInsets.only(right: 8),
+                        child: Column(
+                          children: [
+                            InkWell(
+                              onTap: () {
+                                setSt(() {
+                                  if (_viewModel.focus
+                                      .contains("6541eb0ff1f99641d644a37d")) {
+                                    _viewModel.focus
+                                        .remove("6541eb0ff1f99641d644a37d");
+                                  } else {
+                                    _viewModel.focus
+                                        .add("6541eb0ff1f99641d644a37d");
+                                  }
+                                });
+                              },
+                              child: Container(
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text("Strength"),
+                                    Container(
+                                      height: 18,
+                                      width: 18,
+                                      decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(2),
+                                          color: !_viewModel.focus.contains(
+                                                  "6541eb0ff1f99641d644a37d")
+                                              ? Colors.transparent
+                                              : Color(0xFF008BC3),
+                                          border: Border.all(
+                                              color: _viewModel.focus.contains(
+                                                      "6541eb0ff1f99641d644a37d")
+                                                  ? Colors.transparent
+                                                  : Colors.white)),
+                                      child: Icon(
+                                        Icons.check,
+                                        size: 10,
+                                        color: _viewModel.focus.contains(
+                                                "6541eb0ff1f99641d644a37d")
+                                            ? Colors.white
+                                            : Colors.transparent,
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ),
+                            gapH4,
+                            InkWell(
+                              onTap: () {
+                                setSt(() {
+                                  if (_viewModel.focus
+                                      .contains("6565b7a5e7fe9cfc044933fc")) {
+                                    _viewModel.focus
+                                        .remove("6565b7a5e7fe9cfc044933fc");
+                                  } else {
+                                    _viewModel.focus
+                                        .add("6565b7a5e7fe9cfc044933fc");
+                                  }
+                                });
+                              },
+                              child: Container(
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text("Flexibility"),
+                                    Container(
+                                      height: 18,
+                                      width: 18,
+                                      decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(2),
+                                          color: !_viewModel.focus.contains(
+                                                  "6565b7a5e7fe9cfc044933fc")
+                                              ? Colors.transparent
+                                              : Color(0xFF008BC3),
+                                          border: Border.all(
+                                              color: _viewModel.focus.contains(
+                                                      "6565b7a5e7fe9cfc044933fc")
+                                                  ? Colors.transparent
+                                                  : Colors.white)),
+                                      child: Icon(
+                                        Icons.check,
+                                        size: 10,
+                                        color: _viewModel.focus.contains(
+                                                "6565b7a5e7fe9cfc044933fc")
+                                            ? Colors.white
+                                            : Colors.transparent,
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ),
+                            gapH4,
+                            InkWell(
+                              onTap: () {
+                                setSt(() {
+                                  if (_viewModel.focus
+                                      .contains("6565f35a3e1f9b2470ce1e1d")) {
+                                    _viewModel.focus
+                                        .remove("6565f35a3e1f9b2470ce1e1d");
+                                  } else {
+                                    _viewModel.focus
+                                        .add("6565f35a3e1f9b2470ce1e1d");
+                                  }
+                                });
+                              },
+                              child: Container(
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text("Turns"),
+                                    Container(
+                                      height: 18,
+                                      width: 18,
+                                      decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(2),
+                                          color: !_viewModel.focus.contains(
+                                                  "6565f35a3e1f9b2470ce1e1d")
+                                              ? Colors.transparent
+                                              : Color(0xFF008BC3),
+                                          border: Border.all(
+                                              color: _viewModel.focus.contains(
+                                                      "6565f35a3e1f9b2470ce1e1d")
+                                                  ? Colors.transparent
+                                                  : Colors.white)),
+                                      child: Icon(
+                                        Icons.check,
+                                        size: 10,
+                                        color: _viewModel.focus.contains(
+                                                "6565f35a3e1f9b2470ce1e1d")
+                                            ? Colors.white
+                                            : Colors.transparent,
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ),
+                            gapH4,
+                            InkWell(
+                              onTap: () {
+                                setSt(() {
+                                  if (_viewModel.focus
+                                      .contains("6565f35e3e1f9b2470ce1e2d")) {
+                                    _viewModel.focus
+                                        .remove("6565f35e3e1f9b2470ce1e2d");
+                                  } else {
+                                    _viewModel.focus
+                                        .add("6565f35e3e1f9b2470ce1e2d");
+                                  }
+                                });
+                              },
+                              child: Container(
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text("Jumps"),
+                                    Container(
+                                      height: 18,
+                                      width: 18,
+                                      decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(2),
+                                          color: !_viewModel.focus.contains(
+                                                  "6565f35e3e1f9b2470ce1e2d")
+                                              ? Colors.transparent
+                                              : Color(0xFF008BC3),
+                                          border: Border.all(
+                                              color: _viewModel.focus.contains(
+                                                      "6565f35e3e1f9b2470ce1e2d")
+                                                  ? Colors.transparent
+                                                  : Colors.white)),
+                                      child: Icon(
+                                        Icons.check,
+                                        size: 10,
+                                        color: _viewModel.focus.contains(
+                                                "6565f35e3e1f9b2470ce1e2d")
+                                            ? Colors.white
+                                            : Colors.transparent,
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ),
+                            gapH4,
+                            InkWell(
+                              onTap: () {
+                                setSt(() {
+                                  if (_viewModel.focus
+                                      .contains("65763ac421a48327d2f79386")) {
+                                    _viewModel.focus
+                                        .remove("65763ac421a48327d2f79386");
+                                  } else {
+                                    _viewModel.focus
+                                        .add("65763ac421a48327d2f79386");
+                                  }
+                                });
+                              },
+                              child: Container(
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text("Warmup"),
+                                    Container(
+                                      height: 18,
+                                      width: 18,
+                                      decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(2),
+                                          color: !_viewModel.focus.contains(
+                                                  "65763ac421a48327d2f79386")
+                                              ? Colors.transparent
+                                              : Color(0xFF008BC3),
+                                          border: Border.all(
+                                              color: _viewModel.focus.contains(
+                                                      "65763ac421a48327d2f79386")
+                                                  ? Colors.transparent
+                                                  : Colors.white)),
+                                      child: Icon(
+                                        Icons.check,
+                                        size: 10,
+                                        color: _viewModel.focus.contains(
+                                                "65763ac421a48327d2f79386")
+                                            ? Colors.white
+                                            : Colors.transparent,
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ),
+                            gapH4,
+                            InkWell(
+                              onTap: () {
+                                setSt(() {
+                                  if (_viewModel.focus
+                                      .contains("6565f37b3e1f9b2470ce1e86")) {
+                                    _viewModel.focus
+                                        .remove("6565f37b3e1f9b2470ce1e86");
+                                  } else {
+                                    _viewModel.focus
+                                        .add("6565f37b3e1f9b2470ce1e86");
+                                  }
+                                });
+                              },
+                              child: Container(
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text("Breakdown"),
+                                    Container(
+                                      height: 18,
+                                      width: 18,
+                                      decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(2),
+                                          color: !_viewModel.focus.contains(
+                                                  "6565f37b3e1f9b2470ce1e86")
+                                              ? Colors.transparent
+                                              : Color(0xFF008BC3),
+                                          border: Border.all(
+                                              color: _viewModel.focus.contains(
+                                                      "6565f37b3e1f9b2470ce1e86")
+                                                  ? Colors.transparent
+                                                  : Colors.white)),
+                                      child: Icon(
+                                        Icons.check,
+                                        size: 10,
+                                        color: _viewModel.focus.contains(
+                                                "6565f37b3e1f9b2470ce1e86")
+                                            ? Colors.white
+                                            : Colors.transparent,
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                    gapH8,
+                    InkWell(
+                      onTap: () {
+                        isStrengthOpen = !isStrengthOpen;
+                        setSt(() {});
+                      },
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "Level",
+                            style: TextStyle(
+                                color: Color(0xFF3CB4E4), fontSize: 14),
+                          ),
+                          Icon(
+                            isStrengthOpen
+                                ? Icons.expand_more
+                                : Icons.arrow_forward_ios,
+                            size: isStrengthOpen ? 35 : 25,
+                            color: Color(0xFF3CB4E4),
+                          )
+                        ],
+                      ),
+                    ),
+                    Visibility(
+                      visible: isStrengthOpen,
+                      child: Padding(
+                        padding: const EdgeInsets.only(right: 8),
+                        child: Column(
+                          children: [
+                            InkWell(
+                              onTap: () {
+                                setSt(() {
+                                  if (_viewModel.strength
+                                      .contains("Beginner")) {
+                                    _viewModel.strength.remove("Beginner");
+                                  } else {
+                                    _viewModel.strength.add("Beginner");
+                                  }
+                                });
+                              },
+                              child: Container(
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text("Beginner"),
+                                    Container(
+                                      height: 18,
+                                      width: 18,
+                                      decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(2),
+                                          color: !_viewModel.strength
+                                                  .contains("Beginner")
+                                              ? Colors.transparent
+                                              : Color(0xFF008BC3),
+                                          border: Border.all(
+                                              color: _viewModel.strength
+                                                      .contains("Beginner")
+                                                  ? Colors.transparent
+                                                  : Colors.white)),
+                                      child: Icon(
+                                        Icons.check,
+                                        size: 10,
+                                        color: _viewModel.strength
+                                                .contains("Beginner")
+                                            ? Colors.white
+                                            : Colors.transparent,
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ),
+                            gapH4,
+                            InkWell(
+                              onTap: () {
+                                setSt(() {
+                                  if (_viewModel.strength
+                                      .contains("Intermediate")) {
+                                    _viewModel.strength.remove("Intermediate");
+                                  } else {
+                                    _viewModel.strength.add("Intermediate");
+                                  }
+                                });
+                              },
+                              child: Container(
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text("Intermediate"),
+                                    Container(
+                                      height: 18,
+                                      width: 18,
+                                      decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(2),
+                                          color: !_viewModel.strength
+                                                  .contains("Intermediate")
+                                              ? Colors.transparent
+                                              : Color(0xFF008BC3),
+                                          border: Border.all(
+                                              color: _viewModel.strength
+                                                      .contains("Intermediate")
+                                                  ? Colors.transparent
+                                                  : Colors.white)),
+                                      child: Icon(
+                                        Icons.check,
+                                        size: 10,
+                                        color: _viewModel.strength
+                                                .contains("Intermediate")
+                                            ? Colors.white
+                                            : Colors.transparent,
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ),
+                            gapH4,
+                            InkWell(
+                              onTap: () {
+                                setSt(() {
+                                  if (_viewModel.strength
+                                      .contains("Advanced")) {
+                                    _viewModel.strength.remove("Advanced");
+                                  } else {
+                                    _viewModel.strength.add("Advanced");
+                                  }
+                                });
+                              },
+                              child: Container(
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text("Advanced"),
+                                    Container(
+                                      height: 18,
+                                      width: 18,
+                                      decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(2),
+                                          color: !_viewModel.strength
+                                                  .contains("Advanced")
+                                              ? Colors.transparent
+                                              : Color(0xFF008BC3),
+                                          border: Border.all(
+                                              color: _viewModel.strength
+                                                      .contains("Advanced")
+                                                  ? Colors.transparent
+                                                  : Colors.white)),
+                                      child: Icon(
+                                        Icons.check,
+                                        size: 10,
+                                        color: _viewModel.strength
+                                                .contains("Advanced")
+                                            ? Colors.white
+                                            : Colors.transparent,
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            });
+          },
+        );
+      },
+      child: Container(
+          margin: EdgeInsets.only(top: 0, bottom: 8, left: 16, right: 0),
+          padding: EdgeInsets.symmetric(vertical: 10, horizontal: 12),
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(9),
+              border: Border.all(color: Color(0xFF71717A))),
+          child: Image.asset(
+            "assets/icons/filter.png",
+            height: 15,
+            width: 15,
+          )),
+    );
+  }
+
+  Widget getPlaylist(BuildContext context) {
+    return InkWell(
+      onTap: () {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return StatefulBuilder(builder: (BuildContext context, setSt) {
+              return AlertDialog(
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16)),
+                  insetPadding: EdgeInsets.zero,
+                  titlePadding: EdgeInsets.zero,
+                  backgroundColor: Color(0xFF171718),
+                  surfaceTintColor: Color(0xFF171718),
+                  actions: <Widget>[
+                    TextButton(
+                      child: Container(
+                          padding:
+                              EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                          decoration: BoxDecoration(
+                              color: Color(0xFF008BC3),
+                              borderRadius: BorderRadius.circular(9)),
+                          child: const Text(
+                            'RESET',
+                            style: TextStyle(color: Colors.white, fontSize: 15),
+                          )),
+                      onPressed: () {
+                        _viewModel.durations.clear();
+                        _viewModel.focus.clear();
+                        _viewModel.strength.clear();
+
+                        _viewModel.setSortBy(
+                            _viewModel.sortBy ?? AppConstants.latest,
+                            val,
+                            context);
+                        // Handle the submit action
+                      },
+                    ),
+                    TextButton(
+                      child: Container(
+                          padding:
+                              EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                          decoration: BoxDecoration(
+                              color: Color(0xFF008BC3),
+                              borderRadius: BorderRadius.circular(9)),
+                          child: const Text(
+                            'SAVE',
+                            style: TextStyle(color: Colors.white, fontSize: 15),
+                          )),
+                      onPressed: () {
+                        _viewModel.setSortBy(
+                            _viewModel.sortBy ?? AppConstants.latest,
+                            val,
+                            context);
+                        // Handle the submit action
+                      },
+                    ),
+                  ],
+                  title: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              'Add to playlist'.toUpperCase(),
+                              style: TextStyle(
+                                  color: Color(0xFF3CB4E4), fontSize: 16),
+                            ),
+                            InkWell(
+                                onTap: () {
+                                  context.pop();
+                                },
+                                child: Icon(Icons.close))
+                          ],
+                        ),
+                      ),
+                      Container(
+                        height: 2,
+                        decoration: BoxDecoration(color: Color(0xFF27272A)),
+                      )
+                    ],
+                  ),
+                  content: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        ...List.generate(
+                            _viewModel.getAllPlaylistResponse?.length ?? 0,
+                            (index) => Padding(
+                                  padding: const EdgeInsets.only(right: 8),
+                                  child: Column(
+                                    children: [
+                                      InkWell(
+                                        onTap: () {
+                                          setSt(() {
+                                            if (_viewModel.selectedPlayList
+                                                .contains(_viewModel
+                                                        .getAllPlaylistResponse?[
+                                                    index])) {
+                                              _viewModel.selectedPlayList
+                                                  .remove(_viewModel
+                                                          .getAllPlaylistResponse?[
+                                                      index]);
+                                            } else {
+                                              _viewModel.selectedPlayList.add(_viewModel
+                                                          .getAllPlaylistResponse?[
+                                                      index] ??
+                                                  GetAllPlaylistResponse(
+                                                      label: _viewModel
+                                                          .getAllPlaylistResponse?[
+                                                              index]
+                                                          .label,
+                                                      value: _viewModel
+                                                          .getAllPlaylistResponse?[
+                                                              index]
+                                                          .value));
+                                              // _viewModel.durations.add("5");
+                                            }
+                                          });
+                                        },
+                                        child: Container(
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Text(_viewModel
+                                                      .getAllPlaylistResponse?[
+                                                          index]
+                                                      .label ??
+                                                  ""),
+                                              Container(
+                                                height: 18,
+                                                width: 18,
+                                                decoration: BoxDecoration(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            2),
+                                                    color: !_viewModel
+                                                            .selectedPlayList
+                                                            .contains(_viewModel
+                                                                    .getAllPlaylistResponse?[
+                                                                index])
+                                                        ? Colors.transparent
+                                                        : Color(0xFF008BC3),
+                                                    border: Border.all(
+                                                        color: _viewModel
+                                                                .selectedPlayList
+                                                                .contains(
+                                                                    _viewModel.getAllPlaylistResponse?[index])
+                                                            ? Colors.transparent
+                                                            : Colors.white)),
+                                                child: Icon(
+                                                  Icons.check,
+                                                  size: 10,
+                                                  color: _viewModel
+                                                          .selectedPlayList
+                                                          .contains(_viewModel
+                                                                  .getAllPlaylistResponse?[
+                                                              index])
+                                                      ? Colors.white
+                                                      : Colors.transparent,
+                                                ),
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                      gapH4,
+                                    ],
+                                  ),
+                                ))
+                      ]));
+            });
+          },
+        );
+      },
+      child: Container(
+          margin: EdgeInsets.only(top: 0, bottom: 8, left: 16, right: 0),
+          padding: EdgeInsets.symmetric(vertical: 10, horizontal: 12),
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(9),
+              border: Border.all(color: Color(0xFF71717A))),
+          child: Image.asset(
+            "assets/icons/filter.png",
+            height: 15,
+            width: 15,
+          )),
+    );
+  }
+
+  InkWell sortbySheet(BuildContext context) {
+    return InkWell(
+      onTap: () {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16)),
+              insetPadding: EdgeInsets.zero,
+              titlePadding: EdgeInsets.zero,
+              backgroundColor: Color(0xFF171718),
+              surfaceTintColor: Color(0xFF171718),
+              content: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  InkWell(
+                      onTap: () {
+                        _viewModel.setSortBy(AppConstants.latest, val, context);
+                      },
+                      child: gapH8),
+                  InkWell(
+                      onTap: () {
+                        _viewModel.setSortBy(AppConstants.latest, val, context);
+                      },
+                      child: Container(
+                          width: double.infinity, child: Text("Latest"))),
+                  InkWell(
+                      onTap: () {
+                        _viewModel.setSortBy(AppConstants.latest, val, context);
+                      },
+                      child: gapH8),
+                  InkWell(
+                    onTap: () {
+                      _viewModel.setSortBy(AppConstants.latest, val, context);
+                    },
+                    child: Container(
+                      width: double.infinity,
+                      height: 1,
+                      color: Colors.white.withOpacity(0.1),
+                    ),
+                  ),
+
+                  InkWell(
+                      onTap: () {
+                        _viewModel.setSortBy(AppConstants.oldest, val, context);
+                      },
+                      child: gapH8),
+                  InkWell(
+                      onTap: () {
+                        _viewModel.setSortBy(AppConstants.oldest, val, context);
+                      },
+                      child: Container(
+                          width: double.infinity, child: Text("Oldest"))),
+                  InkWell(
+                      onTap: () {
+                        _viewModel.setSortBy(AppConstants.oldest, val, context);
+                      },
+                      child: gapH8),
+                  InkWell(
+                    onTap: () {
+                      _viewModel.setSortBy(AppConstants.oldest, val, context);
+                    },
+                    child: Container(
+                      width: double.infinity,
+                      height: 1,
+                      color: Colors.white.withOpacity(0.1),
+                    ),
+                  ),
+                  InkWell(
+                      onTap: () {
+                        _viewModel.setSortBy(
+                            AppConstants.title_asc, val, context);
+                      },
+                      child: gapH8),
+                  InkWell(
+                      onTap: () {
+                        _viewModel.setSortBy(
+                            AppConstants.title_asc, val, context);
+                      },
+                      child: Container(
+                          width: double.infinity,
+                          child: Text("Title (A - Z)"))),
+                  InkWell(
+                      onTap: () {
+                        _viewModel.setSortBy(
+                            AppConstants.title_asc, val, context);
+                      },
+                      child: gapH8),
+                  InkWell(
+                    onTap: () {
+                      _viewModel.setSortBy(
+                          AppConstants.title_asc, val, context);
+                    },
+                    child: Container(
+                      width: double.infinity,
+                      height: 1,
+                      color: Colors.white.withOpacity(0.1),
+                    ),
+                  ),
+                  InkWell(
+                      onTap: () {
+                        _viewModel.setSortBy(
+                            AppConstants.title_desc, val, context);
+                      },
+                      child: gapH8),
+                  InkWell(
+                      onTap: () {
+                        _viewModel.setSortBy(
+                            AppConstants.title_desc, val, context);
+                      },
+                      child: Container(
+                          width: double.infinity,
+                          child: Text("Title (Z - A)"))),
+                  InkWell(
+                      onTap: () {
+                        _viewModel.setSortBy(
+                            AppConstants.title_desc, val, context);
+                      },
+                      child: gapH8),
+                  InkWell(
+                    onTap: () {
+                      _viewModel.setSortBy(
+                          AppConstants.title_desc, val, context);
+                    },
+                    child: Container(
+                      width: double.infinity,
+                      height: 1,
+                      color: Colors.white.withOpacity(0.1),
+                    ),
+                  ),
+                  InkWell(
+                      onTap: () {
+                        _viewModel.setSortBy(
+                            AppConstants.long_duration, val, context);
+                      },
+                      child: gapH8),
+                  InkWell(
+                      onTap: () {
+                        _viewModel.setSortBy(
+                            AppConstants.long_duration, val, context);
+                      },
+                      child: Container(
+                          width: double.infinity, child: Text("Longest"))),
+                  InkWell(
+                      onTap: () {
+                        _viewModel.setSortBy(
+                            AppConstants.long_duration, val, context);
+                      },
+                      child: gapH8),
+
+                  InkWell(
+                    onTap: () {
+                      _viewModel.setSortBy(
+                          AppConstants.short_duration, val, context);
+                    },
+                    child: Container(
+                      width: double.infinity,
+                      height: 1,
+                      color: Colors.white.withOpacity(0.1),
+                    ),
+                  ),
+                  InkWell(
+                      onTap: () {
+                        _viewModel.setSortBy(
+                            AppConstants.short_duration, val, context);
+                      },
+                      child: gapH8),
+                  InkWell(
+                      onTap: () {
+                        _viewModel.setSortBy(
+                            AppConstants.short_duration, val, context);
+                      },
+                      child: Container(
+                          width: double.infinity, child: Text("Shortest"))),
+                  // gapH8,
+                  // Container(
+                  //   width: double.infinity,
+                  //   height: 1,
+                  //   color: Colors.white.withOpacity(0.1),
+                  // ),
+                ],
+              ),
+            );
+          },
+        );
+      },
+      child: Container(
+        margin: EdgeInsets.only(top: 0, bottom: 8, left: 8, right: 16),
+        padding: EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(9),
+            border: Border.all(color: Color(0xFF71717A))),
+        child: Row(
+          children: [
+            Text(
+              "Sort by",
+              style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 12),
+            ),
+            gapW6,
+            Text(
+              _viewModel.sortBy == AppConstants.latest
+                  ? "Latest"
+                  : _viewModel.sortBy == AppConstants.oldest
+                      ? "Oldest"
+                      : _viewModel.sortBy == AppConstants.title_asc
+                          ? "Title (A - Z)"
+                          : _viewModel.sortBy == AppConstants.title_desc
+                              ? "Title (Z - A)"
+                              : _viewModel.sortBy == AppConstants.long_duration
+                                  ? "Longest"
+                                  : _viewModel.sortBy ==
+                                          AppConstants.short_duration
+                                      ? "Shortest"
+                                      : "Latest",
+              style: TextStyle(
+                  color: Color(0xFF71717A),
+                  fontWeight: FontWeight.w700,
+                  fontSize: 10.5),
+            ),
+            gapW6,
+            Icon(
+              Icons.expand_more,
+              color: Colors.white,
+              size: 18,
+            )
+          ],
+        ),
       ),
     );
   }
@@ -1591,12 +1551,7 @@ class _LibraryItemsState extends State<LibraryItems> with BaseScreenView {
                           padding: const EdgeInsets.fromLTRB(0, 7, 8, 0),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              Image.asset(
-                                "assets/icons/save.png",
-                                height: 14,
-                              )
-                            ],
+                            children: [getPlaylist(context)],
                           ),
                         ),
                         Padding(
@@ -1751,6 +1706,181 @@ class _LibraryItemsState extends State<LibraryItems> with BaseScreenView {
         ),
       ),
     );
+  }
+
+  Widget getPlaylist(BuildContext context) {
+    return InkWell(
+        onTap: () {
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return StatefulBuilder(builder: (BuildContext context, setSt) {
+                return AlertDialog(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16)),
+                    insetPadding: EdgeInsets.zero,
+                    titlePadding: EdgeInsets.zero,
+                    backgroundColor: Color(0xFF171718),
+                    surfaceTintColor: Color(0xFF171718),
+                    actions: <Widget>[
+                      TextButton(
+                        child: Container(
+                            padding: EdgeInsets.symmetric(
+                                vertical: 8, horizontal: 16),
+                            decoration: BoxDecoration(
+                                color: Color(0xFF008BC3),
+                                borderRadius: BorderRadius.circular(9)),
+                            child: const Text(
+                              'SAVE',
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 15),
+                            )),
+                        onPressed: () {
+                          widget._viewModel.addVideoToPlaylist(widget.items);
+                          // _viewModel.setSortBy(
+                          //     _viewModel.sortBy ?? AppConstants.latest,
+                          //     val,
+                          //     context);
+                          // Handle the submit action
+                        },
+                      ),
+                    ],
+                    title: Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                'Add to playlist'.toUpperCase(),
+                                style: TextStyle(
+                                    color: Color(0xFF3CB4E4), fontSize: 16),
+                              ),
+                              InkWell(
+                                  onTap: () {
+                                    context.pop();
+                                  },
+                                  child: Icon(Icons.close))
+                            ],
+                          ),
+                        ),
+                        Container(
+                          height: 2,
+                          decoration: BoxDecoration(color: Color(0xFF27272A)),
+                        )
+                      ],
+                    ),
+                    content: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          ...List.generate(
+                              widget._viewModel.getAllPlaylistResponse
+                                      ?.length ??
+                                  0,
+                              (index) => Padding(
+                                    padding: const EdgeInsets.only(right: 8),
+                                    child: Column(
+                                      children: [
+                                        InkWell(
+                                          onTap: () {
+                                            setSt(() {
+                                              if (widget
+                                                  ._viewModel.selectedPlayList
+                                                  .contains(widget._viewModel
+                                                          .getAllPlaylistResponse?[
+                                                      index])) {
+                                                widget
+                                                    ._viewModel.selectedPlayList
+                                                    .remove(widget._viewModel
+                                                            .getAllPlaylistResponse?[
+                                                        index]);
+                                              } else {
+                                                widget
+                                                    ._viewModel.selectedPlayList
+                                                    .add(widget._viewModel
+                                                                .getAllPlaylistResponse?[
+                                                            index] ??
+                                                        GetAllPlaylistResponse(
+                                                            label: widget
+                                                                ._viewModel
+                                                                .getAllPlaylistResponse?[
+                                                                    index]
+                                                                .label,
+                                                            value: widget
+                                                                ._viewModel
+                                                                .getAllPlaylistResponse?[
+                                                                    index]
+                                                                .value));
+                                                // _viewModel.durations.add("5");
+                                              }
+                                            });
+                                          },
+                                          child: Container(
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                Text(widget
+                                                        ._viewModel
+                                                        .getAllPlaylistResponse?[
+                                                            index]
+                                                        .label ??
+                                                    ""),
+                                                Container(
+                                                  height: 18,
+                                                  width: 18,
+                                                  decoration: BoxDecoration(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              2),
+                                                      color: !widget._viewModel
+                                                              .selectedPlayList
+                                                              .contains(widget
+                                                                      ._viewModel
+                                                                      .getAllPlaylistResponse?[
+                                                                  index])
+                                                          ? Colors.transparent
+                                                          : Color(0xFF008BC3),
+                                                      border: Border.all(
+                                                          color: widget
+                                                                  ._viewModel
+                                                                  .selectedPlayList
+                                                                  .contains(widget._viewModel.getAllPlaylistResponse?[index])
+                                                              ? Colors.transparent
+                                                              : Colors.white)),
+                                                  child: Icon(
+                                                    Icons.check,
+                                                    size: 10,
+                                                    color: widget._viewModel
+                                                            .selectedPlayList
+                                                            .contains(widget
+                                                                    ._viewModel
+                                                                    .getAllPlaylistResponse?[
+                                                                index])
+                                                        ? Colors.white
+                                                        : Colors.transparent,
+                                                  ),
+                                                )
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                        gapH4,
+                                      ],
+                                    ),
+                                  ))
+                        ]));
+              });
+            },
+          );
+        },
+        child: Image.asset(
+          "assets/icons/save.png",
+          height: 14,
+        ));
   }
 
   @override

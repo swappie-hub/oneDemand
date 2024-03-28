@@ -3,6 +3,7 @@ import 'package:ondemand/view/screens/bottomNavigation/bottom_navigation_view.da
 import 'package:ondemand/view/screens/login/login_view.dart';
 import 'package:ondemand/view/screens/onboarding/onboarding_view.dart';
 import 'package:ondemand/view/screens/onboarding/onboarding_view.dart';
+import 'package:ondemand/view/screens/searchVideo/search_video_view.dart';
 import 'package:ondemand/view/screens/signup/signup_view.dart';
 import 'package:ondemand/view/screens/splash/splash_view.dart';
 import 'package:go_router/go_router.dart';
@@ -17,7 +18,8 @@ enum AppRoute {
   signupView,
   subscriptionView,
   bottomNavigationView,
-  accountDetailsView
+  accountDetailsView,
+  searchVideoView
 }
 
 // flutter packages pub run build_runner build --delete-conflicting-outputs
@@ -56,6 +58,11 @@ final routers = [
     path: '/accountDetailsView',
     name: AppRoute.accountDetailsView.name,
     builder: (context, state) => const AccountDetailsView(),
+  ),
+  GoRoute(
+    path: '/searchVideoView',
+    name: AppRoute.searchVideoView.name,
+    builder: (context, state) => const SearchVideoView(),
   ),
   GoRoute(
     path: '/videoPageView/:id',

@@ -65,7 +65,7 @@ class _PlaylistTabState extends ConsumerState<PlaylistTab> with BaseScreenView {
                       child: Padding(
                         padding: const EdgeInsets.fromLTRB(20, 16, 20, 16),
                         child: CustomSlidingSegmentedControl<int>(
-                          initialValue: 1,
+                          initialValue: 0,
                           // innerPadding: EdgeInsets.all(8),
                           height: 35,
 

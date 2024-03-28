@@ -8,6 +8,9 @@ import 'package:ondemand/data/auth/models/get_user_details_model.dart';
 import 'package:ondemand/data/auth/models/login_model.dart';
 import 'package:ondemand/data/auth/models/signup_model.dart';
 import 'package:ondemand/data/auth/models/subscription_model.dart';
+import 'package:ondemand/data/auth/models/update_email_model.dart';
+import 'package:ondemand/data/auth/models/update_password_model.dart';
+import 'package:ondemand/data/auth/models/update_username_model.dart';
 import 'package:ondemand/services/shared_preference_service.dart';
 import 'package:ondemand/utils/logger.dart';
 
@@ -113,6 +116,51 @@ class AuthRepoImpl implements AuthRepo {
       );
 
       return Right(GetUserDetailResponse.fromJson(response.data!));
+    } catch (e) {
+      return Left(ApiException(e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<ApiException, UpdateUsernameResponse>> updateUserName(
+      UpdateUsernameRequest updateUsernameRequest) async {
+    try {
+      final response = await _apiClient.post(
+          sendCookies: true,
+          "${AppConstants.baseUrl}/update/personal/details/name",
+          updateUsernameRequestToJson(updateUsernameRequest));
+
+      return Right(UpdateUsernameResponse.fromJson(response.data!));
+    } catch (e) {
+      return Left(ApiException(e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<ApiException, UpdateEmailResponse>> updateEmail(
+      UpdateEmailRequest updateEmailRequest) async {
+    try {
+      final response = await _apiClient.post(
+          sendCookies: true,
+          "${AppConstants.baseUrl}/update/personal/details/email",
+          updateEmailRequestToJson(updateEmailRequest));
+
+      return Right(UpdateEmailResponse.fromJson(response.data!));
+    } catch (e) {
+      return Left(ApiException(e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<ApiException, UpdatePasswordResponse>> updatePassword(
+      UpdatePasswordRequest updatePasswordRequest) async {
+    try {
+      final response = await _apiClient.post(
+          sendCookies: true,
+          "${AppConstants.baseUrl}update-password",
+          updatePasswordRequestToJson(updatePasswordRequest));
+
+      return Right(UpdatePasswordResponse.fromJson(response.data!));
     } catch (e) {
       return Left(ApiException(e.toString()));
     }

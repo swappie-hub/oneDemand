@@ -1,21 +1,54 @@
 import 'package:flutter/material.dart';
+import 'package:ondemand/core/constants.dart';
+import 'package:ondemand/data/auth/models/update_email_model.dart';
+import 'package:ondemand/data/auth/models/update_password_model.dart';
+import 'package:ondemand/data/auth/models/update_username_model.dart';
 import 'package:ondemand/helpers/locator.dart';
 import 'package:ondemand/services/user_detail_service.dart';
 import 'package:ondemand/utils/app_sizes.dart';
 import 'package:ondemand/utils/utils.dart';
+import 'package:ondemand/view/screens/login/login_view_model.dart';
 
-class AccountDetailsView extends StatefulWidget {
+class AccountDetailsView extends ConsumerStatefulWidget {
   const AccountDetailsView({super.key});
 
   @override
-  State<AccountDetailsView> createState() => _AccountDetailsViewState();
+  ConsumerState<AccountDetailsView> createState() => _AccountDetailsViewState();
 }
 
-class _AccountDetailsViewState extends State<AccountDetailsView> {
+class _AccountDetailsViewState extends ConsumerState<AccountDetailsView>
+    with BaseScreenView {
   final UserDetailService _userDetailService = getIt<UserDetailService>();
+  late LoginViewModel _viewModel;
+
+  TextEditingController _fistNameController = TextEditingController();
+  TextEditingController _lastNameController = TextEditingController();
+  TextEditingController _emailController = TextEditingController();
+  TextEditingController _confirmEmailController = TextEditingController();
+  TextEditingController _oldPasswordController = TextEditingController();
+  TextEditingController _newPassController = TextEditingController();
+  TextEditingController _confirmNewPassController = TextEditingController();
+
+  final _emailformkey = GlobalKey<FormState>();
+  final _passformkey = GlobalKey<FormState>();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _viewModel = ref.read(authViewModel);
+    _viewModel.attachView(this);
+    _fistNameController.text =
+        _userDetailService.userDetailResponse?.firstname ?? "";
+    _lastNameController.text =
+        _userDetailService.userDetailResponse?.lastname ?? "";
+    _emailController.text = _userDetailService.userDetailResponse?.email ?? "";
+  }
 
   @override
   Widget build(BuildContext context) {
+    _viewModel = ref.watch(authViewModel);
+
     return Scaffold(
       backgroundColor: Color(0xFF171718),
       appBar: AppBar(
@@ -102,135 +135,163 @@ class _AccountDetailsViewState extends State<AccountDetailsView> {
               showDialog(
                 context: context,
                 builder: (BuildContext context) {
-                  return AlertDialog(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(16)),
-                    insetPadding: EdgeInsets.zero,
-                    titlePadding: EdgeInsets.zero,
-                    backgroundColor: Color(0xFF171718),
-                    surfaceTintColor: Color(0xFF171718),
-                    title: Column(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                'Change name'.toUpperCase(),
-                                style: TextStyle(
-                                    color: Color(0xFF008BC3), fontSize: 16),
-                              ),
-                              InkWell(
-                                  onTap: () {
-                                    context.pop();
-                                  },
-                                  child: Icon(Icons.close))
-                            ],
+                  return StatefulBuilder(
+                      builder: (BuildContext context, setSt) {
+                    return AlertDialog(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16)),
+                      insetPadding: EdgeInsets.zero,
+                      titlePadding: EdgeInsets.zero,
+                      backgroundColor: Color(0xFF171718),
+                      surfaceTintColor: Color(0xFF171718),
+                      title: Column(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  'Change name'.toUpperCase(),
+                                  style: TextStyle(
+                                      color: Color(0xFF008BC3), fontSize: 16),
+                                ),
+                                InkWell(
+                                    onTap: () {
+                                      context.pop();
+                                    },
+                                    child: Icon(Icons.close))
+                              ],
+                            ),
                           ),
-                        ),
-                        Container(
-                          height: 2,
-                          decoration: BoxDecoration(color: Color(0xFF27272A)),
-                        )
-                      ],
-                    ),
-                    content: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        TextField(
-                          decoration: InputDecoration(
-                              contentPadding: EdgeInsets.all(8),
-                              filled: true,
-                              fillColor: Colors.black,
-                              hintText: "First Name",
-                              hintStyle: TextStyle(
-                                  color: Color(0xFF71717A),
-                                  fontWeight: FontWeight.w400,
-                                  fontSize: 14),
-                              enabledBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(12),
-                                  borderSide: BorderSide(
-                                    color: Color(0xFF323234),
-                                  )),
-                              border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(12),
-                                  borderSide: BorderSide(
-                                    color: Color(0xFF323234),
-                                  )),
-                              errorBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(12),
-                                  borderSide: BorderSide(
-                                    color: Color(0xFF323234),
-                                  )),
-                              focusedBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(12),
-                                  borderSide: BorderSide(
-                                    color: Color(0xFF323234),
-                                  ))),
-                        ),
-                        gapH8,
-                        TextField(
-                          decoration: InputDecoration(
-                              contentPadding: EdgeInsets.all(8),
-                              filled: true,
-                              fillColor: Colors.black,
-                              hintText: "Last Name",
-                              hintStyle: TextStyle(
-                                  color: Color(0xFF71717A),
-                                  fontWeight: FontWeight.w400,
-                                  fontSize: 14),
-                              enabledBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(12),
-                                  borderSide: BorderSide(
-                                    color: Color(0xFF323234),
-                                  )),
-                              border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(12),
-                                  borderSide: BorderSide(
-                                    color: Color(0xFF323234),
-                                  )),
-                              errorBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(12),
-                                  borderSide: BorderSide(
-                                    color: Color(0xFF323234),
-                                  )),
-                              focusedBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(12),
-                                  borderSide: BorderSide(
-                                    color: Color(0xFF323234),
-                                  ))),
-                        ),
-                      ],
-                    ),
-                    actions: <Widget>[
-                      TextButton(
-                        child: Text(
-                          'Cancel'.toUpperCase(),
-                          style: TextStyle(color: Colors.white, fontSize: 15),
-                        ),
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
+                          Container(
+                            height: 2,
+                            decoration: BoxDecoration(color: Color(0xFF27272A)),
+                          )
+                        ],
                       ),
-                      TextButton(
-                        child: Container(
-                            padding: EdgeInsets.symmetric(
-                                vertical: 8, horizontal: 16),
-                            decoration: BoxDecoration(
-                                color: Color(0xFF008BC3),
-                                borderRadius: BorderRadius.circular(9)),
-                            child: const Text(
-                              'UPDATE',
-                              style:
-                                  TextStyle(color: Colors.white, fontSize: 15),
-                            )),
-                        onPressed: () {
-                          // Handle the submit action
-                        },
+                      content: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          TextFormField(
+                            cursorColor: Colors.white,
+                            style: TextStyle(
+                                color: Color(0xFF7D7878),
+                                fontWeight: FontWeight.w400,
+                                fontSize: 16),
+                            controller: _fistNameController,
+                            decoration: InputDecoration(
+                                contentPadding: EdgeInsets.all(8),
+                                filled: true,
+                                fillColor: Colors.black,
+                                hintText: "First Name",
+                                hintStyle: TextStyle(
+                                    color: Color(0xFF71717A),
+                                    fontWeight: FontWeight.w400,
+                                    fontSize: 14),
+                                enabledBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                    borderSide: BorderSide(
+                                      color: Color(0xFF323234),
+                                    )),
+                                border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                    borderSide: BorderSide(
+                                      color: Color(0xFF323234),
+                                    )),
+                                errorBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                    borderSide: BorderSide(
+                                      color: Color(0xFF323234),
+                                    )),
+                                focusedBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                    borderSide: BorderSide(
+                                      color: Color(0xFF323234),
+                                    ))),
+                          ),
+                          gapH8,
+                          TextFormField(
+                            cursorColor: Colors.white,
+                            style: TextStyle(
+                                color: Color(0xFF7D7878),
+                                fontWeight: FontWeight.w400,
+                                fontSize: 16),
+                            controller: _lastNameController,
+                            decoration: InputDecoration(
+                                contentPadding: EdgeInsets.all(8),
+                                filled: true,
+                                fillColor: Colors.black,
+                                hintText: "Last Name",
+                                hintStyle: TextStyle(
+                                    color: Color(0xFF71717A),
+                                    fontWeight: FontWeight.w400,
+                                    fontSize: 14),
+                                enabledBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                    borderSide: BorderSide(
+                                      color: Color(0xFF323234),
+                                    )),
+                                border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                    borderSide: BorderSide(
+                                      color: Color(0xFF323234),
+                                    )),
+                                errorBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                    borderSide: BorderSide(
+                                      color: Color(0xFF323234),
+                                    )),
+                                focusedBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                    borderSide: BorderSide(
+                                      color: Color(0xFF323234),
+                                    ))),
+                          ),
+                        ],
                       ),
-                    ],
-                  );
+                      actions: <Widget>[
+                        TextButton(
+                          child: Text(
+                            'Cancel'.toUpperCase(),
+                            style: TextStyle(color: Colors.white, fontSize: 15),
+                          ),
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                        ),
+                        TextButton(
+                          child: Container(
+                              padding: EdgeInsets.symmetric(
+                                  vertical: 8, horizontal: 16),
+                              decoration: BoxDecoration(
+                                  color: Color(0xFF008BC3),
+                                  borderRadius: BorderRadius.circular(9)),
+                              child: const Text(
+                                'UPDATE',
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 15),
+                              )),
+                          onPressed: () {
+                            if (_fistNameController.text != "") {
+                              _viewModel.uopdateUserName(
+                                  UpdateUsernameRequest(
+                                      firstname: _fistNameController.text,
+                                      lastname: _lastNameController.text,
+                                      userId: AppConstants.userId),
+                                  context);
+                              setSt(() {
+                                _fistNameController.clear();
+                                _lastNameController.clear();
+                              });
+                            }
+
+                            // Handle the submit action
+                          },
+                        ),
+                      ],
+                    );
+                  });
                 },
               );
             },
@@ -285,135 +346,188 @@ class _AccountDetailsViewState extends State<AccountDetailsView> {
               showDialog(
                 context: context,
                 builder: (BuildContext context) {
-                  return AlertDialog(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(16)),
-                    insetPadding: EdgeInsets.zero,
-                    titlePadding: EdgeInsets.zero,
-                    backgroundColor: Color(0xFF171718),
-                    surfaceTintColor: Color(0xFF171718),
-                    title: Column(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                'Change email'.toUpperCase(),
-                                style: TextStyle(
-                                    color: Color(0xFF008BC3), fontSize: 16),
+                  return StatefulBuilder(
+                      builder: (BuildContext context, setSt) {
+                    return Form(
+                      key: _emailformkey,
+                      child: AlertDialog(
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(16)),
+                        insetPadding: EdgeInsets.zero,
+                        titlePadding: EdgeInsets.zero,
+                        backgroundColor: Color(0xFF171718),
+                        surfaceTintColor: Color(0xFF171718),
+                        title: Column(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(16.0),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    'Change email'.toUpperCase(),
+                                    style: TextStyle(
+                                        color: Color(0xFF008BC3), fontSize: 16),
+                                  ),
+                                  InkWell(
+                                      onTap: () {
+                                        context.pop();
+                                      },
+                                      child: Icon(Icons.close))
+                                ],
                               ),
-                              InkWell(
-                                  onTap: () {
-                                    context.pop();
-                                  },
-                                  child: Icon(Icons.close))
-                            ],
-                          ),
+                            ),
+                            Container(
+                              height: 2,
+                              decoration:
+                                  BoxDecoration(color: Color(0xFF27272A)),
+                            )
+                          ],
                         ),
-                        Container(
-                          height: 2,
-                          decoration: BoxDecoration(color: Color(0xFF27272A)),
-                        )
-                      ],
-                    ),
-                    content: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        TextField(
-                          decoration: InputDecoration(
-                              contentPadding: EdgeInsets.all(8),
-                              filled: true,
-                              fillColor: Colors.black,
-                              hintText: "Enter new Email address",
-                              hintStyle: TextStyle(
-                                  color: Color(0xFF71717A),
+                        content: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            TextFormField(
+                              controller: _emailController,
+                              cursorColor: Colors.white,
+                              validator: (value) {
+                                if (value?.isEmpty ?? true) {
+                                  return 'Please enter an email address';
+                                } else if (!RegExp(
+                                        r'^[\w-]+(\.[\w-]+)*@[\w-]+(\.[\w-]+)+$')
+                                    .hasMatch(value ?? "")) {
+                                  return 'Please enter a valid email address';
+                                }
+                                return null; // Return null if the input is valid
+                              },
+                              style: TextStyle(
+                                  color: Color(0xFF7D7878),
                                   fontWeight: FontWeight.w400,
-                                  fontSize: 14),
-                              enabledBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(12),
-                                  borderSide: BorderSide(
-                                    color: Color(0xFF323234),
-                                  )),
-                              border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(12),
-                                  borderSide: BorderSide(
-                                    color: Color(0xFF323234),
-                                  )),
-                              errorBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(12),
-                                  borderSide: BorderSide(
-                                    color: Color(0xFF323234),
-                                  )),
-                              focusedBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(12),
-                                  borderSide: BorderSide(
-                                    color: Color(0xFF323234),
-                                  ))),
-                        ),
-                        gapH8,
-                        TextField(
-                          decoration: InputDecoration(
-                              contentPadding: EdgeInsets.all(8),
-                              filled: true,
-                              fillColor: Colors.black,
-                              hintText: "Re-enter Email address",
-                              hintStyle: TextStyle(
-                                  color: Color(0xFF71717A),
+                                  fontSize: 16),
+                              decoration: InputDecoration(
+                                  contentPadding: EdgeInsets.all(8),
+                                  filled: true,
+                                  fillColor: Colors.black,
+                                  hintText: "Enter new Email address",
+                                  hintStyle: TextStyle(
+                                      color: Color(0xFF71717A),
+                                      fontWeight: FontWeight.w400,
+                                      fontSize: 14),
+                                  enabledBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(12),
+                                      borderSide: BorderSide(
+                                        color: Color(0xFF323234),
+                                      )),
+                                  border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(12),
+                                      borderSide: BorderSide(
+                                        color: Color(0xFF323234),
+                                      )),
+                                  errorBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(12),
+                                      borderSide: BorderSide(
+                                        color: Color(0xFF323234),
+                                      )),
+                                  focusedBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(12),
+                                      borderSide: BorderSide(
+                                        color: Color(0xFF323234),
+                                      ))),
+                            ),
+                            gapH8,
+                            TextFormField(
+                              validator: (value) {
+                                if (value?.isEmpty ?? true) {
+                                  return 'Please enter the confirm email address';
+                                } else if (!RegExp(
+                                        r'^[\w-]+(\.[\w-]+)*@[\w-]+(\.[\w-]+)+$')
+                                    .hasMatch(value ?? "")) {
+                                  return 'Please enter a valid email address';
+                                } else if (value != _emailController.text) {
+                                  return 'Email and confirm password are not same';
+                                }
+                                return null; // Return null if the input is valid
+                              },
+                              controller: _confirmEmailController,
+                              cursorColor: Colors.white,
+                              style: TextStyle(
+                                  color: Color(0xFF7D7878),
                                   fontWeight: FontWeight.w400,
-                                  fontSize: 14),
-                              enabledBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(12),
-                                  borderSide: BorderSide(
-                                    color: Color(0xFF323234),
-                                  )),
-                              border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(12),
-                                  borderSide: BorderSide(
-                                    color: Color(0xFF323234),
-                                  )),
-                              errorBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(12),
-                                  borderSide: BorderSide(
-                                    color: Color(0xFF323234),
-                                  )),
-                              focusedBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(12),
-                                  borderSide: BorderSide(
-                                    color: Color(0xFF323234),
-                                  ))),
+                                  fontSize: 16),
+                              decoration: InputDecoration(
+                                  contentPadding: EdgeInsets.all(8),
+                                  filled: true,
+                                  fillColor: Colors.black,
+                                  hintText: "Re-enter Email address",
+                                  hintStyle: TextStyle(
+                                      color: Color(0xFF71717A),
+                                      fontWeight: FontWeight.w400,
+                                      fontSize: 14),
+                                  enabledBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(12),
+                                      borderSide: BorderSide(
+                                        color: Color(0xFF323234),
+                                      )),
+                                  border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(12),
+                                      borderSide: BorderSide(
+                                        color: Color(0xFF323234),
+                                      )),
+                                  errorBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(12),
+                                      borderSide: BorderSide(
+                                        color: Color(0xFF323234),
+                                      )),
+                                  focusedBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(12),
+                                      borderSide: BorderSide(
+                                        color: Color(0xFF323234),
+                                      ))),
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
-                    actions: <Widget>[
-                      TextButton(
-                        child: Text(
-                          'Cancel'.toUpperCase(),
-                          style: TextStyle(color: Colors.white, fontSize: 15),
-                        ),
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                      ),
-                      TextButton(
-                        child: Container(
-                            padding: EdgeInsets.symmetric(
-                                vertical: 8, horizontal: 16),
-                            decoration: BoxDecoration(
-                                color: Color(0xFF008BC3),
-                                borderRadius: BorderRadius.circular(9)),
-                            child: const Text(
-                              'UPDATE',
+                        actions: <Widget>[
+                          TextButton(
+                            child: Text(
+                              'Cancel'.toUpperCase(),
                               style:
                                   TextStyle(color: Colors.white, fontSize: 15),
-                            )),
-                        onPressed: () {
-                          // Handle the submit action
-                        },
+                            ),
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                          ),
+                          TextButton(
+                            child: Container(
+                                padding: EdgeInsets.symmetric(
+                                    vertical: 8, horizontal: 16),
+                                decoration: BoxDecoration(
+                                    color: Color(0xFF008BC3),
+                                    borderRadius: BorderRadius.circular(9)),
+                                child: const Text(
+                                  'UPDATE',
+                                  style: TextStyle(
+                                      color: Colors.white, fontSize: 15),
+                                )),
+                            onPressed: () {
+                              if (_emailformkey.currentState!.validate()) {
+                                _viewModel.updateEmail(
+                                    UpdateEmailRequest(
+                                        email: _emailController.text),
+                                    context);
+                                setSt(() {
+                                  _emailController.clear();
+                                  _confirmEmailController.clear();
+                                });
+                              }
+                              // Handle the submit action
+                            },
+                          ),
+                        ],
                       ),
-                    ],
-                  );
+                    );
+                  });
                 },
               );
             },
@@ -462,167 +576,231 @@ class _AccountDetailsViewState extends State<AccountDetailsView> {
               showDialog(
                 context: context,
                 builder: (BuildContext context) {
-                  return AlertDialog(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(16)),
-                    insetPadding: EdgeInsets.zero,
-                    titlePadding: EdgeInsets.zero,
-                    backgroundColor: Color(0xFF171718),
-                    surfaceTintColor: Color(0xFF171718),
-                    title: Column(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                'Change Password'.toUpperCase(),
-                                style: TextStyle(
-                                    color: Color(0xFF008BC3), fontSize: 16),
+                  return StatefulBuilder(
+                      builder: (BuildContext context, setSt) {
+                    return Form(
+                      key: _passformkey,
+                      child: AlertDialog(
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(16)),
+                        insetPadding: EdgeInsets.zero,
+                        titlePadding: EdgeInsets.zero,
+                        backgroundColor: Color(0xFF171718),
+                        surfaceTintColor: Color(0xFF171718),
+                        title: Column(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(16.0),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    'Change Password'.toUpperCase(),
+                                    style: TextStyle(
+                                        color: Color(0xFF008BC3), fontSize: 16),
+                                  ),
+                                  InkWell(
+                                      onTap: () {
+                                        context.pop();
+                                      },
+                                      child: Icon(Icons.close))
+                                ],
                               ),
-                              InkWell(
-                                  onTap: () {
-                                    context.pop();
-                                  },
-                                  child: Icon(Icons.close))
-                            ],
-                          ),
+                            ),
+                            Container(
+                              height: 2,
+                              decoration:
+                                  BoxDecoration(color: Color(0xFF27272A)),
+                            )
+                          ],
                         ),
-                        Container(
-                          height: 2,
-                          decoration: BoxDecoration(color: Color(0xFF27272A)),
-                        )
-                      ],
-                    ),
-                    content: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        TextField(
-                          decoration: InputDecoration(
-                              contentPadding: EdgeInsets.all(8),
-                              filled: true,
-                              fillColor: Colors.black,
-                              hintText: "Enter existing password",
-                              hintStyle: TextStyle(
-                                  color: Color(0xFF71717A),
+                        content: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            TextFormField(
+                              cursorColor: Colors.white,
+                              validator: (value) {
+                                if (value?.isEmpty ?? true) {
+                                  return 'Please enter the old password';
+                                }
+                                return null; // Return null if the input is valid
+                              },
+                              style: TextStyle(
+                                  color: Color(0xFF7D7878),
                                   fontWeight: FontWeight.w400,
-                                  fontSize: 14),
-                              enabledBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(12),
-                                  borderSide: BorderSide(
-                                    color: Color(0xFF323234),
-                                  )),
-                              border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(12),
-                                  borderSide: BorderSide(
-                                    color: Color(0xFF323234),
-                                  )),
-                              errorBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(12),
-                                  borderSide: BorderSide(
-                                    color: Color(0xFF323234),
-                                  )),
-                              focusedBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(12),
-                                  borderSide: BorderSide(
-                                    color: Color(0xFF323234),
-                                  ))),
-                        ),
-                        gapH8,
-                        TextField(
-                          decoration: InputDecoration(
-                              contentPadding: EdgeInsets.all(8),
-                              filled: true,
-                              fillColor: Colors.black,
-                              hintText: "Enter new password",
-                              hintStyle: TextStyle(
-                                  color: Color(0xFF71717A),
+                                  fontSize: 16),
+                              controller: _oldPasswordController,
+                              decoration: InputDecoration(
+                                  contentPadding: EdgeInsets.all(8),
+                                  filled: true,
+                                  fillColor: Colors.black,
+                                  hintText: "Enter existing password",
+                                  hintStyle: TextStyle(
+                                      color: Color(0xFF71717A),
+                                      fontWeight: FontWeight.w400,
+                                      fontSize: 14),
+                                  enabledBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(12),
+                                      borderSide: BorderSide(
+                                        color: Color(0xFF323234),
+                                      )),
+                                  border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(12),
+                                      borderSide: BorderSide(
+                                        color: Color(0xFF323234),
+                                      )),
+                                  errorBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(12),
+                                      borderSide: BorderSide(
+                                        color: Color(0xFF323234),
+                                      )),
+                                  focusedBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(12),
+                                      borderSide: BorderSide(
+                                        color: Color(0xFF323234),
+                                      ))),
+                            ),
+                            gapH8,
+                            TextFormField(
+                              cursorColor: Colors.white,
+                              validator: (value) {
+                                if (value?.isEmpty ?? true) {
+                                  return 'Please enter the new password';
+                                }
+                                return null; // Return null if the input is valid
+                              },
+                              style: TextStyle(
+                                  color: Color(0xFF7D7878),
                                   fontWeight: FontWeight.w400,
-                                  fontSize: 14),
-                              enabledBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(12),
-                                  borderSide: BorderSide(
-                                    color: Color(0xFF323234),
-                                  )),
-                              border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(12),
-                                  borderSide: BorderSide(
-                                    color: Color(0xFF323234),
-                                  )),
-                              errorBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(12),
-                                  borderSide: BorderSide(
-                                    color: Color(0xFF323234),
-                                  )),
-                              focusedBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(12),
-                                  borderSide: BorderSide(
-                                    color: Color(0xFF323234),
-                                  ))),
-                        ),
-                        gapH8,
-                        TextField(
-                          decoration: InputDecoration(
-                              contentPadding: EdgeInsets.all(8),
-                              filled: true,
-                              fillColor: Colors.black,
-                              hintText: "Re-enter new password",
-                              hintStyle: TextStyle(
-                                  color: Color(0xFF71717A),
+                                  fontSize: 16),
+                              controller: _newPassController,
+                              decoration: InputDecoration(
+                                  contentPadding: EdgeInsets.all(8),
+                                  filled: true,
+                                  fillColor: Colors.black,
+                                  hintText: "Enter new password",
+                                  hintStyle: TextStyle(
+                                      color: Color(0xFF71717A),
+                                      fontWeight: FontWeight.w400,
+                                      fontSize: 14),
+                                  enabledBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(12),
+                                      borderSide: BorderSide(
+                                        color: Color(0xFF323234),
+                                      )),
+                                  border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(12),
+                                      borderSide: BorderSide(
+                                        color: Color(0xFF323234),
+                                      )),
+                                  errorBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(12),
+                                      borderSide: BorderSide(
+                                        color: Color(0xFF323234),
+                                      )),
+                                  focusedBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(12),
+                                      borderSide: BorderSide(
+                                        color: Color(0xFF323234),
+                                      ))),
+                            ),
+                            gapH8,
+                            TextFormField(
+                              cursorColor: Colors.white,
+                              validator: (value) {
+                                if (value?.isEmpty ?? true) {
+                                  return 'Please enter the confirm password';
+                                } else if (value != _newPassController.text) {
+                                  return "New password and confirm password are not same";
+                                }
+                                return null; // Return null if the input is valid
+                              },
+                              style: TextStyle(
+                                  color: Color(0xFF7D7878),
                                   fontWeight: FontWeight.w400,
-                                  fontSize: 14),
-                              enabledBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(12),
-                                  borderSide: BorderSide(
-                                    color: Color(0xFF323234),
-                                  )),
-                              border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(12),
-                                  borderSide: BorderSide(
-                                    color: Color(0xFF323234),
-                                  )),
-                              errorBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(12),
-                                  borderSide: BorderSide(
-                                    color: Color(0xFF323234),
-                                  )),
-                              focusedBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(12),
-                                  borderSide: BorderSide(
-                                    color: Color(0xFF323234),
-                                  ))),
+                                  fontSize: 16),
+                              controller: _confirmNewPassController,
+                              decoration: InputDecoration(
+                                  contentPadding: EdgeInsets.all(8),
+                                  filled: true,
+                                  fillColor: Colors.black,
+                                  hintText: "Re-enter new password",
+                                  hintStyle: TextStyle(
+                                      color: Color(0xFF71717A),
+                                      fontWeight: FontWeight.w400,
+                                      fontSize: 14),
+                                  enabledBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(12),
+                                      borderSide: BorderSide(
+                                        color: Color(0xFF323234),
+                                      )),
+                                  border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(12),
+                                      borderSide: BorderSide(
+                                        color: Color(0xFF323234),
+                                      )),
+                                  errorBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(12),
+                                      borderSide: BorderSide(
+                                        color: Color(0xFF323234),
+                                      )),
+                                  focusedBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(12),
+                                      borderSide: BorderSide(
+                                        color: Color(0xFF323234),
+                                      ))),
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
-                    actions: <Widget>[
-                      TextButton(
-                        child: Text(
-                          'Cancel'.toUpperCase(),
-                          style: TextStyle(color: Colors.white, fontSize: 15),
-                        ),
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                      ),
-                      TextButton(
-                        child: Container(
-                            padding: EdgeInsets.symmetric(
-                                vertical: 8, horizontal: 16),
-                            decoration: BoxDecoration(
-                                color: Color(0xFF008BC3),
-                                borderRadius: BorderRadius.circular(9)),
-                            child: const Text(
-                              'UPDATE',
+                        actions: <Widget>[
+                          TextButton(
+                            child: Text(
+                              'Cancel'.toUpperCase(),
                               style:
                                   TextStyle(color: Colors.white, fontSize: 15),
-                            )),
-                        onPressed: () {
-                          // Handle the submit action
-                        },
+                            ),
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                          ),
+                          TextButton(
+                            child: Container(
+                                padding: EdgeInsets.symmetric(
+                                    vertical: 8, horizontal: 16),
+                                decoration: BoxDecoration(
+                                    color: Color(0xFF008BC3),
+                                    borderRadius: BorderRadius.circular(9)),
+                                child: const Text(
+                                  'UPDATE',
+                                  style: TextStyle(
+                                      color: Colors.white, fontSize: 15),
+                                )),
+                            onPressed: () {
+                              // Handle the submit action
+                              if (_passformkey.currentState!.validate()) {
+                                _viewModel.updatePassword(
+                                    UpdatePasswordRequest(
+                                        currentPassword:
+                                            _oldPasswordController.text,
+                                        confirmPassword:
+                                            _confirmNewPassController.text,
+                                        userId: AppConstants.userId,
+                                        newPassword: _newPassController.text),
+                                    context);
+                                setSt(() {
+                                  _newPassController.clear();
+                                  _oldPasswordController.clear();
+                                  _confirmNewPassController.clear();
+                                });
+                              }
+                              // Handle the submit action
+                            },
+                          ),
+                        ],
                       ),
-                    ],
-                  );
+                    );
+                  });
                 },
               );
             },
@@ -669,5 +847,15 @@ class _AccountDetailsViewState extends State<AccountDetailsView> {
         ],
       ),
     );
+  }
+
+  @override
+  void navigateToScreen(AppRoute appRoute, {Map<String, String>? params}) {
+    // TODO: implement navigateToScreen
+  }
+
+  @override
+  void showSnackbar(String message, {Color? color}) {
+    // TODO: implement showSnackbar
   }
 }

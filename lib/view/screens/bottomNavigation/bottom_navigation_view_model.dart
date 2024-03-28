@@ -4,15 +4,20 @@ import 'package:ondemand/data/auth/auth_repo.dart';
 import 'package:ondemand/data/auth/models/login_model.dart';
 import 'package:ondemand/data/auth/models/signup_model.dart';
 import 'package:ondemand/data/home/home_repo.dart';
+import 'package:ondemand/data/home/models/add_playlist_model.dart';
 import 'package:ondemand/data/home/models/feature_playlist_model.dart';
+import 'package:ondemand/data/home/models/get_playlist_model.dart';
 import 'package:ondemand/data/home/models/home_model.dart';
 import 'package:ondemand/data/home/models/library_list_model.dart' as lib;
 import 'package:ondemand/data/home/models/library_list_model.dart';
 import 'package:ondemand/data/home/models/saved_videos_model.dart';
+import 'package:ondemand/data/home/models/search_video_models.dart' as search;
 import 'package:ondemand/domain/providers/repository_provider.dart';
 import 'package:ondemand/helpers/base_screen_view.dart';
 import 'package:ondemand/helpers/base_view_model.dart';
 import 'package:ondemand/helpers/locator.dart';
+import 'package:ondemand/data/home/models/add_playlist_model.dart' as addplay;
+
 import 'package:ondemand/utils/utils.dart';
 
 final bottomNavigationViewModel = ChangeNotifierProvider.autoDispose(
@@ -34,11 +39,20 @@ class BottomNavigationViewModel extends BaseViewModel<BaseScreenView> {
       _featurePlaylistResponse;
   lib.LibraryListResponse? _libraryListResponse;
   lib.LibraryListResponse? get libraryListResponse => _libraryListResponse;
+  search.SearchListResponse? _searchListResponse;
+  search.SearchListResponse? get searchListResponse => _searchListResponse;
+
+  List<GetAllPlaylistResponse>? _getAllPlaylistResponse;
+  List<GetAllPlaylistResponse>? get getAllPlaylistResponse =>
+      _getAllPlaylistResponse;
   List<lib.Video> libraryList = [];
   List<SavesVideosDatum> savedList = [];
   List<ExistingVideo> featuredList = [];
   List<ExistingVideo> allPlaylistList = [];
   List<ExistingVideo> personalPlaylist = [];
+  List<search.Video> searchList = [];
+  List<GetAllPlaylistResponse> selectedPlayList = [];
+
   List<String> durations = [];
   List<String> focus = [];
   List<String> strength = [];
@@ -166,6 +180,34 @@ class BottomNavigationViewModel extends BaseViewModel<BaseScreenView> {
         );
   }
 
+  Future<void> addVideoToPlaylist(lib.Video video) async {
+    List<MyArray> listData = [];
+    for (int i = 0; i < selectedPlayList.length; i++) {
+      listData.add(MyArray(
+          name: selectedPlayList[i].label,
+          objectId: selectedPlayList[i].value,
+          videoObject: VideoObject(
+            duration: video.duration,
+            id: video.id,
+            releaseDateTime: video.releaseDateTime,
+            savedvideo: video.savedvideo,
+          )));
+    }
+    await _homeRepo.addToPlaylist(AddPlaylistRequest(myArray: listData)).then(
+          (value) => value.fold((l) {}, (r) async {
+            // _homeVideoResponse = r;
+            // personalPlaylist.clear();
+            // _featurePlaylistResponse = r;
+            // allPlaylistList
+            //     .addAll(_featurePlaylistResponse?.existingVideos ?? []);
+            Logger.write("this is personal" + r.toString());
+            // view!.navigateToScreen(AppRoute.subscriptionView);
+
+            notifyListeners();
+          }),
+        );
+  }
+
   Future<void> getpersonalPlaylist() async {
     toggleLoading();
 
@@ -237,10 +279,49 @@ class BottomNavigationViewModel extends BaseViewModel<BaseScreenView> {
           (value) => value.fold((l) {
             view!.showSnackbar(l.message);
           }, (r) async {
+            // _libraryListResponse = null;
             libraryList.clear();
+
             _libraryListResponse = r;
             libraryList.addAll(
                 _libraryListResponse?.libraryVideosData?.first.videos ?? []);
+            Logger.write("this is library response  " + r.toString());
+            // view!.navigateToScreen(AppRoute.subscriptionView);
+
+            notifyListeners();
+          }),
+        );
+    toggleLoading();
+  }
+
+  Future<void> getsearchVideos(String query) async {
+    toggleLoading();
+    await _homeRepo.searchVideo(query).then(
+          (value) => value.fold((l) {
+            view!.showSnackbar(l.message);
+          }, (r) async {
+            searchList.clear();
+            _searchListResponse = r;
+            searchList.addAll(_searchListResponse?.videos ?? []);
+            Logger.write(r.toString());
+            // view!.navigateToScreen(AppRoute.subscriptionView);
+
+            notifyListeners();
+          }),
+        );
+    toggleLoading();
+  }
+
+  Future<void> getPlaylistList() async {
+    toggleLoading();
+    await _homeRepo.getPlaylistList().then(
+          (value) => value.fold((l) {
+            view!.showSnackbar(l.message);
+          }, (r) async {
+            _getAllPlaylistResponse = r;
+            // searchList.clear();
+            // _searchListResponse = r;
+            // searchList.addAll(_searchListResponse?.videos ?? []);
             Logger.write(r.toString());
             // view!.navigateToScreen(AppRoute.subscriptionView);
 
@@ -260,14 +341,14 @@ class BottomNavigationViewModel extends BaseViewModel<BaseScreenView> {
                 selectedDurations:
                     durations.isEmpty ? "" : durations.join(" ,"),
                 selectedLevels: strength.isEmpty ? "" : strength.join(" ,"),
-                selectedTags: focus.isEmpty ? "" : focus.join(" ,"),
-                userId: "",
+                selectedTags: focus.isEmpty ? "" : focus.join(","),
+                userId: AppConstants.userId,
                 endIndex: 500)
             // LibraryListRequest(categoryId:AppCons
 
             // )
             );
-
+        notifyListeners();
         break;
       case 2:
         print(LibraryListRequest(
@@ -277,8 +358,8 @@ class BottomNavigationViewModel extends BaseViewModel<BaseScreenView> {
                 selectedDurations:
                     durations.isEmpty ? "" : durations.join(" ,"),
                 selectedLevels: strength.isEmpty ? "" : strength.join(" ,"),
-                selectedTags: focus.isEmpty ? "" : focus.join(" ,"),
-                userId: "",
+                selectedTags: focus.isEmpty ? "" : focus.join(","),
+                userId: AppConstants.userId,
                 endIndex: 500)
             .toString());
         await getLibraryVideos(
@@ -288,7 +369,7 @@ class BottomNavigationViewModel extends BaseViewModel<BaseScreenView> {
               sortby: sortBy,
               selectedDurations: durations.isEmpty ? "" : durations.join(" ,"),
               selectedLevels: strength.isEmpty ? "" : strength.join(" ,"),
-              selectedTags: focus.isEmpty ? "" : focus.join(" ,"),
+              selectedTags: focus.isEmpty ? "" : focus.join(","),
               userId: AppConstants.userId,
               endIndex: 500),
 
@@ -300,13 +381,14 @@ class BottomNavigationViewModel extends BaseViewModel<BaseScreenView> {
                 categoryId: AppConstants.categoryIdForExercise,
                 startIndex: 0,
                 sortby: sortBy,
-                selectedDurations: durations.join(" ,"),
-                selectedLevels: strength.toString(),
-                selectedTags: focus.toString(),
-                userId: "",
+                selectedDurations:
+                    durations.isEmpty ? "" : durations.join(" ,"),
+                selectedLevels: strength.isEmpty ? "" : strength.join(" ,"),
+                selectedTags: focus.isEmpty ? "" : focus.join(","),
+                userId: AppConstants.userId,
                 endIndex: 500)
             .toString());
-
+        notifyListeners();
         break;
       case 3:
         await getLibraryVideos(LibraryListRequest(
@@ -315,8 +397,8 @@ class BottomNavigationViewModel extends BaseViewModel<BaseScreenView> {
                 sortby: sortBy,
                 selectedDurations: durations.join(" ,"),
                 selectedLevels: strength.join(" ,"),
-                selectedTags: focus.join(" ,"),
-                userId: "",
+                selectedTags: focus.join(","),
+                userId: AppConstants.userId,
                 endIndex: 500)
             // LibraryListRequest(categoryId:AppCons
 

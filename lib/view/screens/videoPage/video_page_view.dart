@@ -51,7 +51,6 @@ class _VideoPageViewState extends ConsumerState<VideoPageView>
           playVideoFrom: PlayVideoFrom.vimeoPrivateVideos(
               // _viewModel.videoDetailResponse?.videolink ?? "",
               videoID,
-              
               httpHeaders: headers),
         )
           ..initialise();
@@ -340,7 +339,7 @@ class _VideoPageViewState extends ConsumerState<VideoPageView>
                             itemBuilder: (context, index) => InkWell(
                               onTap: () {
                                 controller?.dispose();
-                                context.pushNamed(
+                                context.pushReplacementNamed(
                                   AppRoute.videoPageView.name,
                                   pathParameters: {
                                     'id': _viewModel
@@ -1353,7 +1352,7 @@ class _ChatBottomSheetState extends ConsumerState<ChatBottomSheet>
   @override
   void navigateToScreen(AppRoute appRoute, {Map<String, String>? params}) {
     // TODO: implement navigateToScreen
-    context.pushNamed(appRoute.name);
+    context.pushReplacementNamed(appRoute.name);
   }
 
   @override

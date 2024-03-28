@@ -1,21 +1,24 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:ondemand/data/home/models/saved_videos_model.dart';
+import 'package:ondemand/data/home/models/search_video_models.dart';
 import 'package:ondemand/utils/app_sizes.dart';
 import 'package:ondemand/utils/utils.dart';
 import 'package:ondemand/view/screens/bottomNavigation/bottom_navigation_view_model.dart';
 import 'package:ondemand/view/screens/bottomNavigation/tabs/home_tab.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
-class SavedTab extends ConsumerStatefulWidget {
-  const SavedTab({super.key});
+class SearchVideoView extends ConsumerStatefulWidget {
+  const SearchVideoView({super.key});
 
   @override
-  ConsumerState<SavedTab> createState() => _SavedTabState();
+  ConsumerState<SearchVideoView> createState() => _SavedTabState();
 }
 
-class _SavedTabState extends ConsumerState<SavedTab> with BaseScreenView {
+class _SavedTabState extends ConsumerState<SearchVideoView>
+    with BaseScreenView {
   late BottomNavigationViewModel _viewModel;
+  TextEditingController _searchController = SearchController();
   @override
   void initState() {
     // TODO: implement initState
@@ -23,21 +26,21 @@ class _SavedTabState extends ConsumerState<SavedTab> with BaseScreenView {
 
     _viewModel = ref.read(bottomNavigationViewModel);
     _viewModel.attachView(this);
-    Future.delayed(Duration(milliseconds: 2)).then((value) async {
-      _viewModel.toggleLoading();
-      await _viewModel.fetchSavedVideos(SavedVideosRequest(
-              startIndex: 0,
-              sortby: "latest",
-              selectedDurations: "",
-              selectedLevels: "",
-              selectedTags: "",
-              endIndex: 500)
-          // LibraryListRequest(categoryId:AppCons
+    // Future.delayed(Duration(milliseconds: 2)).then((value) async {
+    //   _viewModel.toggleLoading();
+    // await _viewModel.fetchSavedVideos(SavedVideosRequest(
+    //         startIndex: 0,
+    //         sortby: "latest",
+    //         selectedDurations: "",
+    //         selectedLevels: "",
+    //         selectedTags: "",
+    //         endIndex: 500)
+    // LibraryListRequest(categoryId:AppCons
 
-          // )
-          );
-      _viewModel.toggleLoading();
-    });
+    // )
+    //     );
+    // _viewModel.toggleLoading();
+    // });
   }
 
   @override
@@ -50,6 +53,47 @@ class _SavedTabState extends ConsumerState<SavedTab> with BaseScreenView {
           preferredSize: Size.fromHeight(40), child: CustomAppBar()),
       body: Column(
         children: [
+          TextFormField(
+            cursorColor: Colors.white,
+            controller: _searchController,
+            onChanged: (val) {
+              _viewModel.getsearchVideos(_searchController.text);
+            },
+            style: TextStyle(
+                color: Color(0xFF7D7878),
+                fontWeight: FontWeight.w400,
+                fontSize: 16),
+            decoration: InputDecoration(
+                contentPadding: EdgeInsets.all(16),
+                filled: true,
+                fillColor: Colors.black,
+                hintText: "Search",
+                hintStyle: TextStyle(
+                    color: Color(0xFF7D7878),
+                    fontWeight: FontWeight.w400,
+                    fontSize: 16),
+                enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: BorderSide(
+                      color: Color(0xFF323234),
+                    )),
+                border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: BorderSide(
+                      color: Color(0xFF323234),
+                    )),
+                errorBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: BorderSide(
+                      color: Color(0xFF323234),
+                    )),
+                focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: BorderSide(
+                      color: Color(0xFF323234),
+                    ))),
+          ),
+          gapH10,
           Container(
             padding: EdgeInsets.symmetric(vertical: 16),
             decoration: BoxDecoration(
@@ -62,7 +106,7 @@ class _SavedTabState extends ConsumerState<SavedTab> with BaseScreenView {
             ),
             child: Center(
                 child: Text(
-              "SAVED VIDEOS",
+              "Search results".toUpperCase(),
               style: TextStyle(
                   fontFamily: "Good",
                   color: Color(0xFF3CB4E4),
@@ -78,7 +122,7 @@ class _SavedTabState extends ConsumerState<SavedTab> with BaseScreenView {
               children: [
                 InkWell(
                   onTap: () {
-                    _viewModel.savedList.shuffle();
+                    _viewModel.searchList.shuffle();
                     setState(() {});
                   },
                   child: Container(
@@ -110,7 +154,7 @@ class _SavedTabState extends ConsumerState<SavedTab> with BaseScreenView {
               ],
             ),
           ),
-          _viewModel.savedList.isEmpty ?? true
+          _viewModel.searchList.isEmpty ?? true
               ? Container()
               : Expanded(
                   child: Container(
@@ -123,10 +167,10 @@ class _SavedTabState extends ConsumerState<SavedTab> with BaseScreenView {
                           mainAxisExtent:
                               MediaQuery.of(context).size.height / 3.7),
                       shrinkWrap: true,
-                      itemCount: _viewModel.savedList.length,
+                      itemCount: _viewModel.searchList.length,
                       itemBuilder: (context, index) => SavedItems(
                         viewModel: _viewModel,
-                        items: _viewModel.savedList[index],
+                        items: _viewModel.searchList[index],
                       ),
                     ),
                   ),
@@ -155,7 +199,7 @@ class SavedItems extends StatefulWidget {
     required this.items,
   }) : _viewModel = viewModel;
 
-  final SavesVideosDatum items;
+  final Video items;
   final BottomNavigationViewModel _viewModel;
 
   @override
@@ -350,30 +394,33 @@ class _SavedItemsState extends State<SavedItems> with BaseScreenView {
                   //   )
 
                   ...List.generate(
-                    widget.items.tagsDetails?.length ?? 0,
-                    (index2) => Container(
-                      constraints: BoxConstraints(maxWidth: 80),
-                      padding: EdgeInsets.symmetric(horizontal: 4, vertical: 4),
-                      margin: EdgeInsets.only(right: 8),
-                      decoration: BoxDecoration(
-                          color: HexColor.fromHex(
-                              widget.items.tagsDetails?[index2].color ??
-                                  "0xFFFFFF"),
-                          // Color(items?.tagsDetails?[index2].color
-                          //         .replaceAll("#", "0xFF") ??
-                          //     Colors.black),
-                          borderRadius: BorderRadius.circular(4)),
-                      child: Text(
-                        (widget.items.tagsDetails?[index2].name ?? "")
-                            .toUpperCase(),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                            fontSize: 10,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white),
-                      ),
-                    ),
+                    widget.items.tags?.length ?? 0,
+                    (index2) => widget.items.tags?[index2].referalId?.color==null
+                        ? Container()
+                        : Container(
+                            constraints: BoxConstraints(maxWidth: 80),
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 4, vertical: 4),
+                            margin: EdgeInsets.only(right: 8),
+                            decoration: BoxDecoration(
+                                color: HexColor.fromHex(widget
+                                        .items.tags?[index2].referalId?.color ??
+                                    "FFFfFFF"),
+                                // Color(items?.tagsDetails?[index2].color
+                                //         .replaceAll("#", "0xFF") ??
+                                //     Colors.black),
+                                borderRadius: BorderRadius.circular(4)),
+                            child: Text(
+                              (widget.items.tags?[index2].referalId?.name ?? "")
+                                  .toUpperCase(),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white),
+                            ),
+                          ),
                   )
                 ],
               ),

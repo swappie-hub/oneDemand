@@ -3,12 +3,15 @@ import 'package:ondemand/core/exceptions.dart';
 import 'package:ondemand/data/auth/models/login_model.dart';
 import 'package:ondemand/data/auth/models/signup_model.dart';
 import 'package:ondemand/data/auth/models/subscription_model.dart';
+import 'package:ondemand/data/home/models/add_playlist_model.dart';
 import 'package:ondemand/data/home/models/feature_playlist_model.dart';
+import 'package:ondemand/data/home/models/get_playlist_model.dart';
 import 'package:ondemand/data/home/models/get_tags_model.dart';
 import 'package:ondemand/data/home/models/home_model.dart';
 import 'package:ondemand/data/home/models/library_list_model.dart';
 import 'package:ondemand/data/home/models/save_model.dart';
 import 'package:ondemand/data/home/models/saved_videos_model.dart';
+import 'package:ondemand/data/home/models/search_video_models.dart';
 
 abstract class HomeRepo {
   Future<Either<ApiException, List<HomeVideoResponse>>> getHomeView();
@@ -23,4 +26,8 @@ abstract class HomeRepo {
   Future<Either<ApiException, FeaturePlaylistResponse>> personalPlaylist(
       PersonalPlaylistRequest personalPlaylistRequest);
   Future<Either<ApiException, List<GetTagsResponse>>> getTags();
+  Future<Either<ApiException, SearchListResponse>> searchVideo(String query);
+  Future<Either<ApiException, List<GetAllPlaylistResponse>>> getPlaylistList();
+  Future<Either<ApiException, AddPlaylistResponse>> addToPlaylist(
+      AddPlaylistRequest addPlaylistRequest);
 }

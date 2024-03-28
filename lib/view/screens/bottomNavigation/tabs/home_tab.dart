@@ -33,6 +33,7 @@ class _HomeViewState extends ConsumerState<HomeView> with BaseScreenView {
     Future.delayed(Duration(milliseconds: 2)).then((value) async {
       _viewModel.toggleLoading();
       await _viewModel.getHomeView();
+
       // await _viewModel.getTags();
 
       _viewModel.toggleLoading();
@@ -375,7 +376,7 @@ class _HomeItemsState extends State<HomeItems> {
   }
 }
 
-class CustomAppBar extends StatelessWidget {
+class CustomAppBar extends StatefulWidget {
   final bool showBack;
   const CustomAppBar({
     super.key,
@@ -383,12 +384,17 @@ class CustomAppBar extends StatelessWidget {
   });
 
   @override
+  State<CustomAppBar> createState() => _CustomAppBarState();
+}
+
+class _CustomAppBarState extends State<CustomAppBar> with BaseScreenView {
+  @override
   Widget build(BuildContext context) {
     return AppBar(
       centerTitle: false,
       backgroundColor: kBlack,
-      leadingWidth: showBack ? 60 : 120,
-      leading: showBack
+      leadingWidth: widget.showBack ? 60 : 120,
+      leading: widget.showBack
           ? InkWell(
               onTap: () {
                 context.pop();
@@ -406,19 +412,36 @@ class CustomAppBar extends StatelessWidget {
               ),
             ),
       actions: [
-        Icon(
-          Icons.search,
-          color: Colors.white,
-        ),
-        Padding(
-          padding: const EdgeInsets.only(left: 16, right: 16),
+        InkWell(
+          onTap: () {
+            navigateToScreen(AppRoute.searchVideoView);
+          },
           child: Icon(
-            Icons.notifications,
+            Icons.search,
             color: Colors.white,
           ),
-        )
+        ),
+        gapW16
+        // Padding(
+        //   padding: const EdgeInsets.only(left: 16, right: 16),
+        //   child: Icon(
+        //     Icons.notifications,
+        //     color: Colors.white,
+        //   ),
+        // )
       ],
     );
+  }
+
+  @override
+  void navigateToScreen(AppRoute appRoute, {Map<String, String>? params}) {
+    // TODO: implement navigateToScreen
+    context.pushNamed(appRoute.name);
+  }
+
+  @override
+  void showSnackbar(String message, {Color? color}) {
+    // TODO: implement showSnackbar
   }
 }
 
