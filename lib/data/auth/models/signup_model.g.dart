@@ -12,6 +12,7 @@ _$SignupRequestImpl _$$SignupRequestImplFromJson(Map<String, dynamic> json) =>
       password: json['password'] as String?,
       lastname: json['lastname'] as String?,
       firstname: json['firstname'] as String?,
+      devicetoken: json['device_token'] as String?,
     );
 
 Map<String, dynamic> _$$SignupRequestImplToJson(_$SignupRequestImpl instance) =>
@@ -20,6 +21,7 @@ Map<String, dynamic> _$$SignupRequestImplToJson(_$SignupRequestImpl instance) =>
       'password': instance.password,
       'lastname': instance.lastname,
       'firstname': instance.firstname,
+      'device_token': instance.devicetoken,
     };
 
 _$SignupResponseImpl _$$SignupResponseImplFromJson(Map<String, dynamic> json) =>
