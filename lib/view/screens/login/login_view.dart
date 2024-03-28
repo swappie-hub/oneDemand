@@ -1,4 +1,4 @@
-import 'package:firebase_messaging/firebase_messaging.dart';
+// import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:ondemand/data/auth/models/forget_password_model.dart';
@@ -345,11 +345,11 @@ class _LoginViewState extends ConsumerState<LoginView> with BaseScreenView {
               InkWell(
                 onTap: () async {
                   if (_formkey.currentState!.validate()) {
-                    final deviceToken =
-                        await FirebaseMessaging.instance.getToken();
+                    // final deviceToken =
+                    //     await FirebaseMessaging.instance.getToken();
                     _viewModel.login(
                         LoginRequest(
-                            device_token: deviceToken,
+                            // device_token: deviceToken,
                             email: _emailController.text,
                             password: _passwordController.text),
                         context);
