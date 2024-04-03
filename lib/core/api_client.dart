@@ -14,8 +14,8 @@ class ApiClient {
 
   ApiClient() {
     // dio.options.baseUrl = Environment.value.baseUrl!;
-    dio.options.connectTimeout = const Duration(minutes: 3);
-    dio.options.receiveTimeout = const Duration(minutes: 3);
+    dio.options.connectTimeout = const Duration(minutes: 10);
+    dio.options.receiveTimeout = const Duration(minutes: 10);
     final cookieJar = CookieJar();
 
     dio.interceptors.add(CookieManager(cookieJar));

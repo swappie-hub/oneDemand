@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ondemand/core/core.dart';
 import 'package:ondemand/data/auth/models/signup_model.dart';
 import 'package:ondemand/utils/app_sizes.dart';
 import 'package:ondemand/utils/colors.dart';
@@ -104,7 +105,7 @@ class _SignupViewState extends ConsumerState<SignupView> with BaseScreenView {
                       ? "Please enter the first name"
                       : null,
                   style: TextStyle(
-                      color: Color(0xFF7D7878),
+                      color: Colors.white,
                       fontWeight: FontWeight.w400,
                       fontSize: 16),
                   decoration: InputDecoration(
@@ -113,7 +114,7 @@ class _SignupViewState extends ConsumerState<SignupView> with BaseScreenView {
                       fillColor: Colors.black,
                       hintText: "First name",
                       hintStyle: TextStyle(
-                          color: Color(0xFF7D7878),
+                          color: Colors.white,
                           fontWeight: FontWeight.w400,
                           fontSize: 16),
                       enabledBorder: OutlineInputBorder(
@@ -145,7 +146,7 @@ class _SignupViewState extends ConsumerState<SignupView> with BaseScreenView {
                       ? "Please enter the last name"
                       : null,
                   style: TextStyle(
-                      color: Color(0xFF7D7878),
+                      color: Colors.white,
                       fontWeight: FontWeight.w400,
                       fontSize: 16),
                   decoration: InputDecoration(
@@ -154,7 +155,7 @@ class _SignupViewState extends ConsumerState<SignupView> with BaseScreenView {
                       fillColor: Colors.black,
                       hintText: "Last name",
                       hintStyle: TextStyle(
-                          color: Color(0xFF7D7878),
+                          color: Colors.white,
                           fontWeight: FontWeight.w400,
                           fontSize: 16),
                       enabledBorder: OutlineInputBorder(
@@ -192,7 +193,7 @@ class _SignupViewState extends ConsumerState<SignupView> with BaseScreenView {
                     return null; // Return null if the input is valid
                   },
                   style: TextStyle(
-                      color: Color(0xFF7D7878),
+                      color: Colors.white,
                       fontWeight: FontWeight.w400,
                       fontSize: 16),
                   decoration: InputDecoration(
@@ -201,7 +202,7 @@ class _SignupViewState extends ConsumerState<SignupView> with BaseScreenView {
                       fillColor: Colors.black,
                       hintText: "Email Address",
                       hintStyle: TextStyle(
-                          color: Color(0xFF7D7878),
+                          color: Colors.white,
                           fontWeight: FontWeight.w400,
                           fontSize: 16),
                       enabledBorder: OutlineInputBorder(
@@ -234,7 +235,7 @@ class _SignupViewState extends ConsumerState<SignupView> with BaseScreenView {
                   obscureText: true,
                   controller: _passwordController,
                   style: TextStyle(
-                      color: Color(0xFF7D7878),
+                      color: Colors.white,
                       fontWeight: FontWeight.w400,
                       fontSize: 16),
                   decoration: InputDecoration(
@@ -243,7 +244,7 @@ class _SignupViewState extends ConsumerState<SignupView> with BaseScreenView {
                       fillColor: Colors.black,
                       hintText: "Create Password",
                       hintStyle: TextStyle(
-                          color: Color(0xFF7D7878),
+                          color: Colors.white,
                           fontWeight: FontWeight.w400,
                           fontSize: 16),
                       enabledBorder: OutlineInputBorder(
@@ -278,7 +279,7 @@ class _SignupViewState extends ConsumerState<SignupView> with BaseScreenView {
                   obscureText: true,
                   controller: _cPasswordController,
                   style: TextStyle(
-                      color: Color(0xFF7D7878),
+                      color: Colors.white,
                       fontWeight: FontWeight.w400,
                       fontSize: 16),
                   decoration: InputDecoration(
@@ -287,7 +288,7 @@ class _SignupViewState extends ConsumerState<SignupView> with BaseScreenView {
                       fillColor: Colors.black,
                       hintText: "Confirm Password",
                       hintStyle: TextStyle(
-                          color: Color(0xFF7D7878),
+                          color: Colors.white,
                           fontWeight: FontWeight.w400,
                           fontSize: 16),
                       enabledBorder: OutlineInputBorder(
@@ -371,6 +372,7 @@ class _SignupViewState extends ConsumerState<SignupView> with BaseScreenView {
                     } else {
                       if (_formkey.currentState!.validate()) {
                         _viewModel.signup(SignupRequest(
+                            devicetoken: AppConstants.fcmToken,
                             email: _emailController.text,
                             firstname: _firstNameController.text,
                             lastname: _lastNameController.text,

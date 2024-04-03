@@ -1,6 +1,8 @@
 // import 'package:firebase_core/firebase_core.dart';
 // import 'package:firebase_core/firebase_core.dart';
 // import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:ondemand/app.dart';
 import 'package:ondemand/core/constants.dart';
@@ -25,11 +27,11 @@ class Environment {
     WidgetsFlutterBinding.ensureInitialized();
     // await EasyLocalization.ensureInitialized();
     // await Firebase.initializeApp();
-    // await Firebase.initializeApp();
-    // await FirebaseMessagingProvider.setupFirebaseConfig();
-    // final String? token = await FirebaseMessaging.instance.getToken();
-    // AppConstants.fcmToken = token ?? "";
-    // print(AppConstants.fcmToken);
+    await Firebase.initializeApp();
+    await FirebaseMessagingProvider.setupFirebaseConfig();
+    final String? token = await FirebaseMessaging.instance.getToken();
+    AppConstants.fcmToken = token ?? "";
+    print(AppConstants.fcmToken);
 
     // await FirebaseMessagingProvider.init();
     await SharedPreferenceService.init();

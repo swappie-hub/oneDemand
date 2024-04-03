@@ -3,6 +3,7 @@ import 'package:ondemand/core/api_client.dart';
 import 'package:ondemand/core/constants.dart';
 import 'package:ondemand/core/exceptions.dart';
 import 'package:ondemand/data/auth/auth_repo.dart';
+import 'package:ondemand/data/auth/models/delete_model.dart';
 import 'package:ondemand/data/auth/models/forget_password_model.dart';
 import 'package:ondemand/data/auth/models/get_user_details_model.dart';
 import 'package:ondemand/data/auth/models/login_model.dart';
@@ -161,6 +162,20 @@ class AuthRepoImpl implements AuthRepo {
           updatePasswordRequestToJson(updatePasswordRequest));
 
       return Right(UpdatePasswordResponse.fromJson(response.data!));
+    } catch (e) {
+      return Left(ApiException(e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<ApiException, DeleteAccountResponse>> deleteAccount() async {
+    try {
+      final response = await _apiClient.get(
+        sendCookies: true,
+        "${AppConstants.baseUrl}/deleteuser/:${AppConstants.userId}",
+      );
+
+      return Right(DeleteAccountResponse.fromJson(response.data!));
     } catch (e) {
       return Left(ApiException(e.toString()));
     }

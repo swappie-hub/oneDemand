@@ -1,12 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:custom_sliding_segmented_control/custom_sliding_segmented_control.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:ondemand/data/home/models/get_playlist_model.dart';
 import 'package:ondemand/data/home/models/home_model.dart';
 import 'package:ondemand/helpers/locator.dart';
 import 'package:ondemand/services/user_detail_service.dart';
-import 'package:ondemand/utils/app_sizes.dart';
-import 'package:ondemand/utils/colors.dart';
 import 'package:ondemand/utils/utils.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:ondemand/view/screens/bottomNavigation/bottom_navigation_view_model.dart';
@@ -20,8 +18,13 @@ class HomeView extends ConsumerStatefulWidget {
 
 class _HomeViewState extends ConsumerState<HomeView> with BaseScreenView {
   final UserDetailService _userDetailService = getIt<UserDetailService>();
-  int val = 1;
+  int val = 0;
+  final ScrollController _scrollController = ScrollController();
 
+  List<String> chipsText = [
+    "Featured",
+    "Recent",
+  ];
   late BottomNavigationViewModel _viewModel;
   @override
   void initState() {
@@ -32,7 +35,8 @@ class _HomeViewState extends ConsumerState<HomeView> with BaseScreenView {
     _viewModel.attachView(this);
     Future.delayed(Duration(milliseconds: 2)).then((value) async {
       _viewModel.toggleLoading();
-      await _viewModel.getHomeView();
+      await _viewModel.getHomeView(isAll: true);
+      await _viewModel.getPlaylistList();
 
       // await _viewModel.getTags();
 
@@ -46,78 +50,200 @@ class _HomeViewState extends ConsumerState<HomeView> with BaseScreenView {
   Widget build(BuildContext context) {
     _viewModel = ref.watch(bottomNavigationViewModel);
     return Scaffold(
-      backgroundColor: bgColor,
+      backgroundColor: Color(0xFF171718),
       appBar: PreferredSize(
-          preferredSize: Size.fromHeight(40), child: CustomAppBar()),
+          preferredSize: Size.fromHeight(40),
+          child: AppBar(
+            centerTitle: false,
+            backgroundColor: kBlack,
+            leadingWidth: 120,
+            leading: Padding(
+              padding: const EdgeInsets.only(left: 16),
+              child: Image.asset(
+                "assets/images/appbar_logo.png",
+                height: 34.52.h,
+              ),
+            ),
+            actions: [
+              InkWell(
+                onTap: () {
+                  // navigateToScreen(AppRoute.searchVideoView);
+                },
+                child: Icon(
+                  Icons.notifications,
+                  color: Colors.white,
+                ),
+              ),
+              gapW16
+              // Padding(
+              //   padding: const EdgeInsets.only(left: 16, right: 16),
+              //   child: Icon(
+              //     Icons.notifications,
+              //     color: Colors.white,
+              //   ),
+              // )
+            ],
+          )),
       body: Column(
         children: [
           Container(
             width: double.infinity,
             decoration: BoxDecoration(
-              color: Color(0xFF191919),
+              color: Color(0xFF171718),
             ),
             child: Column(
               children: [
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(20, 16, 20, 16),
-                  child: CustomSlidingSegmentedControl<int>(
-                    initialValue: 1,
-                    height: 35,
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    mainAxisSize: MainAxisSize.max,
+                    children: [
+                      ...List.generate(
+                          chipsText.length,
+                          (index3) => InkWell(
+                                onTap: () {
+                                  setState(() {
+                                    val = index3;
+                                    if (val == 1) {
+                                      _viewModel.getHomeView();
+                                      _scrollController.animateTo(
+                                        _scrollController
+                                            .position.minScrollExtent,
+                                        duration: Duration(seconds: 2),
+                                        curve: Curves.fastOutSlowIn,
+                                      );
+                                    } else {
+                                      _viewModel.getHomeView(isReccent: true);
+                                      _scrollController.animateTo(
+                                        _scrollController
+                                            .position.minScrollExtent,
+                                        duration: Duration(seconds: 2),
+                                        curve: Curves.fastOutSlowIn,
+                                      );
+                                    }
+                                  });
 
-                    innerPadding: EdgeInsets.only(top: 0),
-
-                    isStretch: true,
-
-                    children: {
-                      1: Text(
-                        "Featured",
-                        style: TextStyle(
-                          color: val == 1 ? Color(0xFF1AA2D9) : Colors.white,
-                          fontSize: 10,
-                          fontFamily: "Century",
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      2: Text(
-                        "Recent",
-                        style: TextStyle(
-                          color: val == 2 ? Color(0xFF1AA2D9) : Colors.white,
-                          fontSize: 10,
-                          fontFamily: "Century",
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    },
-                    // height: 30,
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Color(0xFF6D6D6D)),
-                      color: bgColor,
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-
-                    thumbDecoration: BoxDecoration(
-                      color: Color(0xFF161616),
-// Border.all(color: Color(0xFF6D6D6D))
-                      border: Border.symmetric(
-                          vertical: BorderSide(color: Color(0xFF6D6D6D))),
-                      borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(val == 1 ? 8 : 0),
-                          bottomLeft: Radius.circular(val == 1 ? 8 : 0),
-                          topRight: Radius.circular(val == 2 ? 8 : 0),
-                          bottomRight: Radius.circular(val == 2 ? 8 : 0)),
-                    ),
-                    duration: const Duration(milliseconds: 300),
-
-                    curve: Curves.easeInToLinear,
-                    onValueChanged: (v) {
-                      // print(v);
-                      _viewModel.getHomeView();
-                      setState(() {
-                        val = v;
-                      });
-                    },
+                                  // _viewModel.setVideoList(
+                                  //   val,
+                                  // );
+                                  // if (val == 1) {
+                                  //   setState(() {
+                                  //     _viewModel.featuredPlaylist();
+                                  //   });
+                                  // } else if (val == 2) {
+                                  //   setState(() {
+                                  //     _viewModel.getpersonalPlaylist();
+                                  //   });
+                                  // } else if (val == 0) {
+                                  //   setState(() {
+                                  //     _viewModel.getPlaylistList();
+                                  //   });
+                                  // } else {}
+                                },
+                                child: Container(
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 16, vertical: 8),
+                                  margin: EdgeInsets.fromLTRB(
+                                      index3 == 0 ? 16 : 8,
+                                      12,
+                                      index3 == 3 ? 16 : 8,
+                                      12),
+                                  decoration: BoxDecoration(
+                                      boxShadow: val == index3
+                                          ? [
+                                              BoxShadow(
+                                                  color: Color(0xFF3CB4E4)
+                                                      .withOpacity(0.2),
+                                                  blurRadius: 3,
+                                                  spreadRadius: 4)
+                                            ]
+                                          : [],
+                                      color: val == index3
+                                          ? Colors.black
+                                          : bgColor,
+                                      borderRadius: BorderRadius.circular(16),
+                                      border: Border.all(
+                                          color: val == index3
+                                              ? Color(0xFF1AA2D9)
+                                              : Color(0xFF6D6D6D))),
+                                  child: Text(
+                                    chipsText[index3].toUpperCase(),
+                                    style: TextStyle(
+                                      color: val == index3
+                                          ? Color(0xFF1AA2D9)
+                                          : Colors.white,
+                                      fontSize: 10,
+                                      fontFamily: "Century",
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                              ))
+                    ],
                   ),
                 ),
+
+                // Padding(
+                // padding: const EdgeInsets.fromLTRB(20, 16, 20, 16),
+//                   child: CustomSlidingSegmentedControl<int>(
+//                     initialValue: 1,
+//                     height: 35,
+
+//                     innerPadding: EdgeInsets.only(top: 0),
+
+//                     isStretch: true,
+
+//                     children: {
+//                       1: Text(
+//                         "Featured".toUpperCase(),
+//                         style: TextStyle(
+//                           color: val == 1 ? Color(0xFF1AA2D9) : Colors.white,
+//                           fontSize: 10,
+//                           fontFamily: "Century",
+//                           fontWeight: FontWeight.bold,
+//                         ),
+//                       ),
+//                       2: Text(
+//                         "Recent".toUpperCase(),
+//                         style: TextStyle(
+//                           color: val == 2 ? Color(0xFF1AA2D9) : Colors.white,
+//                           fontSize: 10,
+//                           fontFamily: "Century",
+//                           fontWeight: FontWeight.bold,
+//                         ),
+//                       ),
+//                     },
+//                     // height: 30,
+//                     decoration: BoxDecoration(
+//                       border: Border.all(color: Color(0xFF6D6D6D)),
+//                       color: bgColor,
+//                       borderRadius: BorderRadius.circular(8),
+//                     ),
+
+//                     thumbDecoration: BoxDecoration(
+//                       color: Color(0xFF161616),
+// // Border.all(color: Color(0xFF6D6D6D))
+//                       border: Border.symmetric(
+//                           vertical: BorderSide(color: Color(0xFF6D6D6D))),
+//                       borderRadius: BorderRadius.only(
+//                           topLeft: Radius.circular(val == 1 ? 8 : 0),
+//                           bottomLeft: Radius.circular(val == 1 ? 8 : 0),
+//                           topRight: Radius.circular(val == 2 ? 8 : 0),
+//                           bottomRight: Radius.circular(val == 2 ? 8 : 0)),
+//                     ),
+//                     duration: const Duration(milliseconds: 300),
+
+//                     curve: Curves.easeInToLinear,
+//                     onValueChanged: (v) {
+//                       // print(v);
+//                       _viewModel.getHomeView();
+//                       setState(() {
+//                         val = v;
+//                       });
+//                     },
+//                   ),
+//                 ),
               ],
             ),
           ),
@@ -125,6 +251,9 @@ class _HomeViewState extends ConsumerState<HomeView> with BaseScreenView {
           Container(
             padding: EdgeInsets.symmetric(vertical: 8),
             decoration: BoxDecoration(
+              borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(20),
+                  bottomRight: Radius.circular(20)),
               gradient: LinearGradient(
                   begin: Alignment.centerLeft,
                   end: Alignment.centerRight,
@@ -142,31 +271,19 @@ class _HomeViewState extends ConsumerState<HomeView> with BaseScreenView {
                   fontSize: 14),
             )),
           ),
-          _viewModel.homeVideoResponse == null
+          _viewModel.videos?.isEmpty ?? true
               ? Container()
-              : _viewModel.loading
-                  ? Container()
-                  : Expanded(
-                      child: ListView.builder(
-                        shrinkWrap: true,
-                        itemCount: val == 1
-                            ? (_viewModel
-                                    .homeVideoResponse?[0].videos?.length ??
-                                0)
-                            : _viewModel.homeVideoResponse?[1].videos?.length ??
-                                0,
-                        itemBuilder: (context, index) => HomeItems(
+              : Expanded(
+                  child: ListView.builder(
+                      controller: _scrollController,
+                      shrinkWrap: true,
+                      itemCount: _viewModel.videos?.length ?? 0,
+                      itemBuilder: (context, index) => HomeItems(
                             index: index,
                             viewModel: _viewModel,
-                            items: val == 1
-                                ? (_viewModel
-                                        .homeVideoResponse?[0].videos?[index] ??
-                                    null)
-                                : _viewModel
-                                        .homeVideoResponse?[1].videos?[index] ??
-                                    null),
-                      ),
-                    )
+                            items: _viewModel.videos?[index] ?? null,
+                          )),
+                )
         ],
       ),
     );
@@ -240,16 +357,12 @@ class _HomeItemsState extends State<HomeItems> {
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
+                            // getPlaylist(context),
                             Padding(
                               padding: const EdgeInsets.fromLTRB(0, 25, 8, 0),
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.end,
-                                children: [
-                                  Image.asset(
-                                    "assets/icons/save.png",
-                                    height: 18,
-                                  )
-                                ],
+                                children: [getPlaylist(context)],
                               ),
                             ),
                             Padding(
@@ -266,7 +379,8 @@ class _HomeItemsState extends State<HomeItems> {
                                         borderRadius:
                                             BorderRadius.circular(16)),
                                     child: Text(
-                                      "${(widget.items?.duration ?? 100) ~/ 60}:${((widget.items?.duration ?? 100) % 60)}",
+                                      convertTime(
+                                          widget.items?.duration ?? 100),
                                       // totalSeconds ~/ 60
                                       // (
                                       // ((widget.items?.duration ?? 100) / 60)
@@ -368,19 +482,212 @@ class _HomeItemsState extends State<HomeItems> {
                     fontWeight: FontWeight.bold),
               ),
             ),
-            gapH16,
+            // gapH16,
           ],
         ),
       ),
     );
   }
+
+  String convertTime(int time) {
+    print(time);
+    int originalDuration = time;
+
+    int hours = originalDuration ~/ 60;
+    int minutes = originalDuration % 60;
+
+    String newTime =
+        '${hours.toString()}:${minutes.toString().padLeft(2, '0')}';
+
+    return newTime;
+  }
+
+  Widget getPlaylist(BuildContext context) {
+    return InkWell(
+        onTap: () {
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return StatefulBuilder(builder: (BuildContext context, setSt) {
+                return AlertDialog(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16)),
+                    insetPadding: EdgeInsets.zero,
+                    titlePadding: EdgeInsets.zero,
+                    backgroundColor: Color(0xFF171718),
+                    surfaceTintColor: Color(0xFF171718),
+                    actions: <Widget>[
+                      TextButton(
+                        child: Container(
+                            padding: EdgeInsets.symmetric(
+                                vertical: 8, horizontal: 16),
+                            decoration: BoxDecoration(
+                                color: Color(0xFF008BC3),
+                                borderRadius: BorderRadius.circular(9)),
+                            child: const Text(
+                              'SAVE',
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 15),
+                            )),
+                        onPressed: () {
+                          if (widget.items != null) {
+                            widget.viewModel
+                                .addVideoToPlaylistHome(widget.items, context);
+                          }
+                          // _viewModel.setSortBy(
+                          //     _viewModel.sortBy ?? AppConstants.latest,
+                          //     val,
+                          //     context);
+                          // Handle the submit action
+                        },
+                      ),
+                    ],
+                    title: Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                'Add to playlist'.toUpperCase(),
+                                style: TextStyle(
+                                    fontFamily: "Good",
+                                    color: Color(0xFF3CB4E4),
+                                    fontSize: 16),
+                              ),
+                              InkWell(
+                                  onTap: () {
+                                    context.pop();
+                                  },
+                                  child: Icon(Icons.close))
+                            ],
+                          ),
+                        ),
+                        Container(
+                          height: 2,
+                          decoration: BoxDecoration(color: Color(0xFF27272A)),
+                        )
+                      ],
+                    ),
+                    content: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          ...List.generate(
+                              widget.viewModel.getAllPlaylistResponse?.length ??
+                                  0,
+                              (index) => Padding(
+                                    padding: const EdgeInsets.only(right: 8),
+                                    child: Column(
+                                      children: [
+                                        InkWell(
+                                          onTap: () {
+                                            setSt(() {
+                                              if (widget
+                                                  .viewModel.selectedPlayList
+                                                  .contains(widget.viewModel
+                                                          .getAllPlaylistResponse?[
+                                                      index])) {
+                                                widget
+                                                    .viewModel.selectedPlayList
+                                                    .remove(widget.viewModel
+                                                            .getAllPlaylistResponse?[
+                                                        index]);
+                                              } else {
+                                                widget.viewModel.selectedPlayList.add(widget
+                                                            .viewModel
+                                                            .getAllPlaylistResponse?[
+                                                        index] ??
+                                                    GetAllPlaylistResponse(
+                                                        label: widget
+                                                            .viewModel
+                                                            .getAllPlaylistResponse?[
+                                                                index]
+                                                            .label,
+                                                        value: widget
+                                                            .viewModel
+                                                            .getAllPlaylistResponse?[
+                                                                index]
+                                                            .value));
+                                                // _viewModel.durations.add("5");
+                                              }
+                                            });
+                                          },
+                                          child: Container(
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                Text(widget
+                                                        .viewModel
+                                                        .getAllPlaylistResponse?[
+                                                            index]
+                                                        .label ??
+                                                    ""),
+                                                Container(
+                                                  height: 18,
+                                                  width: 18,
+                                                  decoration: BoxDecoration(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              2),
+                                                      color: !widget.viewModel
+                                                              .selectedPlayList
+                                                              .contains(widget
+                                                                      .viewModel
+                                                                      .getAllPlaylistResponse?[
+                                                                  index])
+                                                          ? Colors.transparent
+                                                          : Color(0xFF008BC3),
+                                                      border: Border.all(
+                                                          color: widget
+                                                                  .viewModel
+                                                                  .selectedPlayList
+                                                                  .contains(widget.viewModel.getAllPlaylistResponse?[index])
+                                                              ? Colors.transparent
+                                                              : Colors.white)),
+                                                  child: Icon(
+                                                    Icons.check,
+                                                    size: 10,
+                                                    color: widget.viewModel
+                                                            .selectedPlayList
+                                                            .contains(widget
+                                                                    .viewModel
+                                                                    .getAllPlaylistResponse?[
+                                                                index])
+                                                        ? Colors.white
+                                                        : Colors.transparent,
+                                                  ),
+                                                )
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                        gapH4,
+                                      ],
+                                    ),
+                                  ))
+                        ]));
+              });
+            },
+          );
+        },
+        child: Image.asset(
+          "assets/icons/save.png",
+          height: 18,
+        ));
+  }
 }
 
 class CustomAppBar extends StatefulWidget {
   final bool showBack;
+  final bool isSearchDisabled;
   const CustomAppBar({
     super.key,
     this.showBack = false,
+    this.isSearchDisabled = false,
   });
 
   @override
@@ -412,15 +719,17 @@ class _CustomAppBarState extends State<CustomAppBar> with BaseScreenView {
               ),
             ),
       actions: [
-        InkWell(
-          onTap: () {
-            navigateToScreen(AppRoute.searchVideoView);
-          },
-          child: Icon(
-            Icons.search,
-            color: Colors.white,
-          ),
-        ),
+        widget.isSearchDisabled
+            ? Container()
+            : InkWell(
+                onTap: () {
+                  navigateToScreen(AppRoute.searchVideoView);
+                },
+                child: Icon(
+                  Icons.search,
+                  color: Colors.white,
+                ),
+              ),
         gapW16
         // Padding(
         //   padding: const EdgeInsets.only(left: 16, right: 16),

@@ -1,6 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:custom_sliding_segmented_control/custom_sliding_segmented_control.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:ondemand/core/core.dart';
 import 'package:ondemand/data/home/models/get_playlist_model.dart';
 import 'package:ondemand/data/home/models/library_list_model.dart';
@@ -18,11 +20,18 @@ class LibraryView extends ConsumerStatefulWidget {
 }
 
 class _LibraryViewState extends ConsumerState<LibraryView> with BaseScreenView {
-  int val = 1;
+  int val = 0;
+  final ScrollController _scrollController = ScrollController();
 
   bool isDurationOpen = false;
   bool isFocusOpen = false;
   bool isStrengthOpen = false;
+  List<String> chipsText = [
+    "ALL",
+    "LESSONS",
+    "EXERCISES",
+    "ACROSS THE FLOOR",
+  ];
 
   late BottomNavigationViewModel _viewModel;
   @override
@@ -34,20 +43,8 @@ class _LibraryViewState extends ConsumerState<LibraryView> with BaseScreenView {
     _viewModel.attachView(this);
     Future.delayed(Duration(milliseconds: 2)).then((value) async {
       _viewModel.toggleLoading();
-      await _viewModel.getLibraryVideos(
-        LibraryListRequest(
-            categoryId: AppConstants.categoryIdForLesson,
-            startIndex: 0,
-            sortby: "latest",
-            selectedDurations: "",
-            selectedLevels: "",
-            selectedTags: "",
-            userId: "",
-            endIndex: 500),
-
-        // LibraryListRequest(categoryId:AppCons
-
-        // )
+      _viewModel.setVideoList(
+        val,
       );
       await _viewModel.getPlaylistList();
 
@@ -72,93 +69,166 @@ class _LibraryViewState extends ConsumerState<LibraryView> with BaseScreenView {
           Container(
             width: double.infinity,
             decoration: BoxDecoration(
-              color: Color(0xFF27272a),
+              color: Color(0xFF171718),
             ),
             child: Column(
               children: [
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(20, 16, 20, 16),
-                  child: CustomSlidingSegmentedControl<int>(
-                    initialValue: 1,
-                    // innerPadding: EdgeInsets.all(8),
-                    height: 35,
+                //   Padding(
+                //     padding: const EdgeInsets.fromLTRB(20, 16, 20, 16),
+                //     child: CustomSlidingSegmentedControl<int>(
+                //       initialValue: 1,
+                //       // innerPadding: EdgeInsets.all(8),
+                //       height: 35,
 
-                    innerPadding: EdgeInsets.only(top: 0),
-                    isStretch: true,
-                    // fixedWidth: 80.w,
-                    // fixedWidth: double.infinity,
-                    children: {
-                      1: Text(
-                        "Lessons",
-                        style: TextStyle(
-                          color: val == 1 ? Color(0xFF1AA2D9) : Colors.white,
-                          fontSize: 10,
-                          fontFamily: "Century",
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      2: Text(
-                        "Exercises",
-                        style: TextStyle(
-                          color: val == 2 ? Color(0xFF1AA2D9) : Colors.white,
-                          fontSize: 10,
-                          fontFamily: "Century",
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      3: Text(
-                        "Across the Floor",
-                        style: TextStyle(
-                          color: val == 3 ? Color(0xFF1AA2D9) : Colors.white,
-                          fontSize: 10,
-                          fontFamily: "Century",
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    },
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Color(0xFF6D6D6D)),
-                      color: bgColor,
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    thumbDecoration: BoxDecoration(
-                      color: Color(0xFF161616),
-                      border: Border.symmetric(
-                          vertical: BorderSide(color: Color(0xFF6D6D6D))),
-                      borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(val == 1
-                              ? 8
-                              : val == 2
-                                  ? 0
-                                  : 0),
-                          bottomLeft: Radius.circular(val == 1
-                              ? 8
-                              : val == 2
-                                  ? 0
-                                  : 0),
-                          topRight: Radius.circular(val == 3
-                              ? 8
-                              : val == 2
-                                  ? 0
-                                  : 0),
-                          bottomRight: Radius.circular(val == 3
-                              ? 8
-                              : val == 2
-                                  ? 0
-                                  : 0)),
-                    ),
-                    duration: const Duration(milliseconds: 300),
-                    curve: Curves.easeInToLinear,
-                    onValueChanged: (v) {
-                      // print(v);
+                //       innerPadding: EdgeInsets.only(top: 0),
+                //       isStretch: true,
+                //       // fixedWidth: 80.w,
+                //       // fixedWidth: double.infinity,
+                //       children: {
+                //         1: Text(
+                //           "Lessons".toUpperCase(),
+                //           style: TextStyle(
+                //             color: val == 1 ? Color(0xFF1AA2D9) : Colors.white,
+                //             fontSize: 10,
+                //             fontFamily: "Century",
+                //             fontWeight: FontWeight.bold,
+                //           ),
+                //         ),
+                //         2: Text(
+                //           "Exercises".toUpperCase(),
+                //           style: TextStyle(
+                //             color: val == 2 ? Color(0xFF1AA2D9) : Colors.white,
+                //             fontSize: 10,
+                //             fontFamily: "Century",
+                //             fontWeight: FontWeight.bold,
+                //           ),
+                //         ),
+                //         3: Text(
+                //           "Across the Floor".toUpperCase(),
+                //           style: TextStyle(
+                //             color: val == 3 ? Color(0xFF1AA2D9) : Colors.white,
+                //             fontSize: 10,
+                //             fontFamily: "Century",
+                //             fontWeight: FontWeight.bold,
+                //           ),
+                //         ),
+                //       },
+                //       decoration: BoxDecoration(
+                //         border: Border.all(color: Color(0xFF6D6D6D)),
+                //         color: bgColor,
+                //         borderRadius: BorderRadius.circular(8),
+                //       ),
+                //       thumbDecoration: BoxDecoration(
+                //         color: Color(0xFF161616),
+                //         border: Border.symmetric(
+                //             vertical: BorderSide(color: Color(0xFF6D6D6D))),
+                //         borderRadius: BorderRadius.only(
+                //             topLeft: Radius.circular(val == 1
+                //                 ? 8
+                //                 : val == 2
+                //                     ? 0
+                //                     : 0),
+                //             bottomLeft: Radius.circular(val == 1
+                //                 ? 8
+                //                 : val == 2
+                //                     ? 0
+                //                     : 0),
+                //             topRight: Radius.circular(val == 3
+                //                 ? 8
+                //                 : val == 2
+                //                     ? 0
+                //                     : 0),
+                //             bottomRight: Radius.circular(val == 3
+                //                 ? 8
+                //                 : val == 2
+                //                     ? 0
+                //                     : 0)),
+                //       ),
+                //       duration: const Duration(milliseconds: 300),
+                //       curve: Curves.easeInToLinear,
+                //       onValueChanged: (v) {
+                //         // print(v);
 
-                      setState(() {
-                        val = v;
-                        _viewModel.setVideoList(
-                          val,
-                        );
-                      });
-                    },
+                //         setState(() {
+                //           val = v;
+                //           _viewModel.setVideoList(
+                //             val,
+                //           );
+                //         });
+                //       },
+                //     ),
+                //   ),
+                SingleChildScrollView(
+                  // controller: _scrollController,
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    mainAxisSize: MainAxisSize.max,
+                    children: [
+                      ...List.generate(
+                          4,
+                          (index3) => InkWell(
+                                onTap: () {
+                                  setState(() {
+                                    val = index3;
+                                  });
+                                  _viewModel.setVideoList(
+                                    val,
+                                  );
+                                  // if (val == 1) {
+                                  //   setState(() {
+                                  //     _viewModel.featuredPlaylist();
+                                  //   });
+                                  // } else if (val == 2) {
+                                  //   setState(() {
+                                  //     _viewModel.getpersonalPlaylist();
+                                  //   });
+                                  // } else if (val == 0) {
+                                  //   setState(() {
+                                  //     _viewModel.getPlaylistList();
+                                  //   });
+                                  // } else {}
+                                },
+                                child: Container(
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 16, vertical: 8),
+                                  margin: EdgeInsets.fromLTRB(
+                                      index3 == 0 ? 16 : 8,
+                                      12,
+                                      index3 == 3 ? 16 : 8,
+                                      12),
+                                  decoration: BoxDecoration(
+                                      boxShadow: val == index3
+                                          ? [
+                                              BoxShadow(
+                                                  color: Color(0xFF3CB4E4)
+                                                      .withOpacity(0.2),
+                                                  blurRadius: 3,
+                                                  spreadRadius: 4)
+                                            ]
+                                          : [],
+                                      color: val == index3
+                                          ? Colors.black
+                                          : bgColor,
+                                      borderRadius: BorderRadius.circular(16),
+                                      border: Border.all(
+                                          color: val == index3
+                                              ? Color(0xFF1AA2D9)
+                                              : Color(0xFF6D6D6D))),
+                                  child: Text(
+                                    chipsText[index3].toUpperCase(),
+                                    style: TextStyle(
+                                      color: val == index3
+                                          ? Color(0xFF1AA2D9)
+                                          : Colors.white,
+                                      fontSize: 10,
+                                      fontFamily: "Century",
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                              ))
+                    ],
                   ),
                 ),
               ],
@@ -218,10 +288,11 @@ class _LibraryViewState extends ConsumerState<LibraryView> with BaseScreenView {
               padding: EdgeInsets.symmetric(horizontal: 16),
               color: Color(0xFF171718),
               child: GridView.builder(
+                controller: _scrollController,
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2,
                     crossAxisSpacing: 16,
-                    mainAxisExtent: MediaQuery.of(context).size.height / 3.7),
+                    mainAxisExtent: MediaQuery.of(context).size.height / 4.3),
                 shrinkWrap: true,
                 itemCount: _viewModel.libraryList.length ?? 0,
                 itemBuilder: (context, index) => LibraryItems(
@@ -305,7 +376,9 @@ class _LibraryViewState extends ConsumerState<LibraryView> with BaseScreenView {
                           Text(
                             'Filters'.toUpperCase(),
                             style: TextStyle(
-                                color: Color(0xFF3CB4E4), fontSize: 16),
+                                fontFamily: "Good",
+                                color: Color(0xFF3CB4E4),
+                                fontSize: 16),
                           ),
                           InkWell(
                               onTap: () {
@@ -1118,7 +1191,9 @@ class _LibraryViewState extends ConsumerState<LibraryView> with BaseScreenView {
                             Text(
                               'Add to playlist'.toUpperCase(),
                               style: TextStyle(
-                                  color: Color(0xFF3CB4E4), fontSize: 16),
+                                  fontFamily: "Good",
+                                  color: Color(0xFF3CB4E4),
+                                  fontSize: 16),
                             ),
                             InkWell(
                                 onTap: () {
@@ -1566,7 +1641,7 @@ class _LibraryItemsState extends State<LibraryItems> with BaseScreenView {
                                     color: Color(0xFF27272A),
                                     borderRadius: BorderRadius.circular(16)),
                                 child: Text(
-                                  "${(widget.items?.duration ?? 100) ~/ 60}:${((widget.items?.duration ?? 100) % 60)}",
+                                  "${convertTime(widget.items?.duration ?? 100)}",
                                   // (((widget.items.duration ?? 100) / 60)
                                   // .toStringAsFixed(2)),
                                   style: TextStyle(
@@ -1661,31 +1736,38 @@ class _LibraryItemsState extends State<LibraryItems> with BaseScreenView {
                   //   )
 
                   ...List.generate(
-                    widget.items.tagsDetails?.length ?? 0,
-                    (index2) => Container(
-                      constraints:
-                          BoxConstraints(maxWidth: widget.val == 3 ? 150 : 80),
-                      padding: EdgeInsets.symmetric(horizontal: 4, vertical: 4),
-                      margin: EdgeInsets.only(right: 8),
-                      decoration: BoxDecoration(
-                          color: HexColor.fromHex(
-                              widget.items.tagsDetails?[index2].color ??
-                                  "0xFFFFFF"),
-                          // Color(items?.tagsDetails?[index2].color
-                          //         .replaceAll("#", "0xFF") ??
-                          //     Colors.black),
-                          borderRadius: BorderRadius.circular(4)),
-                      child: Text(
-                        (widget.items.tagsDetails?[index2].name ?? "")
-                            .toUpperCase(),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                            fontSize: 10,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white),
-                      ),
-                    ),
+                    widget.items.tagsDetails != null
+                        ? widget.items.tagsDetails!.length - 1 != -1
+                            ? widget.items.tagsDetails!.length
+                            : widget.items.tagsDetails?.length ?? 0
+                        : widget.items.tagsDetails?.length ?? 0,
+                    (index2) => index2 == 0
+                        ? Container()
+                        : Container(
+                            constraints: BoxConstraints(
+                                maxWidth: widget.val == 3 ? 150 : 80),
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 4, vertical: 4),
+                            margin: EdgeInsets.only(right: 8),
+                            decoration: BoxDecoration(
+                                color: HexColor.fromHex(
+                                    widget.items.tagsDetails?[index2].color ??
+                                        "0xFFFFFF"),
+                                // Color(items?.tagsDetails?[index2].color
+                                //         .replaceAll("#", "0xFF") ??
+                                //     Colors.black),
+                                borderRadius: BorderRadius.circular(4)),
+                            child: Text(
+                              (widget.items.tagsDetails?[index2].name ?? "")
+                                  .toUpperCase(),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white),
+                            ),
+                          ),
                   )
                 ],
               ),
@@ -1736,7 +1818,8 @@ class _LibraryItemsState extends State<LibraryItems> with BaseScreenView {
                                   TextStyle(color: Colors.white, fontSize: 15),
                             )),
                         onPressed: () {
-                          widget._viewModel.addVideoToPlaylist(widget.items);
+                          widget._viewModel
+                              .addVideoToPlaylist(widget.items, context);
                           // _viewModel.setSortBy(
                           //     _viewModel.sortBy ?? AppConstants.latest,
                           //     val,
@@ -1755,7 +1838,9 @@ class _LibraryItemsState extends State<LibraryItems> with BaseScreenView {
                               Text(
                                 'Add to playlist'.toUpperCase(),
                                 style: TextStyle(
-                                    color: Color(0xFF3CB4E4), fontSize: 16),
+                                    fontFamily: "Good",
+                                    color: Color(0xFF3CB4E4),
+                                    fontSize: 16),
                               ),
                               InkWell(
                                   onTap: () {
@@ -1881,6 +1966,19 @@ class _LibraryItemsState extends State<LibraryItems> with BaseScreenView {
           "assets/icons/save.png",
           height: 14,
         ));
+  }
+
+  String convertTime(int time) {
+    print(time);
+    int originalDuration = time;
+
+    int hours = originalDuration ~/ 60;
+    int minutes = originalDuration % 60;
+
+    String newTime =
+        '${hours.toString()}:${minutes.toString().padLeft(2, '0')}';
+
+    return newTime;
   }
 
   @override

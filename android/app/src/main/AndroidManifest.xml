@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.ondemand.app">
+    package="com.thegodfreymethod.ondemand">
 
    <application
         android:usesCleartextTraffic="true"        

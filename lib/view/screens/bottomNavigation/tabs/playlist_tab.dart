@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:custom_sliding_segmented_control/custom_sliding_segmented_control.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:image_stack/image_stack.dart';
 import 'package:ondemand/data/home/models/feature_playlist_model.dart'
     as playlist;
@@ -23,6 +24,7 @@ class _PlaylistTabState extends ConsumerState<PlaylistTab> with BaseScreenView {
   int val = 0;
   int initialIndex = 0;
   late BottomNavigationViewModel _viewModel;
+  final ScrollController _scrollController = ScrollController();
   @override
   void initState() {
     // TODO: implement initState
@@ -31,18 +33,20 @@ class _PlaylistTabState extends ConsumerState<PlaylistTab> with BaseScreenView {
     _viewModel = ref.read(bottomNavigationViewModel);
     _viewModel.attachView(this);
     Future.delayed(Duration(milliseconds: 2)).then((value) async {
-      _viewModel.toggleLoading();
       await _viewModel.allPlaylist(
           // LibraryListRequest(categoryId:AppCons
 
           // )
           );
-      _viewModel.toggleLoading();
+      setState(() {
+        initialIndex = 0;
+      });
     });
 
     // _viewModel.getSubscriptionList();
   }
 
+  List<String> chipsText = ["All", "featured", "Personal"];
   @override
   Widget build(BuildContext context) {
     _viewModel = ref.watch(bottomNavigationViewModel);
@@ -53,84 +57,208 @@ class _PlaylistTabState extends ConsumerState<PlaylistTab> with BaseScreenView {
       body: Column(
         children: [
           Container(
+            padding: EdgeInsets.only(bottom: 12),
             width: double.infinity,
             decoration: BoxDecoration(
-              color: Color(0xFF27272a),
+              color: Color(0xFF171718),
             ),
             child: Column(
               children: [
                 Row(
+                  mainAxisSize: MainAxisSize.max,
                   children: [
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.fromLTRB(20, 16, 20, 16),
-                        child: CustomSlidingSegmentedControl<int>(
-                          initialValue: 0,
-                          // innerPadding: EdgeInsets.all(8),
-                          height: 35,
+                    // Expanded(
+                    //   child: Padding(
+                    //     padding: const EdgeInsets.fromLTRB(20, 16, 20, 16),
+                    //     child: CustomSlidingSegmentedControl<int>(
+                    //       initialValue: 1,
+                    //       // innerPadding: EdgeInsets.all(8),
+                    //       height: 35,
+                    //       isShowDivider: true,
+                    //       innerPadding: EdgeInsets.only(top: 0),
+                    //       isStretch: true,
+                    //       // fixedWidth: 80.w,
+                    //       // fixedWidth: double.infinity,
+                    //       children: {
+                    //         1: Text(
+                    //           "All",
+                    //           style: TextStyle(
+                    //             color:
+                    //                 val == 1 ? Color(0xFF1AA2D9) : Colors.white,
+                    //             fontSize: 10,
+                    //             fontFamily: "Century",
+                    //             fontWeight: FontWeight.bold,
+                    //           ),
+                    //         ),
+                    //         2: Text(
+                    //           "Featured",
+                    //           style: TextStyle(
+                    //             color:
+                    //                 val == 2 ? Color(0xFF1AA2D9) : Colors.white,
+                    //             fontSize: 10,
+                    //             fontFamily: "Century",
+                    //             fontWeight: FontWeight.bold,
+                    //           ),
+                    //         ),
+                    //         3: Text(
+                    //           "Personal",
+                    //           style: TextStyle(
+                    //             color:
+                    //                 val == 3 ? Color(0xFF1AA2D9) : Colors.white,
+                    //             fontSize: 10,
+                    //             fontFamily: "Century",
+                    //             fontWeight: FontWeight.bold,
+                    //           ),
+                    //         ),
+                    //       },
+                    //       decoration: BoxDecoration(
+                    //         border: Border.all(color: Color(0xFF6D6D6D)),
+                    //         color: bgColor,
+                    //         borderRadius: BorderRadius.circular(8),
+                    //       ),
+                    //       dividerSettings: DividerSettings(
+                    //           decoration:
+                    //               BoxDecoration(color: Color(0xFF6D6D6D))),
+                    //       thumbDecoration: BoxDecoration(
+                    //         color: Color(0xFF161616),
+                    //         border: Border.symmetric(
+                    //           vertical: BorderSide(
+                    //               // strokeAlign: BorderSide.strokeAlignCenter,
+                    //               width: 1,
+                    //               color: Color(0xFF6D6D6D)),
+                    //         ),
+                    //         borderRadius: BorderRadius.only(
+                    //             topLeft: Radius.circular(val == 1
+                    //                 ? 8
+                    //                 : val == 2
+                    //                     ? 0
+                    //                     : 0),
+                    //             bottomLeft: Radius.circular(val == 1
+                    //                 ? 8
+                    //                 : val == 2
+                    //                     ? 0
+                    //                     : 0),
+                    //             topRight: Radius.circular(val == 3
+                    //                 ? 8
+                    //                 : val == 2
+                    //                     ? 0
+                    //                     : 0),
+                    //             bottomRight: Radius.circular(val == 3
+                    //                 ? 8
+                    //                 : val == 2
+                    //                     ? 0
+                    //                     : 0)),
+                    //       ),
+                    //       duration: const Duration(milliseconds: 300),
+                    //       curve: Curves.easeInToLinear,
+                    //       onValueChanged: (v) {
+                    //         // print(v);
 
-                          innerPadding: EdgeInsets.only(top: 0),
-                          isStretch: true,
-                          // fixedWidth: 80.w,
-                          // fixedWidth: double.infinity,
-                          children: {
-                            1: Text(
-                              "Featured",
-                              style: TextStyle(
-                                color:
-                                    val == 1 ? Color(0xFF1AA2D9) : Colors.white,
-                                fontSize: 10,
-                                fontFamily: "Century",
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            2: Text(
-                              "Personal",
-                              style: TextStyle(
-                                color:
-                                    val == 2 ? Color(0xFF1AA2D9) : Colors.white,
-                                fontSize: 10,
-                                fontFamily: "Century",
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          },
-                          decoration: BoxDecoration(
-                            border: Border.all(color: Color(0xFF6D6D6D)),
-                            color: bgColor,
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          thumbDecoration: BoxDecoration(
-                            color: Color(0xFF161616),
-                            border: Border.symmetric(
-                                vertical: BorderSide(color: Color(0xFF6D6D6D))),
-                            borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(val == 1 ? 8 : 0),
-                                bottomLeft: Radius.circular(val == 1 ? 8 : 0),
-                                topRight: Radius.circular(val == 2 ? 8 : 0),
-                                bottomRight: Radius.circular(val == 2 ? 8 : 0)),
-                          ),
-                          duration: const Duration(milliseconds: 300),
-                          curve: Curves.easeInToLinear,
-                          onValueChanged: (v) {
-                            // print(v);
-
-                            setState(() {
-                              val = v;
-                            });
-                            if (val == 1) {
-                              setState(() {
-                                _viewModel.featuredPlaylist();
-                              });
-                            } else if (val == 2) {
-                              setState(() {
-                                _viewModel.getpersonalPlaylist();
-                              });
-                            } else {}
-                          },
-                        ),
-                      ),
+                    //         setState(() {
+                    //           val = v;
+                    //         });
+                    //         if (val == 1) {
+                    //           setState(() {
+                    //             _viewModel.featuredPlaylist();
+                    //           });
+                    //         } else if (val == 2) {
+                    //           setState(() {
+                    //             _viewModel.getpersonalPlaylist();
+                    //           });
+                    //         } else if (val == 0) {
+                    //           setState(() {
+                    //             _viewModel.getPlaylistList();
+                    //           });
+                    //         } else {}
+                    //       },
+                    //     ),
+                    //   ),
+                    // ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      mainAxisSize: MainAxisSize.max,
+                      children: [
+                        ...List.generate(
+                            3,
+                            (index3) => InkWell(
+                                  onTap: () {
+                                    setState(() {
+                                      val = index3;
+                                    });
+                                    if (val == 1) {
+                                      setState(() {
+                                        _viewModel.featuredPlaylist();
+                                        _scrollController.animateTo(
+                                          _scrollController
+                                              .position.minScrollExtent,
+                                          duration: Duration(seconds: 2),
+                                          curve: Curves.fastOutSlowIn,
+                                        );
+                                      });
+                                    } else if (val == 2) {
+                                      setState(() {
+                                        _viewModel.getpersonalPlaylist();
+                                        _scrollController.animateTo(
+                                          _scrollController
+                                              .position.minScrollExtent,
+                                          duration: Duration(seconds: 2),
+                                          curve: Curves.fastOutSlowIn,
+                                        );
+                                      });
+                                    } else if (val == 0) {
+                                      setState(() {
+                                        _viewModel.getPlaylistList();
+                                        _scrollController.animateTo(
+                                          _scrollController
+                                              .position.minScrollExtent,
+                                          duration: Duration(seconds: 2),
+                                          curve: Curves.fastOutSlowIn,
+                                        );
+                                      });
+                                    } else {}
+                                  },
+                                  child: Container(
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 16, vertical: 8),
+                                    margin: EdgeInsets.fromLTRB(
+                                        index3 == 0 ? 16 : 8,
+                                        12,
+                                        index3 == 2 ? 16 : 8,
+                                        0),
+                                    decoration: BoxDecoration(
+                                        boxShadow: val == index3
+                                            ? [
+                                                BoxShadow(
+                                                    color: Color(0xFF3CB4E4)
+                                                        .withOpacity(0.2),
+                                                    blurRadius: 3,
+                                                    spreadRadius: 4)
+                                              ]
+                                            : [],
+                                        color: val == index3
+                                            ? Colors.black
+                                            : bgColor,
+                                        borderRadius: BorderRadius.circular(16),
+                                        border: Border.all(
+                                            color: val == index3
+                                                ? Color(0xFF1AA2D9)
+                                                : Color(0xFF6D6D6D))),
+                                    child: Text(
+                                      chipsText[index3].toUpperCase(),
+                                      style: TextStyle(
+                                        color: val == index3
+                                            ? Color(0xFF1AA2D9)
+                                            : Colors.white,
+                                        fontSize: 10,
+                                        fontFamily: "Century",
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
+                                ))
+                      ],
                     ),
+                    Spacer(),
                     addPlaylist(context)
                   ],
                 ),
@@ -138,48 +266,55 @@ class _PlaylistTabState extends ConsumerState<PlaylistTab> with BaseScreenView {
             ),
           ),
           // gapH16,
-          gapH8,
-          Container(
-            height: 4,
-            decoration: BoxDecoration(color: Color(0xFF171718)),
-          ),
-          _viewModel.loading
-              ? Container()
-              : Container(
-                  height: MediaQuery.of(context).size.height / 4.8,
-                  // width: MediaQuery.of(context).size.width / 1.6,
-                  child: ListView.builder(
-                    itemCount: val == 0
-                        ? _viewModel.allPlaylistList.length ?? 0
-                        : val == 1
-                            ? _viewModel.featuredList.length ?? 0
-                            : _viewModel.personalPlaylist.length ?? 0,
-                    scrollDirection: Axis.horizontal,
-                    itemBuilder: (context, index) => InkWell(
-                        onTap: () {
-                          initialIndex = index;
-                          setState(() {});
-                        },
-                        child: playlistSwiper(
-                            index,
-                            val == 0
-                                ? _viewModel.allPlaylistList
+          Expanded(
+            child: SingleChildScrollView(
+              controller: _scrollController,
+              child: Column(
+                children: [
+                  // gapH8,
+                  _viewModel.isPlaylistLoading
+                      ? Container()
+                      : Container(
+                          decoration: BoxDecoration(color: Color(0xFF27272a)),
+                          height: MediaQuery.of(context).size.height / 4.8,
+                          // width: MediaQuery.of(context).size.width / 1.6,
+                          child: ListView.builder(
+                            itemCount: val == 0
+                                ? _viewModel.allPlaylistList.length ?? 0
                                 : val == 1
-                                    ? _viewModel.featuredList
-                                    : _viewModel.personalPlaylist)),
-                  ),
-                ),
-          gapH12,
-          _viewModel.loading ? Container() : heading(),
-          _viewModel.loading
-              ? Container()
-              : playlists(
-                  context,
-                  val == 0
-                      ? _viewModel.allPlaylistList[initialIndex].videos
-                      : val == 1
-                          ? _viewModel.featuredList[initialIndex].videos
-                          : _viewModel.personalPlaylist[initialIndex].videos)
+                                    ? _viewModel.featuredList.length ?? 0
+                                    : _viewModel.personalPlaylist.length ?? 0,
+                            scrollDirection: Axis.horizontal,
+                            itemBuilder: (context, index) => InkWell(
+                                onTap: () {
+                                  initialIndex = index;
+                                  setState(() {});
+                                },
+                                child: playlistSwiper(
+                                    index,
+                                    val == 0
+                                        ? _viewModel.allPlaylistList
+                                        : val == 1
+                                            ? _viewModel.featuredList
+                                            : _viewModel.personalPlaylist)),
+                          ),
+                        ),
+                  gapH12,
+                  _viewModel.isPlaylistLoading ? Container() : heading(),
+                  _viewModel.isPlaylistLoading
+                      ? Container()
+                      : playlists(
+                          context,
+                          val == 0
+                              ? _viewModel.allPlaylistList[initialIndex].videos
+                              : val == 1
+                                  ? _viewModel.featuredList[initialIndex].videos
+                                  : _viewModel
+                                      .personalPlaylist[initialIndex].videos)
+                ],
+              ),
+            ),
+          )
         ],
       ),
     );
@@ -408,7 +543,12 @@ class _PlaylistTabState extends ConsumerState<PlaylistTab> with BaseScreenView {
               content: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  TextField(
+                  TextFormField(
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w400,
+                        fontSize: 14),
+                    cursorColor: Colors.white,
                     decoration: InputDecoration(
                         contentPadding: EdgeInsets.all(8),
                         filled: true,
@@ -440,8 +580,13 @@ class _PlaylistTabState extends ConsumerState<PlaylistTab> with BaseScreenView {
                             ))),
                   ),
                   gapH8,
-                  TextField(
-                    maxLines: 6,
+                  TextFormField(
+                    // maxLines: 6,
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w400,
+                        fontSize: 14),
+                    cursorColor: Colors.white,
                     decoration: InputDecoration(
                         contentPadding: EdgeInsets.all(8),
                         filled: true,
@@ -473,7 +618,12 @@ class _PlaylistTabState extends ConsumerState<PlaylistTab> with BaseScreenView {
                             ))),
                   ),
                   gapH8,
-                  TextField(
+                  TextFormField(
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w400,
+                        fontSize: 14),
+                    cursorColor: Colors.white,
                     decoration: InputDecoration(
                         contentPadding: EdgeInsets.all(8),
                         filled: true,
@@ -538,7 +688,7 @@ class _PlaylistTabState extends ConsumerState<PlaylistTab> with BaseScreenView {
         );
       },
       child: Container(
-        margin: EdgeInsets.fromLTRB(0, 0, 16, 0),
+        margin: EdgeInsets.fromLTRB(0, 8, 16, 0),
         padding: EdgeInsets.all(8),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(12),
@@ -560,7 +710,6 @@ class _PlaylistTabState extends ConsumerState<PlaylistTab> with BaseScreenView {
       width: MediaQuery.of(context).size.width / 1.2,
       // height: 4,
 
-      decoration: BoxDecoration(color: Color(0xFF27272a)),
       child: Container(
           padding: EdgeInsets.all(16),
           // width: MediaQuery.of(context).size.width / 2.3,
@@ -635,7 +784,9 @@ class _PlaylistTabState extends ConsumerState<PlaylistTab> with BaseScreenView {
                     onTap: () {
                       context.pushNamed(
                         AppRoute.videoPageView.name,
-                        pathParameters: {'id': videosList.first.id ?? ""},
+                        pathParameters: {
+                          'id': videosList.first.videos?.first.id ?? ""
+                        },
                       );
                       // navigateToScreen(AppRoute.videoPageView);
                     },
@@ -672,22 +823,21 @@ class _PlaylistTabState extends ConsumerState<PlaylistTab> with BaseScreenView {
   }
 
   Widget playlists(BuildContext context, List<playlist.Video>? videoList) {
-    return Expanded(
-      child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 16),
-        color: Color(0xFF171718),
-        child: GridView.builder(
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                crossAxisSpacing: 16,
-                mainAxisExtent: MediaQuery.of(context).size.height / 3.7),
-            shrinkWrap: true,
-            itemCount: videoList?.length ?? 0,
-            itemBuilder: (context, index) => LibraryItems(
-                  items: videoList![index],
-                  viewModel: _viewModel,
-                )),
-      ),
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 16),
+      color: Color(0xFF171718),
+      child: GridView.builder(
+          physics: NeverScrollableScrollPhysics(),
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              crossAxisSpacing: 16,
+              mainAxisExtent: MediaQuery.of(context).size.height / 3.7),
+          shrinkWrap: true,
+          itemCount: videoList?.length ?? 0,
+          itemBuilder: (context, index) => LibraryItems(
+                items: videoList![index],
+                viewModel: _viewModel,
+              )),
     );
   }
 
@@ -782,7 +932,7 @@ class _LibraryItemsState extends State<LibraryItems> with BaseScreenView {
                                     color: Color(0xFF27272A),
                                     borderRadius: BorderRadius.circular(16)),
                                 child: Text(
-                                  "${(widget.items?.duration ?? 100) ~/ 60}:${((widget.items?.duration ?? 100) % 60)}",
+                                  "${convertTime(widget.items?.duration ?? 100)}",
                                   // (((widget.items.duration ?? 100) / 60)
                                   // .toStringAsFixed(2)),
                                   style: TextStyle(
@@ -921,6 +1071,19 @@ class _LibraryItemsState extends State<LibraryItems> with BaseScreenView {
         ),
       ),
     );
+  }
+
+  String convertTime(int time) {
+    print(time);
+    int originalDuration = time;
+
+    int hours = originalDuration ~/ 60;
+    int minutes = originalDuration % 60;
+
+    String newTime =
+        '${hours.toString()}:${minutes.toString().padLeft(2, '0')}';
+
+    return newTime;
   }
 
   @override

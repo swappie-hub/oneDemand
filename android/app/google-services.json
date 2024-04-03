@@ -7,9 +7,9 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:956244940807:android:79d4f77dc329526ddbb2a2",
+        "mobilesdk_app_id": "1:956244940807:android:cbb3c3375cc2affddbb2a2",
         "android_client_info": {
-          "package_name": "com.ondemand.app"
+          "package_name": "com.thegodfreymethod.ondemand"
         }
       },
       "oauth_client": [],

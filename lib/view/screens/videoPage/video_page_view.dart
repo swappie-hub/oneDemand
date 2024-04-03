@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
+import 'package:ondemand/data/home/models/get_playlist_model.dart';
 import 'package:ondemand/data/videoDetail/models/add_comments_model.dart';
 import 'package:ondemand/data/videoDetail/models/video_detail_model.dart'
     as Products;
@@ -27,6 +28,7 @@ class _VideoPageViewState extends ConsumerState<VideoPageView>
     with BaseScreenView {
   PodPlayerController? controller;
   late VideoPageViewModel _viewModel;
+
   bool isSaved = false;
   bool isBottomSheetopen = false;
   String videoID = "";
@@ -57,6 +59,8 @@ class _VideoPageViewState extends ConsumerState<VideoPageView>
       });
       controller?.pause();
       _viewModel.getComments(widget.id);
+      await _viewModel.getPlaylistList();
+
       isSaved = _viewModel.videoDetailResponse?.first.savedvideo ?? false;
       setState(() {});
     });
@@ -179,22 +183,181 @@ class _VideoPageViewState extends ConsumerState<VideoPageView>
                                       ),
                                     ),
                                     gapW8,
-                                    Column(
-                                      children: [
-                                        Icon(
-                                          Icons.playlist_add,
-                                          size: 25,
-                                          color: Colors.white,
-                                        ),
-                                        // gapH8,
-                                        Text(
-                                          "ADD to playlist".toUpperCase(),
-                                          style: TextStyle(
-                                              fontSize: 8,
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.bold),
-                                        )
-                                      ],
+                                    InkWell(
+                                      onTap: () {
+                                        showDialog(
+                                          context: context,
+                                          builder: (BuildContext context) {
+                                            return StatefulBuilder(builder:
+                                                (BuildContext context, setSt) {
+                                              return AlertDialog(
+                                                  shape: RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              16)),
+                                                  insetPadding: EdgeInsets.zero,
+                                                  titlePadding: EdgeInsets.zero,
+                                                  backgroundColor:
+                                                      Color(0xFF171718),
+                                                  surfaceTintColor:
+                                                      Color(0xFF171718),
+                                                  actions: <Widget>[
+                                                    TextButton(
+                                                      child: Container(
+                                                          padding: EdgeInsets
+                                                              .symmetric(
+                                                                  vertical: 8,
+                                                                  horizontal:
+                                                                      16),
+                                                          decoration: BoxDecoration(
+                                                              color: Color(
+                                                                  0xFF008BC3),
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          9)),
+                                                          child: const Text(
+                                                            'SAVE',
+                                                            style: TextStyle(
+                                                                color: Colors
+                                                                    .white,
+                                                                fontSize: 15),
+                                                          )),
+                                                      onPressed: () {
+                                                        _viewModel
+                                                            .addVideoToPlaylistHome(
+                                                                widget.id,
+                                                                context);
+
+                                                        // _viewModel.setSortBy(
+                                                        //     _viewModel.sortBy ?? AppConstants.latest,
+                                                        //     val,
+                                                        //     context);
+                                                        // Handle the submit action
+                                                      },
+                                                    ),
+                                                  ],
+                                                  title: Column(
+                                                    children: [
+                                                      Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .all(16.0),
+                                                        child: Row(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .spaceBetween,
+                                                          children: [
+                                                            Text(
+                                                              'Add to playlist'
+                                                                  .toUpperCase(),
+                                                              style: TextStyle(
+                                                                  fontFamily:
+                                                                      "Good",
+                                                                  color: Color(
+                                                                      0xFF3CB4E4),
+                                                                  fontSize: 16),
+                                                            ),
+                                                            InkWell(
+                                                                onTap: () {
+                                                                  context.pop();
+                                                                },
+                                                                child: Icon(
+                                                                    Icons
+                                                                        .close))
+                                                          ],
+                                                        ),
+                                                      ),
+                                                      Container(
+                                                        height: 2,
+                                                        decoration:
+                                                            BoxDecoration(
+                                                                color: Color(
+                                                                    0xFF27272A)),
+                                                      )
+                                                    ],
+                                                  ),
+                                                  content: Column(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      mainAxisSize:
+                                                          MainAxisSize.min,
+                                                      children: [
+                                                        ...List.generate(
+                                                            _viewModel
+                                                                    .getAllPlaylistResponse
+                                                                    ?.length ??
+                                                                0,
+                                                            (index) => Padding(
+                                                                  padding:
+                                                                      const EdgeInsets
+                                                                          .only(
+                                                                          right:
+                                                                              8),
+                                                                  child: Column(
+                                                                    children: [
+                                                                      InkWell(
+                                                                        onTap:
+                                                                            () {
+                                                                          setSt(
+                                                                              () {
+                                                                            if (_viewModel.selectedPlayList.contains(_viewModel.getAllPlaylistResponse?[index])) {
+                                                                              _viewModel.selectedPlayList.remove(_viewModel.getAllPlaylistResponse?[index]);
+                                                                            } else {
+                                                                              _viewModel.selectedPlayList.add(_viewModel.getAllPlaylistResponse?[index] ?? GetAllPlaylistResponse(label: _viewModel.getAllPlaylistResponse?[index].label, value: _viewModel.getAllPlaylistResponse?[index].value));
+                                                                              // _viewModel.durations.add("5");
+                                                                            }
+                                                                          });
+                                                                        },
+                                                                        child:
+                                                                            Container(
+                                                                          child:
+                                                                              Row(
+                                                                            mainAxisAlignment:
+                                                                                MainAxisAlignment.spaceBetween,
+                                                                            children: [
+                                                                              Text(_viewModel.getAllPlaylistResponse?[index].label ?? ""),
+                                                                              Container(
+                                                                                height: 18,
+                                                                                width: 18,
+                                                                                decoration: BoxDecoration(borderRadius: BorderRadius.circular(2), color: !_viewModel.selectedPlayList.contains(_viewModel.getAllPlaylistResponse?[index]) ? Colors.transparent : Color(0xFF008BC3), border: Border.all(color: _viewModel.selectedPlayList.contains(_viewModel.getAllPlaylistResponse?[index]) ? Colors.transparent : Colors.white)),
+                                                                                child: Icon(
+                                                                                  Icons.check,
+                                                                                  size: 10,
+                                                                                  color: _viewModel.selectedPlayList.contains(_viewModel.getAllPlaylistResponse?[index]) ? Colors.white : Colors.transparent,
+                                                                                ),
+                                                                              )
+                                                                            ],
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                      gapH4,
+                                                                    ],
+                                                                  ),
+                                                                ))
+                                                      ]));
+                                            });
+                                          },
+                                        );
+                                      },
+                                      child: Column(
+                                        children: [
+                                          Icon(
+                                            Icons.playlist_add,
+                                            size: 25,
+                                            color: Colors.white,
+                                          ),
+                                          // gapH8,
+                                          Text(
+                                            "ADD to playlist".toUpperCase(),
+                                            style: TextStyle(
+                                                fontSize: 8,
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.bold),
+                                          )
+                                        ],
+                                      ),
                                     ),
                                   ],
                                 ),
@@ -986,7 +1149,8 @@ class _ChatBottomSheetState extends ConsumerState<ChatBottomSheet>
                         context.pop();
                       },
                       child: Icon(
-                        Icons.expand_more,
+                        Icons.expand_more_outlined,
+                        size: 40,
                         color: Color(0xFF149BD1),
                       ),
                     )
@@ -1252,16 +1416,27 @@ class _ChatBottomSheetState extends ConsumerState<ChatBottomSheet>
                                                         shape: BoxShape.circle,
                                                         image: DecorationImage(
                                                             image: NetworkImage(widget
-                                                                    .videoPageViewModel
-                                                                    .commentsResponse
-                                                                    ?.comments?[
-                                                                        index]
-                                                                    .replies?[
-                                                                        index2]
-                                                                    ?.images
-                                                                    ?.first
-                                                                    .url ??
-                                                                "https://img.freepik.com/premium-vector/businessman-avatar-illustration-cartoon-user-portrait-user-profile-icon_118339-4382.jpg"))),
+                                                                        .videoPageViewModel
+                                                                        .commentsResponse
+                                                                        ?.comments?[
+                                                                            index]
+                                                                        .replies?[
+                                                                            index2]
+                                                                        .images
+                                                                        ?.isEmpty ??
+                                                                    true
+                                                                ? "https://img.freepik.com/premium-vector/businessman-avatar-illustration-cartoon-user-portrait-user-profile-icon_118339-4382.jpg"
+                                                                : widget
+                                                                        .videoPageViewModel
+                                                                        .commentsResponse
+                                                                        ?.comments?[
+                                                                            index]
+                                                                        .replies?[
+                                                                            index2]
+                                                                        .images
+                                                                        ?.first
+                                                                        .url ??
+                                                                    "https://img.freepik.com/premium-vector/businessman-avatar-illustration-cartoon-user-portrait-user-profile-icon_118339-4382.jpg"))),
                                                   ),
                                                   gapW8,
                                                   Text(

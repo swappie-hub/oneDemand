@@ -50,54 +50,17 @@ class _SavedTabState extends ConsumerState<SearchVideoView>
     return Scaffold(
       backgroundColor: Color(0xFF171718),
       appBar: PreferredSize(
-          preferredSize: Size.fromHeight(40), child: CustomAppBar()),
+          preferredSize: Size.fromHeight(40),
+          child: CustomAppBar(
+            isSearchDisabled: true,
+            showBack: true,
+          )),
       body: Column(
         children: [
-          TextFormField(
-            cursorColor: Colors.white,
-            controller: _searchController,
-            onChanged: (val) {
-              _viewModel.getsearchVideos(_searchController.text);
-            },
-            style: TextStyle(
-                color: Color(0xFF7D7878),
-                fontWeight: FontWeight.w400,
-                fontSize: 16),
-            decoration: InputDecoration(
-                contentPadding: EdgeInsets.all(16),
-                filled: true,
-                fillColor: Colors.black,
-                hintText: "Search",
-                hintStyle: TextStyle(
-                    color: Color(0xFF7D7878),
-                    fontWeight: FontWeight.w400,
-                    fontSize: 16),
-                enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                    borderSide: BorderSide(
-                      color: Color(0xFF323234),
-                    )),
-                border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                    borderSide: BorderSide(
-                      color: Color(0xFF323234),
-                    )),
-                errorBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                    borderSide: BorderSide(
-                      color: Color(0xFF323234),
-                    )),
-                focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                    borderSide: BorderSide(
-                      color: Color(0xFF323234),
-                    ))),
-          ),
-          gapH10,
           Container(
             padding: EdgeInsets.symmetric(vertical: 16),
             decoration: BoxDecoration(
-              color: Color(0xFF27272A),
+              color: Color(0xFF171718),
               // border: Border.symmetric(
               //     horizontal: BorderSide(color: Color(0xFF71717A))
               //     //  Border.all(color: Color(0xFF71717A)
@@ -115,45 +78,99 @@ class _SavedTabState extends ConsumerState<SearchVideoView>
             )),
           ),
           gapH10,
-          Container(
-            decoration: BoxDecoration(color: Color(0xFF171718)),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                InkWell(
-                  onTap: () {
-                    _viewModel.searchList.shuffle();
-                    setState(() {});
-                  },
-                  child: Container(
-                    margin: EdgeInsets.only(
-                        top: 0, bottom: 10, left: 16, right: 16),
-                    padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(9),
-                        border: Border.all(color: Color(0xFF1AA2D9), width: 2)),
-                    child: Row(
-                      children: [
-                        Text(
-                          "SHUFFLE",
-                          style: TextStyle(
-                              fontFamily: "Good",
-                              color: Color(0xFF1AA2D9),
-                              fontWeight: FontWeight.bold,
-                              fontSize: 12),
-                        ),
-                        gapW12,
-                        Image.asset(
-                          "assets/icons/shuffle.png",
-                          height: 16,
-                        )
-                      ],
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: TextFormField(
+              cursorColor: Colors.white,
+              controller: _searchController,
+              style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.w400,
+                  fontSize: 16),
+              decoration: InputDecoration(
+                  suffixIcon: InkWell(
+                    onTap: () {
+                      _viewModel.getsearchVideos(_searchController.text);
+                    },
+                    child: Icon(
+                      Icons.search,
+                      color: Colors.white,
                     ),
                   ),
-                ),
-              ],
+                  contentPadding: EdgeInsets.all(16),
+                  filled: true,
+                  fillColor: Colors.black,
+                  hintText: "Search",
+                  hintStyle: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.w400,
+                      fontSize: 16),
+                  enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: BorderSide(
+                        color: Color(0xFF323234),
+                      )),
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: BorderSide(
+                        color: Color(0xFF323234),
+                      )),
+                  errorBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: BorderSide(
+                        color: Color(0xFF323234),
+                      )),
+                  focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: BorderSide(
+                        color: Color(0xFF323234),
+                      ))),
             ),
           ),
+          gapH10,
+          _viewModel.searchList.isEmpty
+              ? Container()
+              : Container(
+                  decoration: BoxDecoration(color: Color(0xFF171718)),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      InkWell(
+                        onTap: () {
+                          _viewModel.searchList.shuffle();
+                          setState(() {});
+                        },
+                        child: Container(
+                          margin: EdgeInsets.only(
+                              top: 0, bottom: 10, left: 16, right: 16),
+                          padding:
+                              EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(9),
+                              border: Border.all(
+                                  color: Color(0xFF1AA2D9), width: 2)),
+                          child: Row(
+                            children: [
+                              Text(
+                                "SHUFFLE",
+                                style: TextStyle(
+                                    fontFamily: "Good",
+                                    color: Color(0xFF1AA2D9),
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 12),
+                              ),
+                              gapW12,
+                              Image.asset(
+                                "assets/icons/shuffle.png",
+                                height: 16,
+                              )
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
           _viewModel.searchList.isEmpty ?? true
               ? Container()
               : Expanded(
@@ -272,8 +289,7 @@ class _SavedItemsState extends State<SavedItems> with BaseScreenView {
                                     color: Color(0xFF27272A),
                                     borderRadius: BorderRadius.circular(16)),
                                 child: Text(
-                                  (((widget.items.duration ?? 100) / 60)
-                                      .toStringAsFixed(2)),
+                                  convertTime(widget.items.duration ?? 100),
                                   style: TextStyle(
                                       color: Colors.white,
                                       fontSize: 8,
@@ -395,7 +411,8 @@ class _SavedItemsState extends State<SavedItems> with BaseScreenView {
 
                   ...List.generate(
                     widget.items.tags?.length ?? 0,
-                    (index2) => widget.items.tags?[index2].referalId?.color==null
+                    (index2) => widget.items.tags?[index2].referalId?.color ==
+                            null
                         ? Container()
                         : Container(
                             constraints: BoxConstraints(maxWidth: 80),
@@ -441,6 +458,19 @@ class _SavedItemsState extends State<SavedItems> with BaseScreenView {
         ),
       ),
     );
+  }
+
+  String convertTime(int time) {
+    print(time);
+    int originalDuration = time;
+
+    int hours = originalDuration ~/ 60;
+    int minutes = originalDuration % 60;
+
+    String newTime =
+        '${hours.toString()}:${minutes.toString().padLeft(2, '0')}';
+
+    return newTime;
   }
 
   @override

@@ -53,22 +53,25 @@ class _SavedTabState extends ConsumerState<SavedTab> with BaseScreenView {
           Container(
             padding: EdgeInsets.symmetric(vertical: 16),
             decoration: BoxDecoration(
-              color: Color(0xFF27272A),
+              color: Color(0xFF171718),
               // border: Border.symmetric(
               //     horizontal: BorderSide(color: Color(0xFF71717A))
               //     //  Border.all(color: Color(0xFF71717A)
 
               //     )
             ),
-            child: Center(
-                child: Text(
-              "SAVED VIDEOS",
-              style: TextStyle(
-                  fontFamily: "Good",
-                  color: Color(0xFF3CB4E4),
-                  fontWeight: FontWeight.w700,
-                  fontSize: 18),
-            )),
+            child: Container(
+              height: 35,
+              child: Center(
+                  child: Text(
+                "SAVED VIDEOS",
+                style: TextStyle(
+                    fontFamily: "Good",
+                    color: Color(0xFF3CB4E4),
+                    fontWeight: FontWeight.w700,
+                    fontSize: 18),
+              )),
+            ),
           ),
           gapH10,
           Container(
@@ -228,8 +231,7 @@ class _SavedItemsState extends State<SavedItems> with BaseScreenView {
                                     color: Color(0xFF27272A),
                                     borderRadius: BorderRadius.circular(16)),
                                 child: Text(
-                                  (((widget.items.duration ?? 100) / 60)
-                                      .toStringAsFixed(2)),
+                                  convertTime(widget.items.duration ?? 100),
                                   style: TextStyle(
                                       color: Colors.white,
                                       fontSize: 8,
@@ -394,6 +396,19 @@ class _SavedItemsState extends State<SavedItems> with BaseScreenView {
         ),
       ),
     );
+  }
+
+  String convertTime(int time) {
+    print(time);
+    int originalDuration = time;
+
+    int hours = originalDuration ~/ 60;
+    int minutes = originalDuration % 60;
+
+    String newTime =
+        '${hours.toString()}:${minutes.toString().padLeft(2, '0')}';
+
+    return newTime;
   }
 
   @override

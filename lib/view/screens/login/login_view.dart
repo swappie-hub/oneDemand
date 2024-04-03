@@ -1,4 +1,5 @@
 // import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:ondemand/data/auth/models/forget_password_model.dart';
@@ -119,7 +120,7 @@ class _LoginViewState extends ConsumerState<LoginView> with BaseScreenView {
                   return null; // Return null if the input is valid
                 },
                 style: TextStyle(
-                    color: Color(0xFF7D7878),
+                    color: Colors.white,
                     fontWeight: FontWeight.w400,
                     fontSize: 16),
                 decoration: InputDecoration(
@@ -128,7 +129,7 @@ class _LoginViewState extends ConsumerState<LoginView> with BaseScreenView {
                     fillColor: Colors.black,
                     hintText: "Email Address",
                     hintStyle: TextStyle(
-                        color: Color(0xFF7D7878),
+                        color: Colors.white,
                         fontWeight: FontWeight.w400,
                         fontSize: 16),
                     enabledBorder: OutlineInputBorder(
@@ -161,7 +162,7 @@ class _LoginViewState extends ConsumerState<LoginView> with BaseScreenView {
                     ? "Please enter the password"
                     : null,
                 style: TextStyle(
-                    color: Color(0xFF7D7878),
+                    color: Colors.white,
                     fontWeight: FontWeight.w400,
                     fontSize: 16),
                 decoration: InputDecoration(
@@ -170,7 +171,7 @@ class _LoginViewState extends ConsumerState<LoginView> with BaseScreenView {
                     fillColor: Colors.black,
                     hintText: "Password",
                     hintStyle: TextStyle(
-                        color: Color(0xFF7D7878),
+                        color: Colors.white,
                         fontWeight: FontWeight.w400,
                         fontSize: 16),
                     enabledBorder: OutlineInputBorder(
@@ -345,11 +346,11 @@ class _LoginViewState extends ConsumerState<LoginView> with BaseScreenView {
               InkWell(
                 onTap: () async {
                   if (_formkey.currentState!.validate()) {
-                    // final deviceToken =
-                    //     await FirebaseMessaging.instance.getToken();
+                    final deviceToken =
+                        await FirebaseMessaging.instance.getToken();
                     _viewModel.login(
                         LoginRequest(
-                            // device_token: deviceToken,
+                            device_token: deviceToken,
                             email: _emailController.text,
                             password: _passwordController.text),
                         context);

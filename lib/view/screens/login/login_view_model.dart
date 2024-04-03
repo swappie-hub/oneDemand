@@ -139,6 +139,31 @@ class LoginViewModel extends BaseViewModel<BaseScreenView> {
     toggleLoading();
   }
 
+  Future<void> deleteAccount(
+    BuildContext context,
+  ) async {
+    toggleLoading();
+    await _authRepo.deleteAccount().then(
+          (value) => value.fold((l) {
+            // view!.navigateToScreen(AppRoute.onboardingView);
+          }, (r) async {
+            Logger.write(r.toString());
+            // _userDetailService.setuserDetail(r);
+            // if (shouldNavigate) {
+            //   context?.pushReplacementNamed(AppRoute.bottomNavigationView.name);
+            // }
+            // view!.navigateToScreen(AppRoute.subscriptionView);
+            SharedPreferenceService.clearAll();
+            AppConstants.token = "";
+            AppConstants.userId = "";
+            context.pushReplacementNamed(AppRoute.onboardingView.name);
+
+            notifyListeners();
+          }),
+        );
+    toggleLoading();
+  }
+
   Future<void> forgetPassword(
       ForgetPasswordRequest forgetPasswordRequest, BuildContext context) async {
     toggleLoading();

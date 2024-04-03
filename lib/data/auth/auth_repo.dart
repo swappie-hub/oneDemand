@@ -1,5 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:ondemand/core/exceptions.dart';
+import 'package:ondemand/data/auth/models/delete_model.dart';
 import 'package:ondemand/data/auth/models/forget_password_model.dart';
 import 'package:ondemand/data/auth/models/get_user_details_model.dart';
 import 'package:ondemand/data/auth/models/login_model.dart';
@@ -24,4 +25,5 @@ abstract class AuthRepo {
       UpdateEmailRequest updateEmailRequest);
   Future<Either<ApiException, UpdatePasswordResponse>> updatePassword(
       UpdatePasswordRequest updatePasswordRequest);
+  Future<Either<ApiException, DeleteAccountResponse>> deleteAccount();
 }

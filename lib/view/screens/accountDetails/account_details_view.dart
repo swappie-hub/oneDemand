@@ -66,6 +66,7 @@ class _AccountDetailsViewState extends ConsumerState<AccountDetailsView>
         title: Text(
           "ACCOUNT DETAILS",
           style: TextStyle(
+            fontFamily: "Good",
             color: Color(0xFF1AA2D9),
             fontSize: 15,
           ),
@@ -154,7 +155,9 @@ class _AccountDetailsViewState extends ConsumerState<AccountDetailsView>
                                 Text(
                                   'Change name'.toUpperCase(),
                                   style: TextStyle(
-                                      color: Color(0xFF008BC3), fontSize: 16),
+                                      fontFamily: "Good",
+                                      color: Color(0xFF008BC3),
+                                      fontSize: 16),
                                 ),
                                 InkWell(
                                     onTap: () {
@@ -368,7 +371,9 @@ class _AccountDetailsViewState extends ConsumerState<AccountDetailsView>
                                   Text(
                                     'Change email'.toUpperCase(),
                                     style: TextStyle(
-                                        color: Color(0xFF008BC3), fontSize: 16),
+                                        fontFamily: "Good",
+                                        color: Color(0xFF008BC3),
+                                        fontSize: 16),
                                   ),
                                   InkWell(
                                       onTap: () {
@@ -598,7 +603,9 @@ class _AccountDetailsViewState extends ConsumerState<AccountDetailsView>
                                   Text(
                                     'Change Password'.toUpperCase(),
                                     style: TextStyle(
-                                        color: Color(0xFF008BC3), fontSize: 16),
+                                        fontFamily: "Good",
+                                        color: Color(0xFF008BC3),
+                                        fontSize: 16),
                                   ),
                                   InkWell(
                                       onTap: () {

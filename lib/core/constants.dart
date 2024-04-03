@@ -5,7 +5,9 @@ class AppConstants {
   // static const authTokenPref = 'authTokenPref';
 
   // static const String baseUrl = "https://app.thegodfreymethod.com/api";
-  static const String baseUrl = "http://10.0.2.2:9002/api";
+  static const String baseUrl = "https://orca-app-ixna2.ondigitalocean.app/api";
+
+  // static const String baseUrl = "http://10.0.2.2:9002/api";
   static String userId = "";
   static String token = "";
   static String cookies = "";
