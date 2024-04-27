@@ -4,7 +4,10 @@ import 'package:ondemand/data/auth/models/login_model.dart';
 import 'package:ondemand/data/auth/models/signup_model.dart';
 import 'package:ondemand/data/auth/models/subscription_model.dart';
 import 'package:ondemand/data/home/models/add_playlist_model.dart';
+import 'package:ondemand/data/home/models/create_playlist_model.dart';
+import 'package:ondemand/data/home/models/create_playlist_request.dart';
 import 'package:ondemand/data/home/models/feature_playlist_model.dart';
+import 'package:ondemand/data/home/models/fetch_all_playlist_model.dart';
 import 'package:ondemand/data/home/models/get_playlist_model.dart';
 import 'package:ondemand/data/home/models/get_tags_model.dart';
 import 'package:ondemand/data/home/models/home_model.dart';
@@ -30,4 +33,9 @@ abstract class HomeRepo {
   Future<Either<ApiException, List<GetAllPlaylistResponse>>> getPlaylistList();
   Future<Either<ApiException, AddPlaylistResponse>> addToPlaylist(
       AddPlaylistRequest addPlaylistRequest);
+  Future<Either<ApiException, CreatePlaylistResponse>> createPlaylist(
+      CreatePlaylistRequest createPlaylistRequest);
+  Future<Either<ApiException, List<FetchAllPlaylistResponse>>> fetchAllVideos();
+  Future<Either<ApiException, CreatePlaylistResponse>> createPlay(
+      AddPlaylistVidieoRequest addPlaylistVidieoRequest);
 }

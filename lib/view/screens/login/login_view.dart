@@ -108,6 +108,7 @@ class _LoginViewState extends ConsumerState<LoginView> with BaseScreenView {
               ),
               gapH32,
               TextFormField(
+                enableSuggestions: false,
                 cursorColor: Colors.white,
                 controller: _emailController,
                 validator: (value) {
@@ -123,6 +124,7 @@ class _LoginViewState extends ConsumerState<LoginView> with BaseScreenView {
                     color: Colors.white,
                     fontWeight: FontWeight.w400,
                     fontSize: 16),
+                keyboardType: TextInputType.emailAddress,
                 decoration: InputDecoration(
                     contentPadding: EdgeInsets.all(16),
                     filled: true,

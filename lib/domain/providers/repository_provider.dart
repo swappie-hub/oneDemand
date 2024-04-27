@@ -11,6 +11,7 @@ import 'package:ondemand/domain/providers/api_client_provider.dart';
 final authRepositoryProvider = Provider<AuthRepo>(
   (ref) => AuthRepoImpl(
     ref.read(apiClientProvider),
+    ref.read(multiPartClientProvider),
   ),
 );
 final homeRepositoryProvider = Provider<HomeRepo>(

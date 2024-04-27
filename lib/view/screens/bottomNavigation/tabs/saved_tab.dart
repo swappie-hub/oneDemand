@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:ondemand/core/constants.dart';
 import 'package:ondemand/data/home/models/saved_videos_model.dart';
 import 'package:ondemand/utils/app_sizes.dart';
 import 'package:ondemand/utils/utils.dart';
@@ -47,72 +48,102 @@ class _SavedTabState extends ConsumerState<SavedTab> with BaseScreenView {
     return Scaffold(
       backgroundColor: Color(0xFF171718),
       appBar: PreferredSize(
-          preferredSize: Size.fromHeight(40), child: CustomAppBar()),
+          preferredSize: Size.fromHeight(40),
+          child: AppBar(
+            centerTitle: false,
+            backgroundColor: kBlack,
+            leadingWidth: 120,
+            leading: Padding(
+                padding: const EdgeInsets.only(left: 16, top: 14),
+                child: Text(
+                  "Saved",
+                  style: TextStyle(color: Colors.white, fontFamily: 'Good'),
+                )),
+            actions: [
+              InkWell(
+                onTap: () {
+                  navigateToScreen(AppRoute.searchVideoView);
+                },
+                child: Icon(
+                  Icons.search,
+                  color: Colors.white,
+                ),
+              ),
+              gapW16
+              // Padding(
+              //   padding: const EdgeInsets.only(left: 16, right: 16),
+              //   child: Icon(
+              //     Icons.notifications,
+              //     color: Colors.white,
+              //   ),
+              // )
+            ],
+          )),
       body: Column(
         children: [
-          Container(
-            padding: EdgeInsets.symmetric(vertical: 16),
-            decoration: BoxDecoration(
-              color: Color(0xFF171718),
-              // border: Border.symmetric(
-              //     horizontal: BorderSide(color: Color(0xFF71717A))
-              //     //  Border.all(color: Color(0xFF71717A)
+          // Container(
+          //   padding: EdgeInsets.symmetric(vertical: 16),
+          //   decoration: BoxDecoration(
+          //     color: Color(0xFF171718),
+          //     // border: Border.symmetric(
+          //     //     horizontal: BorderSide(color: Color(0xFF71717A))
+          //     //     //  Border.all(color: Color(0xFF71717A)
 
-              //     )
-            ),
-            child: Container(
-              height: 35,
-              child: Center(
-                  child: Text(
-                "SAVED VIDEOS",
-                style: TextStyle(
-                    fontFamily: "Good",
-                    color: Color(0xFF3CB4E4),
-                    fontWeight: FontWeight.w700,
-                    fontSize: 18),
-              )),
-            ),
-          ),
+          //     //     )
+          //   ),
+          //   child: Container(
+          //     height: 35,
+          //     child: Center(
+          //         child: Text(
+          //       "SAVED VIDEOS",
+          //       style: TextStyle(
+          //           fontFamily: "Good",
+          //           color: Color(0xFF3CB4E4),
+          //           fontWeight: FontWeight.w700,
+          //           fontSize: 18),
+          //     )),
+          //   ),
+          // ),
           gapH10,
-          Container(
-            decoration: BoxDecoration(color: Color(0xFF171718)),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                InkWell(
-                  onTap: () {
-                    _viewModel.savedList.shuffle();
-                    setState(() {});
-                  },
-                  child: Container(
-                    margin: EdgeInsets.only(
-                        top: 0, bottom: 10, left: 16, right: 16),
-                    padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(9),
-                        border: Border.all(color: Color(0xFF1AA2D9), width: 2)),
-                    child: Row(
-                      children: [
-                        Text(
-                          "SHUFFLE",
-                          style: TextStyle(
-                              fontFamily: "Good",
-                              color: Color(0xFF1AA2D9),
-                              fontWeight: FontWeight.bold,
-                              fontSize: 12),
-                        ),
-                        gapW12,
-                        Image.asset(
-                          "assets/icons/shuffle.png",
-                          height: 16,
-                        )
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
+          // Container(
+          //   decoration: BoxDecoration(color: Color(0xFF171718)),
+          //   child: Row(
+          //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          //     children: [
+          //       InkWell(
+          //         onTap: () {
+          //           _viewModel.savedList.shuffle();
+          //           setState(() {});
+          //         },
+          //         child: Container(
+          //           margin: EdgeInsets.only(
+          //               top: 0, bottom: 10, left: 16, right: 16),
+          //           padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+          //           decoration: BoxDecoration(
+          //               borderRadius: BorderRadius.circular(9),
+          //               border: Border.all(color: Color(0xFF1AA2D9), width: 2)),
+          //           child: Row(
+          //             children: [
+          //               Text(
+          //                 "SHUFFLE",
+          //                 style: TextStyle(
+          //                     fontFamily: "Good",
+          //                     color: Color(0xFF1AA2D9),
+          //                     fontWeight: FontWeight.bold,
+          //                     fontSize: 12),
+          //               ),
+          //               gapW12,
+          //               Image.asset(
+          //                 "assets/icons/shuffle.png",
+          //                 height: 16,
+          //               )
+          //             ],
+          //           ),
+          //         ),
+          //       ),
+          //     ],
+          //   ),
+          // ),
           _viewModel.savedList.isEmpty ?? true
               ? Container()
               : Expanded(
@@ -179,10 +210,15 @@ class _SavedItemsState extends State<SavedItems> with BaseScreenView {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        context.pushNamed(
-          AppRoute.videoPageView.name,
-          pathParameters: {'id': widget.items.id ?? ""},
-        );
+        if (AppConstants.isSubscribed) {
+          context.pushNamed(
+            AppRoute.videoPageView.name,
+            pathParameters: {'id': widget.items.id ?? ""},
+          );
+        } else {
+          context.pushNamed(AppRoute.subscriptionView.name);
+        }
+
         // navigateToScreen(AppRoute.videoPageView);
       },
       child: Container(
@@ -399,7 +435,6 @@ class _SavedItemsState extends State<SavedItems> with BaseScreenView {
   }
 
   String convertTime(int time) {
-    print(time);
     int originalDuration = time;
 
     int hours = originalDuration ~/ 60;

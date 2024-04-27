@@ -1,9 +1,13 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:dartz/dartz.dart';
 import 'package:ondemand/core/api_client.dart';
 import 'package:ondemand/core/constants.dart';
 import 'package:ondemand/core/exceptions.dart';
 import 'package:ondemand/data/auth/auth_repo.dart';
 import 'package:ondemand/data/auth/models/delete_model.dart';
+import 'package:ondemand/data/auth/models/fetch_subscription_model.dart';
 import 'package:ondemand/data/auth/models/forget_password_model.dart';
 import 'package:ondemand/data/auth/models/get_user_details_model.dart';
 import 'package:ondemand/data/auth/models/login_model.dart';
@@ -12,13 +16,16 @@ import 'package:ondemand/data/auth/models/subscription_model.dart';
 import 'package:ondemand/data/auth/models/update_email_model.dart';
 import 'package:ondemand/data/auth/models/update_password_model.dart';
 import 'package:ondemand/data/auth/models/update_username_model.dart';
+import 'package:ondemand/data/auth/models/upload_model.dart';
 import 'package:ondemand/services/shared_preference_service.dart';
 import 'package:ondemand/utils/logger.dart';
+import 'package:http/http.dart' as http;
 
 class AuthRepoImpl implements AuthRepo {
   final ApiClient _apiClient;
+  final MultiPartClient _apiClient2;
 
-  AuthRepoImpl(this._apiClient);
+  AuthRepoImpl(this._apiClient, this._apiClient2);
 
   @override
   Future<Either<ApiException, SignupResponse>> signup(
@@ -176,6 +183,46 @@ class AuthRepoImpl implements AuthRepo {
       );
 
       return Right(DeleteAccountResponse.fromJson(response.data!));
+    } catch (e) {
+      return Left(ApiException(e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<ApiException, List<UploadResponse>>> uploadSingleFile(
+    File file,
+  ) async {
+    // ignore: prefer_final_locals
+    http.MultipartRequest request = http.MultipartRequest(
+        'POST',
+        Uri.parse(
+            '${AppConstants.baseUrl}/uploadthing?actionType=upload&slug=profileImage'));
+
+    request.files.add(await http.MultipartFile.fromPath("files", file.path));
+    try {
+      final http.StreamedResponse streamedResponse =
+          await _apiClient2.send(request);
+      final http.Response response =
+          await http.Response.fromStream(streamedResponse);
+      print(uploadResponseFromJson(jsonEncode(response.body)));
+      return Right(
+        uploadResponseFromJson(jsonEncode(response.body)),
+      );
+    } catch (e) {
+      return Left(ApiException(e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<ApiException, FetchSubscriptionResponse>>
+      fetchSubscription() async {
+    try {
+      final response = await _apiClient.get(
+        sendCookies: true,
+        "${AppConstants.baseUrl}/fetch/subscribtion",
+      );
+
+      return Right(FetchSubscriptionResponse.fromJson(response.data!));
     } catch (e) {
       return Left(ApiException(e.toString()));
     }

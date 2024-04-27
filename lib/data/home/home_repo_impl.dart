@@ -7,7 +7,10 @@ import 'package:ondemand/core/constants.dart';
 import 'package:ondemand/core/exceptions.dart';
 import 'package:ondemand/data/home/home_repo.dart';
 import 'package:ondemand/data/home/models/add_playlist_model.dart';
+import 'package:ondemand/data/home/models/create_playlist_model.dart';
+import 'package:ondemand/data/home/models/create_playlist_request.dart';
 import 'package:ondemand/data/home/models/feature_playlist_model.dart';
+import 'package:ondemand/data/home/models/fetch_all_playlist_model.dart';
 import 'package:ondemand/data/home/models/get_playlist_model.dart';
 import 'package:ondemand/data/home/models/get_tags_model.dart';
 import 'package:ondemand/data/home/models/home_model.dart';
@@ -184,6 +187,54 @@ class HomeRepoImpl implements HomeRepo {
           addPlaylistRequestToJson(addPlaylistRequest));
       print("this is response" + response.data.toString());
       return Right(AddPlaylistResponse.fromJson(response.data));
+    } catch (e) {
+      Logger.write(e.toString());
+      return Left(ApiException(e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<ApiException, CreatePlaylistResponse>> createPlaylist(
+      CreatePlaylistRequest createPlaylistRequest) async {
+    try {
+      final response = await _apiClient.post(
+          sendCookies: true,
+          "${AppConstants.baseUrl}/personalvideo/save",
+          createPlaylistRequestToJson(createPlaylistRequest));
+      print("this is response" + response.data.toString());
+      return Right(CreatePlaylistResponse.fromJson(response.data));
+    } catch (e) {
+      Logger.write(e.toString());
+      return Left(ApiException(e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<ApiException, List<FetchAllPlaylistResponse>>>
+      fetchAllVideos() async {
+    try {
+      final response = await _apiClient.get(
+        sendCookies: true,
+        "${AppConstants.baseUrl}/video/fetch",
+      );
+      print("this is response" + response.data.toString());
+      return Right(fetchAllPlaylistResponseFromJson(jsonEncode(response.data)));
+    } catch (e) {
+      Logger.write(e.toString());
+      return Left(ApiException(e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<ApiException, CreatePlaylistResponse>> createPlay(
+      AddPlaylistVidieoRequest addPlaylistVidieoRequest) async {
+    try {
+      final response = await _apiClient.post(
+          sendCookies: true,
+          "${AppConstants.baseUrl}/personalvideo/save",
+          addPlaylistVidieoRequestToJson(addPlaylistVidieoRequest));
+      print("this is response" + response.data.toString());
+      return Right(CreatePlaylistResponse.fromJson(response.data));
     } catch (e) {
       Logger.write(e.toString());
       return Left(ApiException(e.toString()));

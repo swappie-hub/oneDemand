@@ -24,6 +24,17 @@ class MyApp extends ConsumerWidget {
             routerDelegate: goRouter.routerDelegate,
             routeInformationProvider: goRouter.routeInformationProvider,
             theme: AppThemes.lightTheme,
+            builder: (context, child) {
+              ErrorWidget.builder = (FlutterErrorDetails errorDetails) {
+                return Container();
+              };
+
+              return MediaQuery(
+                data: MediaQuery.of(context)
+                    .copyWith(textScaler: const TextScaler.linear(1.0)),
+                child: child!,
+              );
+            },
             // darkTheme: AppThemes.darkTheme,
             themeMode: themeManager.currentTheme,
             debugShowCheckedModeBanner: false,

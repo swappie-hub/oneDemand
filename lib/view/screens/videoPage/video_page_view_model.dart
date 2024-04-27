@@ -81,53 +81,61 @@ class VideoPageViewModel extends BaseViewModel<BaseScreenView> {
     for (int i = 0; i < selectedPlayList.length; i++) {
       await getVideoDetails(videoId);
       List<add.CategoryDetail> newCat = [];
-      if (_videoDetailResponse?.first.categoryDetails?.length != 0) {
-        int? length = _videoDetailResponse?.first.categoryDetails!.length;
-        for (int i = 0; i <= length!; i++) {
-          newCat.add(add.CategoryDetail(
-              id: _videoDetailResponse?.first.categoryDetails?[i].id,
-              name: _videoDetailResponse?.first.categoryDetails?[i].name,
-              v: _videoDetailResponse?.first.categoryDetails?[i].v));
-        }
+
+      int? catLength = _videoDetailResponse?.first.categoryDetails?.length ?? 0;
+      for (int j = 0; j < catLength; j++) {
+        // Note the change from i to j to avoid confusion with outer loop
+        newCat.add(add.CategoryDetail(
+          id: _videoDetailResponse!.first.categoryDetails![j].id,
+          name: _videoDetailResponse!.first.categoryDetails![j].name,
+          v: _videoDetailResponse!.first.categoryDetails![j].v,
+        ));
       }
+      print("this is newCat" + newCat.toString());
+
       List<add.Tag> newTag = [];
-      if (_videoDetailResponse?.first.tags?.length != 0) {
-        int? length = _videoDetailResponse?.first.tags!.length;
-        for (int i = 0; i <= length!; i++) {
-          newTag.add(add.Tag(
-            id: _videoDetailResponse?.first.categoryDetails?[i].id,
-            referalId: _videoDetailResponse?.first.categoryDetails?[i].name,
-          ));
-        }
+
+      int? tagLength = _videoDetailResponse?.first.tags?.length ?? 0;
+      for (int j = 0; j < tagLength; j++) {
+        newTag.add(add.Tag(
+          id: _videoDetailResponse!
+              .first.tags![j].id, // This might need correcting
+          referalId: _videoDetailResponse!
+              .first.tags![j].referalId, // This might need correcting
+        ));
       }
+      print("this is newTags" + newTag.toString());
+
       List<add.TagsDetail> tagDetails = [];
-      if (_videoDetailResponse?.first.tagsDetails?.length != 0) {
-        int? length = _videoDetailResponse?.first.tagsDetails!.length;
-        for (int i = 0; i <= length!; i++) {
-          tagDetails.add(add.TagsDetail(
-            id: _videoDetailResponse?.first.tagsDetails?[i].id,
-            name: _videoDetailResponse?.first.tagsDetails?[i].name,
-            color: _videoDetailResponse?.first.tagsDetails?[i].name,
-            priority: _videoDetailResponse?.first.tagsDetails?[i].priority,
-            v: _videoDetailResponse?.first.tagsDetails?[i].v,
-          ));
-        }
+
+      int? tagDetailLength =
+          _videoDetailResponse?.first.tagsDetails?.length ?? 0;
+      for (int j = 0; j < tagDetailLength; j++) {
+        tagDetails.add(add.TagsDetail(
+          id: _videoDetailResponse!.first.tagsDetails![j].id,
+          name: _videoDetailResponse!.first.tagsDetails![j].name,
+          color: _videoDetailResponse!.first.tagsDetails![j]
+              .color, // Ensure this is what you intend to do
+          priority: _videoDetailResponse!.first.tagsDetails![j].priority,
+          v: _videoDetailResponse!.first.tagsDetails![j].v,
+        ));
       }
+      print("this is tagDetails" + tagDetails.toString());
 
       listData.add(MyArray(
           name: selectedPlayList[i].label,
           objectId: selectedPlayList[i].value,
-          videoObject: VideoObject().copyWith(
+          videoObject: VideoObject(
               categoryDetails: newCat,
               tagsDetails: tagDetails,
               tags: newTag,
+              releaseDateTime: _videoDetailResponse?.first.releaseDateTime,
               title: _videoDetailResponse?.first.title ?? "",
               savedvideo: _videoDetailResponse?.first.savedvideo ?? false,
               vId: _videoDetailResponse?.first.vId ?? "",
               videoId: _videoDetailResponse?.first.videoId ?? "",
               thumnailLink: _videoDetailResponse?.first.thumnailLink ?? "",
               duration: _videoDetailResponse?.first.duration ?? 100,
-              releaseDateTime: _videoDetailResponse?.first.releaseDateTime,
               videolink: _videoDetailResponse?.first.videolink,
               description: _videoDetailResponse?.first.description ?? "")));
     }

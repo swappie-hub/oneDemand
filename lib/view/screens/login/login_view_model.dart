@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:ondemand/core/constants.dart';
 import 'package:ondemand/data/auth/auth_repo.dart';
@@ -41,15 +43,62 @@ class LoginViewModel extends BaseViewModel<BaseScreenView> {
             );
             print("this is userId" + AppConstants.userId);
             getUserDetails(r.userId ?? "", context, shouldNavigate: false);
+            isSubscribed(context);
             Logger.write(r.toString());
-            view!.navigateToScreen(AppRoute.subscriptionView);
+            // view!.navigateToScreen(AppRoute.subscriptionView);
             notifyListeners();
           }),
         );
     toggleLoading();
   }
 
-  Future<void> getUserDetails(String ID, BuildContext? context,
+  Future<void> isSubscribed(BuildContext context) async {
+    toggleLoading();
+    await _authRepo.fetchSubscription().then(
+          (value) => value.fold((l) {
+            view!.showSnackbar(l.message);
+          }, (r) async {
+            if (r.data == "active") {
+              AppConstants.isSubscribed = true;
+            } else if (r.data == "in_trial") {
+              AppConstants.isSubscribed = true;
+            } else if (r.data == "non_renewing") {
+              AppConstants.isSubscribed = true;
+            } else {
+              AppConstants.isSubscribed = false;
+            }
+            print("this is subscription status" + r.toString());
+            notifyListeners();
+            if (AppConstants.isSubscribed == true) {
+              view!.navigateToScreen(AppRoute.bottomNavigationView);
+            } else {
+              view!.navigateToScreen(AppRoute.subscriptionView);
+            }
+            Logger.write(r.toString());
+
+            notifyListeners();
+          }),
+        );
+    toggleLoading();
+  }
+
+  Future<String?> uploadSingleFile(File file, BuildContext context) async {
+    String? fileUrl;
+
+    await _authRepo.uploadSingleFile(file).then(
+          (value) => value.fold((l) {
+            view?.showSnackbar(l.message);
+            return "";
+          }, (r) {
+            context.pop();
+            getUserDetails(AppConstants.userId, context);
+            // fileUrl = r.;
+          }),
+        );
+    return fileUrl;
+  }
+
+  Future<void> getUserDetails(String ID, BuildContext context,
       {bool shouldNavigate = false}) async {
     toggleLoading();
     await _authRepo.getUserdetails(ID).then(
@@ -59,7 +108,7 @@ class LoginViewModel extends BaseViewModel<BaseScreenView> {
             Logger.write(r.toString());
             _userDetailService.setuserDetail(r);
             if (shouldNavigate) {
-              context?.pushReplacementNamed(AppRoute.bottomNavigationView.name);
+              await isSubscribed(context);
             }
             // view!.navigateToScreen(AppRoute.subscriptionView);
             notifyListeners();
@@ -155,6 +204,7 @@ class LoginViewModel extends BaseViewModel<BaseScreenView> {
             // view!.navigateToScreen(AppRoute.subscriptionView);
             SharedPreferenceService.clearAll();
             AppConstants.token = "";
+            AppConstants.isSubscribed = false;
             AppConstants.userId = "";
             context.pushReplacementNamed(AppRoute.onboardingView.name);
 

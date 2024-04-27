@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:custom_sliding_segmented_control/custom_sliding_segmented_control.dart';
 import 'package:flutter/material.dart';
+import 'package:ondemand/core/constants.dart';
 import 'package:ondemand/data/home/models/get_playlist_model.dart';
 import 'package:ondemand/data/home/models/home_model.dart';
 import 'package:ondemand/helpers/locator.dart';
@@ -35,7 +36,7 @@ class _HomeViewState extends ConsumerState<HomeView> with BaseScreenView {
     _viewModel.attachView(this);
     Future.delayed(Duration(milliseconds: 2)).then((value) async {
       _viewModel.toggleLoading();
-      await _viewModel.getHomeView(isAll: true);
+      await _viewModel.getHomeView(isReccent: false);
       await _viewModel.getPlaylistList();
 
       // await _viewModel.getTags();
@@ -54,27 +55,34 @@ class _HomeViewState extends ConsumerState<HomeView> with BaseScreenView {
       appBar: PreferredSize(
           preferredSize: Size.fromHeight(40),
           child: AppBar(
-            centerTitle: false,
+            centerTitle: true,
             backgroundColor: kBlack,
-            leadingWidth: 120,
-            leading: Padding(
-              padding: const EdgeInsets.only(left: 16),
+            // leadingWidth: 120,
+            // leading: Padding(
+            //     padding: const EdgeInsets.only(left: 16, top: 14),
+            //     child: Text(
+            //       "Home",
+            //       style: TextStyle(color: Colors.white, fontFamily: 'Good'),
+            //     )),
+            
+            title: Padding(
+              padding: const EdgeInsets.only(right: 16),
               child: Image.asset(
                 "assets/images/appbar_logo.png",
-                height: 34.52.h,
+                height: 30.52.h,
               ),
             ),
-            actions: [
-              InkWell(
-                onTap: () {
-                  // navigateToScreen(AppRoute.searchVideoView);
-                },
-                child: Icon(
-                  Icons.notifications,
-                  color: Colors.white,
-                ),
-              ),
-              gapW16
+            // actions: [
+            //   InkWell(
+            //     onTap: () {
+            //       // navigateToScreen(AppRoute.searchVideoView);
+            //     },
+            //     child: Icon(
+            //       Icons.notifications,
+            //       color: Colors.white,
+            //     ),
+            //   ),
+              // gapW16
               // Padding(
               //   padding: const EdgeInsets.only(left: 16, right: 16),
               //   child: Icon(
@@ -82,7 +90,7 @@ class _HomeViewState extends ConsumerState<HomeView> with BaseScreenView {
               //     color: Colors.white,
               //   ),
               // )
-            ],
+            // ],
           )),
       body: Column(
         children: [
@@ -105,7 +113,7 @@ class _HomeViewState extends ConsumerState<HomeView> with BaseScreenView {
                                 onTap: () {
                                   setState(() {
                                     val = index3;
-                                    if (val == 1) {
+                                    if (val == 0) {
                                       _viewModel.getHomeView();
                                       _scrollController.animateTo(
                                         _scrollController
@@ -330,10 +338,15 @@ class _HomeItemsState extends State<HomeItems> {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        context.pushNamed(
-          AppRoute.videoPageView.name,
-          pathParameters: {'id': widget.items?.id ?? ""},
-        );
+        if (AppConstants.isSubscribed) {
+          context.pushNamed(
+            AppRoute.videoPageView.name,
+            pathParameters: {'id': widget.items?.id ?? ""},
+          );
+        } else {
+          context.pushNamed(AppRoute.subscriptionView.name);
+        }
+
         // navigateToScreen(AppRoute.videoPageView);
       },
       child: Container(
@@ -490,7 +503,6 @@ class _HomeItemsState extends State<HomeItems> {
   }
 
   String convertTime(int time) {
-    print(time);
     int originalDuration = time;
 
     int hours = originalDuration ~/ 60;

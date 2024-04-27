@@ -5,6 +5,7 @@ import 'package:ondemand/utils/app_sizes.dart';
 import 'package:ondemand/utils/colors.dart';
 import 'package:ondemand/utils/utils.dart';
 import 'package:ondemand/view/screens/signup/signup_view_model.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class SignupView extends ConsumerStatefulWidget {
   const SignupView({super.key});
@@ -338,30 +339,36 @@ class _SignupViewState extends ConsumerState<SignupView> with BaseScreenView {
                       ),
                     ),
                     gapW8,
-                    RichText(
-                        text: TextSpan(children: [
-                      TextSpan(
-                        text: "I agree with the ",
-                        style: TextStyle(
-                            color: Color(0xFF71717A),
-                            fontWeight: FontWeight.w400,
-                            fontSize: 12),
-                      ),
-                      TextSpan(
-                          text: "Terms & Conditions",
+                    InkWell(
+                      onTap: () {
+                        launchUrl(Uri.parse(
+                            "https://thegodfreymethod.com/pages/terms-conditions"));
+                      },
+                      child: RichText(
+                          text: TextSpan(children: [
+                        TextSpan(
+                          text: "I agree with the ",
                           style: TextStyle(
-                              // decoration: TextDecoration.underline,
-                              color: Color(0xFF0B6386),
-                              fontWeight: FontWeight.bold,
-                              fontSize: 12)),
-                      TextSpan(
-                        text: " of the Godfrey Method",
-                        style: TextStyle(
-                            color: Color(0xFF71717A),
-                            fontWeight: FontWeight.w400,
-                            fontSize: 12),
-                      ),
-                    ]))
+                              color: Color(0xFF71717A),
+                              fontWeight: FontWeight.w400,
+                              fontSize: 12),
+                        ),
+                        TextSpan(
+                            text: "Terms & Conditions",
+                            style: TextStyle(
+                                // decoration: TextDecoration.underline,
+                                color: Color(0xFF0B6386),
+                                fontWeight: FontWeight.bold,
+                                fontSize: 12)),
+                        TextSpan(
+                          text: " of the Godfrey Method",
+                          style: TextStyle(
+                              color: Color(0xFF71717A),
+                              fontWeight: FontWeight.w400,
+                              fontSize: 12),
+                        ),
+                      ])),
+                    )
                   ],
                 ),
                 gapH32,
@@ -371,12 +378,14 @@ class _SignupViewState extends ConsumerState<SignupView> with BaseScreenView {
                       showSnackbar("Please accept the terms and conditions");
                     } else {
                       if (_formkey.currentState!.validate()) {
-                        _viewModel.signup(SignupRequest(
-                            devicetoken: AppConstants.fcmToken,
-                            email: _emailController.text,
-                            firstname: _firstNameController.text,
-                            lastname: _lastNameController.text,
-                            password: _passwordController.text));
+                        _viewModel.signup(
+                            SignupRequest(
+                                devicetoken: AppConstants.fcmToken,
+                                email: _emailController.text,
+                                firstname: _firstNameController.text,
+                                lastname: _lastNameController.text,
+                                password: _passwordController.text),
+                            context);
                       }
                     }
                     // navigateToScreen(AppRoute.loginView);

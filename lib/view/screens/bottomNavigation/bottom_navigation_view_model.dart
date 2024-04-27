@@ -2,7 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:ondemand/core/constants.dart';
 import 'package:ondemand/data/home/home_repo.dart';
 import 'package:ondemand/data/home/models/add_playlist_model.dart';
+import 'package:ondemand/data/home/models/create_playlist_request.dart';
 import 'package:ondemand/data/home/models/feature_playlist_model.dart';
+import 'package:ondemand/data/home/models/fetch_all_playlist_model.dart';
 import 'package:ondemand/data/home/models/get_playlist_model.dart';
 import 'package:ondemand/data/home/models/home_model.dart' as home;
 import 'package:ondemand/data/home/models/library_list_model.dart' as lib;
@@ -13,6 +15,8 @@ import 'package:ondemand/data/home/models/home_model.dart' as home;
 import 'package:ondemand/data/videoDetail/models/video_detail_model.dart';
 import 'package:ondemand/data/videoDetail/video_detail_repo.dart';
 import 'package:ondemand/domain/providers/repository_provider.dart';
+import 'package:ondemand/data/home/models/create_playlist_request.dart'
+    as addVid;
 import 'package:ondemand/helpers/base_view_model.dart';
 import 'package:ondemand/data/home/models/add_playlist_model.dart' as add;
 import 'package:ondemand/utils/utils.dart';
@@ -41,15 +45,23 @@ class BottomNavigationViewModel extends BaseViewModel<BaseScreenView> {
   lib.LibraryListResponse? get libraryListResponse => _libraryListResponse;
   search.SearchListResponse? _searchListResponse;
   search.SearchListResponse? get searchListResponse => _searchListResponse;
-
+  List<FetchAllPlaylistResponse> fetchList = [];
   List<GetAllPlaylistResponse>? _getAllPlaylistResponse;
   List<GetAllPlaylistResponse>? get getAllPlaylistResponse =>
       _getAllPlaylistResponse;
   List<lib.Video> libraryList = [];
+  List<String> addedVideos = [];
+
   List<String> tags = [];
   bool isPlaylistLoading = false;
-
+  List<FetchAllPlaylistResponse>? _fetchAllPlaylistResponse;
+  List<FetchAllPlaylistResponse>? get fetchAllPlaylistResponse =>
+      _fetchAllPlaylistResponse;
+  bool _isSearching = false;
+  bool get isSearching => _isSearching;
   List<SavesVideosDatum> savedList = [];
+  List<String> titlesForPlaylist = [];
+
   List<ExistingVideo> featuredList = [];
   List<ExistingVideo> allPlaylistList = [];
   List<ExistingVideo> personalPlaylist = [];
@@ -68,7 +80,7 @@ class BottomNavigationViewModel extends BaseViewModel<BaseScreenView> {
     this._homeRepo,
     this._videoRepo,
   );
-  Future<void> getHomeView({bool isAll = false, bool isReccent = false}) async {
+  Future<void> getHomeView({bool isReccent = false}) async {
     toggleLoading();
     await _homeRepo.getHomeView().then(
           (value) => value.fold((l) {
@@ -76,10 +88,7 @@ class BottomNavigationViewModel extends BaseViewModel<BaseScreenView> {
           }, (r) async {
             videos?.clear();
             _homeVideoResponse = r;
-            if (isAll) {
-              videos?.addAll(_homeVideoResponse?[0].videos ?? []);
-              videos?.addAll(_homeVideoResponse?[1].videos ?? []);
-            } else if (isReccent) {
+            if (isReccent) {
               videos?.addAll(_homeVideoResponse?[1].videos ?? []);
             } else {
               videos?.addAll(_homeVideoResponse?[0].videos ?? []);
@@ -141,6 +150,90 @@ class BottomNavigationViewModel extends BaseViewModel<BaseScreenView> {
         );
   }
 
+  Future<void> createPlay(
+      BuildContext context, String title, String subtitle) async {
+    List<addVid.Video> listData = [];
+    for (int i = 0; i < fetchList.length; i++) {
+      await getVideoDetails(fetchList[i].id ?? "");
+      List<addVid.CategoryDetail> newCat = [];
+
+      int? catLength = _videoDetailResponse?.first.categoryDetails?.length ?? 0;
+      for (int j = 0; j < catLength; j++) {
+        // Note the change from i to j to avoid confusion with outer loop
+        newCat.add(addVid.CategoryDetail(
+          id: _videoDetailResponse!.first.categoryDetails![j].id,
+          name: _videoDetailResponse!.first.categoryDetails![j].name,
+          v: _videoDetailResponse!.first.categoryDetails![j].v,
+        ));
+      }
+      print("this is newCat" + newCat.toString());
+
+      List<addVid.TagsDatum> newTag = [];
+
+      int? tagLength = _videoDetailResponse?.first.tags?.length ?? 0;
+      for (int j = 0; j < tagLength; j++) {
+        newTag.add(addVid.TagsDatum(
+          id: _videoDetailResponse!
+              .first.tags![j].id, // This might need correcting
+          name: _videoDetailResponse!.first.tags![j].referalId,
+          // This might need correcting
+        ));
+      }
+      print("this is newTags" + newTag.toString());
+
+      List<add.TagsDetail> tagDetails = [];
+
+      int? tagDetailLength =
+          _videoDetailResponse?.first.tagsDetails?.length ?? 0;
+      for (int j = 0; j < tagDetailLength; j++) {
+        tagDetails.add(add.TagsDetail(
+          id: _videoDetailResponse!.first.tagsDetails![j].id,
+          name: _videoDetailResponse!.first.tagsDetails![j].name,
+          color: _videoDetailResponse!.first.tagsDetails![j]
+              .color, // Ensure this is what you intend to do
+          priority: _videoDetailResponse!.first.tagsDetails![j].priority,
+          v: _videoDetailResponse!.first.tagsDetails![j].v,
+        ));
+      }
+      print("this is tagDetails" + tagDetails.toString());
+
+      listData.add(addVid.Video(
+          id: _videoDetailResponse?.first.id,
+          categoryDetails: newCat,
+          // tagsData: tagDetails,
+          // tags: newTag,
+          releaseDateTime: _videoDetailResponse?.first.releaseDateTime,
+          title: _videoDetailResponse?.first.title ?? "",
+          vId: _videoDetailResponse?.first.vId ?? "",
+          videoId: _videoDetailResponse?.first.videoId ?? "",
+          thumnailLink: _videoDetailResponse?.first.thumnailLink ?? "",
+          duration: _videoDetailResponse?.first.duration ?? 100,
+          videolink: _videoDetailResponse?.first.videolink,
+          description: _videoDetailResponse?.first.description ?? ""));
+    }
+    await _homeRepo
+        .createPlay(AddPlaylistVidieoRequest(
+            description: subtitle,
+            name: title,
+            userId: AppConstants.userId,
+            videos: listData))
+        .then(
+          (value) => value.fold((l) {
+            view!.showSnackbar(l.message);
+          }, (r) async {
+            // _homeVideoResponse = r;
+            fetchList.clear();
+            addedVideos.clear();
+            Logger.write(r.toString());
+            // view!.navigateToScreen(AppRoute.subscriptionView);
+
+            notifyListeners();
+          }),
+        );
+    context.pop();
+    getpersonalPlaylist();
+  }
+
   Future<void> fetchSavedVideos(SavedVideosRequest savedVideosRequest) async {
     await _homeRepo.fetchSavedVideos(savedVideosRequest).then(
           (value) => value.fold((l) {
@@ -178,8 +271,10 @@ class BottomNavigationViewModel extends BaseViewModel<BaseScreenView> {
   }
 
   Future<void> allPlaylist() async {
+    toggleLoading();
     await addFeatureToAll();
     await addpersonalToAll();
+    toggleLoading();
   }
 
   Future<void> addFeatureToAll() async {
@@ -222,43 +317,51 @@ class BottomNavigationViewModel extends BaseViewModel<BaseScreenView> {
     for (int i = 0; i < selectedPlayList.length; i++) {
       await getVideoDetails(video?.id ?? "");
       List<add.CategoryDetail> newCat = [];
-      if (_videoDetailResponse?.first.categoryDetails?.length != 0) {
-        int? length = _videoDetailResponse?.first.categoryDetails!.length;
-        for (int i = 0; i <= length!; i++) {
-          newCat.add(add.CategoryDetail(
-              id: _videoDetailResponse?.first.categoryDetails?[i].id,
-              name: _videoDetailResponse?.first.categoryDetails?[i].name,
-              v: _videoDetailResponse?.first.categoryDetails?[i].v));
-        }
+
+      int? catLength = _videoDetailResponse?.first.categoryDetails?.length ?? 0;
+      for (int j = 0; j < catLength; j++) {
+        // Note the change from i to j to avoid confusion with outer loop
+        newCat.add(add.CategoryDetail(
+          id: _videoDetailResponse!.first.categoryDetails![j].id,
+          name: _videoDetailResponse!.first.categoryDetails![j].name,
+          v: _videoDetailResponse!.first.categoryDetails![j].v,
+        ));
       }
+      print("this is newCat" + newCat.toString());
+
       List<add.Tag> newTag = [];
-      if (_videoDetailResponse?.first.tags?.length != 0) {
-        int? length = _videoDetailResponse?.first.tags!.length;
-        for (int i = 0; i <= length!; i++) {
-          newTag.add(add.Tag(
-            id: _videoDetailResponse?.first.categoryDetails?[i].id,
-            referalId: _videoDetailResponse?.first.categoryDetails?[i].name,
-          ));
-        }
+
+      int? tagLength = _videoDetailResponse?.first.tags?.length ?? 0;
+      for (int j = 0; j < tagLength; j++) {
+        newTag.add(add.Tag(
+          id: _videoDetailResponse!
+              .first.tags![j].id, // This might need correcting
+          referalId: _videoDetailResponse!
+              .first.tags![j].referalId, // This might need correcting
+        ));
       }
+      print("this is newTags" + newTag.toString());
+
       List<add.TagsDetail> tagDetails = [];
-      if (_videoDetailResponse?.first.tagsDetails?.length != 0) {
-        int? length = _videoDetailResponse?.first.tagsDetails!.length;
-        for (int i = 0; i <= length!; i++) {
-          tagDetails.add(add.TagsDetail(
-            id: _videoDetailResponse?.first.tagsDetails?[i].id,
-            name: _videoDetailResponse?.first.tagsDetails?[i].name,
-            color: _videoDetailResponse?.first.tagsDetails?[i].name,
-            priority: _videoDetailResponse?.first.tagsDetails?[i].priority,
-            v: _videoDetailResponse?.first.tagsDetails?[i].v,
-          ));
-        }
+
+      int? tagDetailLength =
+          _videoDetailResponse?.first.tagsDetails?.length ?? 0;
+      for (int j = 0; j < tagDetailLength; j++) {
+        tagDetails.add(add.TagsDetail(
+          id: _videoDetailResponse!.first.tagsDetails![j].id,
+          name: _videoDetailResponse!.first.tagsDetails![j].name,
+          color: _videoDetailResponse!.first.tagsDetails![j]
+              .color, // Ensure this is what you intend to do
+          priority: _videoDetailResponse!.first.tagsDetails![j].priority,
+          v: _videoDetailResponse!.first.tagsDetails![j].v,
+        ));
       }
+      print("this is tagDetails" + tagDetails.toString());
 
       listData.add(MyArray(
           name: selectedPlayList[i].label,
           objectId: selectedPlayList[i].value,
-          videoObject: VideoObject().copyWith(
+          videoObject: VideoObject(
               categoryDetails: newCat,
               tagsDetails: tagDetails,
               tags: newTag,
@@ -273,8 +376,12 @@ class BottomNavigationViewModel extends BaseViewModel<BaseScreenView> {
               description: _videoDetailResponse?.first.description ?? "")));
     }
 
+    print(listData);
+
     await _homeRepo.addToPlaylist(AddPlaylistRequest(myArray: listData)).then(
           (value) => value.fold((l) {}, (r) async {
+            selectedPlayList.clear();
+
             // _homeVideoResponse = r;
             // personalPlaylist.clear();
             // _featurePlaylistResponse = r;
@@ -292,86 +399,83 @@ class BottomNavigationViewModel extends BaseViewModel<BaseScreenView> {
   Future<void> addVideoToPlaylistHome(
       home.Video? video, BuildContext context) async {
     List<MyArray> listData = [];
-    try {
-      for (int i = 0; i < selectedPlayList.length; i++) {
-        await getVideoDetails(video?.id ?? "");
-        List<add.CategoryDetail> newCat = [];
-        if (_videoDetailResponse?.first.categoryDetails?.length != 0) {
-          int? length = _videoDetailResponse?.first.categoryDetails!.length;
-          for (int i = 0; i <= length!; i++) {
-            newCat.insert(
-                i,
-                add.CategoryDetail(
-                    id: _videoDetailResponse?.first.categoryDetails?[i].id,
-                    name: _videoDetailResponse?.first.categoryDetails?[i].name,
-                    v: _videoDetailResponse?.first.categoryDetails?[i].v));
-          }
-        }
-        List<add.Tag> newTag = [];
-        if (_videoDetailResponse?.first.tags?.length != 0) {
-          int? length = _videoDetailResponse?.first.tags!.length;
-          for (int i = 0; i <= length!; i++) {
-            newTag.insert(
-                i,
-                add.Tag(
-                  id: _videoDetailResponse?.first.categoryDetails?[i].id,
-                  referalId:
-                      _videoDetailResponse?.first.categoryDetails?[i].name,
-                ));
-          }
-        }
-        List<add.TagsDetail> tagDetails = [];
-        if (_videoDetailResponse?.first.tagsDetails?.length != 0) {
-          int? length = _videoDetailResponse?.first.tagsDetails!.length;
-          for (int i = 0; i <= length!; i++) {
-            tagDetails.insert(
-                i,
-                add.TagsDetail(
-                  id: _videoDetailResponse?.first.tagsDetails?[i].id,
-                  name: _videoDetailResponse?.first.tagsDetails?[i].name,
-                  color: _videoDetailResponse?.first.tagsDetails?[i].name,
-                  priority:
-                      _videoDetailResponse?.first.tagsDetails?[i].priority,
-                  v: _videoDetailResponse?.first.tagsDetails?[i].v,
-                ));
-          }
-        }
+    for (int i = 0; i < selectedPlayList.length; i++) {
+      await getVideoDetails(video?.id ?? "");
+      List<add.CategoryDetail> newCat = [];
 
-        listData.add(MyArray(
-            name: selectedPlayList[i].label,
-            objectId: selectedPlayList[i].value,
-            videoObject: VideoObject().copyWith(
-                categoryDetails: newCat,
-                tagsDetails: tagDetails,
-                tags: newTag,
-                releaseDateTime: _videoDetailResponse?.first.releaseDateTime,
-                title: _videoDetailResponse?.first.title ?? "",
-                savedvideo: _videoDetailResponse?.first.savedvideo ?? false,
-                vId: _videoDetailResponse?.first.vId ?? "",
-                videoId: _videoDetailResponse?.first.videoId ?? "",
-                thumnailLink: _videoDetailResponse?.first.thumnailLink ?? "",
-                duration: _videoDetailResponse?.first.duration ?? 100,
-                videolink: _videoDetailResponse?.first.videolink,
-                description: _videoDetailResponse?.first.description ?? "")));
+      int? catLength = _videoDetailResponse?.first.categoryDetails?.length ?? 0;
+      for (int j = 0; j < catLength; j++) {
+        // Note the change from i to j to avoid confusion with outer loop
+        newCat.add(add.CategoryDetail(
+          id: _videoDetailResponse!.first.categoryDetails![j].id,
+          name: _videoDetailResponse!.first.categoryDetails![j].name,
+          v: _videoDetailResponse!.first.categoryDetails![j].v,
+        ));
       }
-    } catch (e) {
-      print("this is error" + e.toString());
+      print("this is newCat" + newCat.toString());
+
+      List<add.Tag> newTag = [];
+
+      int? tagLength = _videoDetailResponse?.first.tags?.length ?? 0;
+      for (int j = 0; j < tagLength; j++) {
+        newTag.add(add.Tag(
+          id: _videoDetailResponse!
+              .first.tags![j].id, // This might need correcting
+          referalId: _videoDetailResponse!
+              .first.tags![j].referalId, // This might need correcting
+        ));
+      }
+      print("this is newTags" + newTag.toString());
+
+      List<add.TagsDetail> tagDetails = [];
+
+      int? tagDetailLength =
+          _videoDetailResponse?.first.tagsDetails?.length ?? 0;
+      for (int j = 0; j < tagDetailLength; j++) {
+        tagDetails.add(add.TagsDetail(
+          id: _videoDetailResponse!.first.tagsDetails![j].id,
+          name: _videoDetailResponse!.first.tagsDetails![j].name,
+          color: _videoDetailResponse!.first.tagsDetails![j]
+              .color, // Ensure this is what you intend to do
+          priority: _videoDetailResponse!.first.tagsDetails![j].priority,
+          v: _videoDetailResponse!.first.tagsDetails![j].v,
+        ));
+      }
+      print("this is tagDetails" + tagDetails.toString());
+
+      listData.add(MyArray(
+          name: selectedPlayList[i].label,
+          objectId: selectedPlayList[i].value,
+          videoObject: VideoObject(
+              id: _videoDetailResponse?.first.id,
+              categoryDetails: newCat,
+              tagsDetails: tagDetails,
+              tags: newTag,
+              releaseDateTime: _videoDetailResponse?.first.releaseDateTime,
+              title: _videoDetailResponse?.first.title ?? "",
+              savedvideo: _videoDetailResponse?.first.savedvideo ?? false,
+              vId: _videoDetailResponse?.first.vId ?? "",
+              videoId: _videoDetailResponse?.first.videoId ?? "",
+              thumnailLink: _videoDetailResponse?.first.thumnailLink ?? "",
+              duration: _videoDetailResponse?.first.duration ?? 100,
+              videolink: _videoDetailResponse?.first.videolink,
+              description: _videoDetailResponse?.first.description ?? "")));
+
+      await _homeRepo.addToPlaylist(AddPlaylistRequest(myArray: listData)).then(
+            (value) => value.fold((l) {}, (r) async {
+              // _homeVideoResponse = r;
+              // personalPlaylist.clear();
+              // _featurePlaylistResponse = r;
+              // allPlaylistList
+              //     .addAll(_featurePlaylistResponse?.existingVideos ?? []);
+              context.pop();
+              Logger.write("this is personal" + r.toString());
+              // view!.navigateToScreen(AppRoute.subscriptionView);
+
+              notifyListeners();
+            }),
+          );
     }
-
-    await _homeRepo.addToPlaylist(AddPlaylistRequest(myArray: listData)).then(
-          (value) => value.fold((l) {}, (r) async {
-            // _homeVideoResponse = r;
-            // personalPlaylist.clear();
-            // _featurePlaylistResponse = r;
-            // allPlaylistList
-            //     .addAll(_featurePlaylistResponse?.existingVideos ?? []);
-            context.pop();
-            Logger.write("this is personal" + r.toString());
-            // view!.navigateToScreen(AppRoute.subscriptionView);
-
-            notifyListeners();
-          }),
-        );
   }
 
   Future<void> getpersonalPlaylist() async {
@@ -486,6 +590,7 @@ class BottomNavigationViewModel extends BaseViewModel<BaseScreenView> {
 
   Future<void> getsearchVideos(String query) async {
     toggleLoading();
+    _isSearching = true;
     await _homeRepo.searchVideo(query).then(
           (value) => value.fold((l) {
             view!.showSnackbar(l.message);
@@ -499,12 +604,11 @@ class BottomNavigationViewModel extends BaseViewModel<BaseScreenView> {
             notifyListeners();
           }),
         );
+    _isSearching = false;
     toggleLoading();
   }
 
   Future<void> getPlaylistList() async {
-    isPlaylistLoading = true;
-    notifyListeners();
     await _homeRepo.getPlaylistList().then(
           (value) => value.fold((l) {
             view!.showSnackbar(l.message);
@@ -519,8 +623,28 @@ class BottomNavigationViewModel extends BaseViewModel<BaseScreenView> {
             notifyListeners();
           }),
         );
-    isPlaylistLoading = false;
-    notifyListeners();
+  }
+
+  Future<void> getAllVid() async {
+    await _homeRepo.fetchAllVideos().then(
+          (value) => value.fold((l) {
+            view!.showSnackbar(l.message);
+          }, (r) async {
+            _fetchAllPlaylistResponse = r;
+            int length = _fetchAllPlaylistResponse?.length ?? 0;
+            for (int i = 0; i < length; i++) {
+              titlesForPlaylist.add(_fetchAllPlaylistResponse?[i].title ?? "");
+            }
+            // fetchList.addAll(_fetchAllPlaylistResponse ?? []);
+            // searchList.clear();
+            // _searchListResponse = r;
+            // searchList.addAll(_searchListResponse?.videos ?? []);
+            Logger.write(r.toString());
+            // view!.navigateToScreen(AppRoute.subscriptionView);
+
+            notifyListeners();
+          }),
+        );
   }
 
   void setVideoList(int val) async {

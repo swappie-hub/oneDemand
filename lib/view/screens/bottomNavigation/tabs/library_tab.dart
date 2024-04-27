@@ -63,7 +63,44 @@ class _LibraryViewState extends ConsumerState<LibraryView> with BaseScreenView {
     return Scaffold(
       backgroundColor: Color(0xFF171718),
       appBar: PreferredSize(
-          preferredSize: Size.fromHeight(40), child: CustomAppBar()),
+          preferredSize: Size.fromHeight(40),
+          child: AppBar(
+            centerTitle: false,
+            backgroundColor: kBlack,
+            leadingWidth: 120,
+            leading: Padding(
+                padding: const EdgeInsets.only(left: 16, top: 14),
+                child: Text(
+                  "Library",
+                  style: TextStyle(color: Colors.white, fontFamily: 'Good'),
+                )),
+            // title: Padding(
+            //   padding: const EdgeInsets.only(right: 16),
+            //   child: Image.asset(
+            //     "assets/images/appbar_logo.png",
+            //     height: 30.52.h,
+            //   ),
+            // ),
+            actions: [
+              InkWell(
+                onTap: () {
+                  context.pushNamed(AppRoute.searchVideoView.name);
+                },
+                child: Icon(
+                  Icons.search,
+                  color: Colors.white,
+                ),
+              ),
+              gapW16
+              // Padding(
+              //   padding: const EdgeInsets.only(left: 16, right: 16),
+              //   child: Icon(
+              //     Icons.notifications,
+              //     color: Colors.white,
+              //   ),
+              // )
+            ],
+          )),
       body: Column(
         children: [
           Container(
@@ -174,6 +211,11 @@ class _LibraryViewState extends ConsumerState<LibraryView> with BaseScreenView {
                                   });
                                   _viewModel.setVideoList(
                                     val,
+                                  );
+                                  _scrollController.animateTo(
+                                    _scrollController.position.minScrollExtent,
+                                    duration: Duration(seconds: 2),
+                                    curve: Curves.fastOutSlowIn,
                                   );
                                   // if (val == 1) {
                                   //   setState(() {
@@ -1594,10 +1636,16 @@ class _LibraryItemsState extends State<LibraryItems> with BaseScreenView {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        context.pushNamed(
+          if(AppConstants.isSubscribed){
+  context.pushNamed(
           AppRoute.videoPageView.name,
           pathParameters: {'id': widget.items.id ?? ""},
         );
+        }else{
+          context.pushNamed(AppRoute.subscriptionView.name);
+        }
+      
+        
         // navigateToScreen(AppRoute.videoPageView);
       },
       child: Container(
@@ -1969,7 +2017,6 @@ class _LibraryItemsState extends State<LibraryItems> with BaseScreenView {
   }
 
   String convertTime(int time) {
-    print(time);
     int originalDuration = time;
 
     int hours = originalDuration ~/ 60;

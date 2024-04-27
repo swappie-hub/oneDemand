@@ -1,6 +1,8 @@
 // ignore_for_file: avoid_bool_literals_in_conditional_expressions
 
+import 'package:chargebee_flutter/chargebee_flutter.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:ondemand/core/constants.dart';
 import 'package:ondemand/services/shared_preference_service.dart';
 
@@ -24,6 +26,24 @@ class _SplashViewState extends ConsumerState<SplashView> with BaseScreenView {
     _viewModel.attachView(this);
     // TODO: implement initState
     Future.delayed(const Duration(milliseconds: 200)).then((value) async {
+      try {
+        await Chargebee.configure(
+            "thegodfreymethod",
+            "live_TcSjRmd7vOHtlD9eeon8NjowsgzLw0im",
+            "cb-z6r4nv6eafg3hbwmqtjxfjpoee",
+            "cb-yoaivqsm4rhv5eojomk2vvgcc4");
+      } on PlatformException catch (e) {
+        print(
+            'Error cargebee: ${e.message}, Error Details: ${e.details}, Error Code: ${e.code}');
+      }
+      try {
+        final result =
+            await Chargebee.retrieveProductIdentifiers({"limit": "100"});
+        print("these are products" + result.toString());
+      } on PlatformException catch (e) {
+        print(
+            'Error Message: ${e.message}, Error Details: ${e.details}, Error Code: ${e.code}');
+      }
       final String? token =
           SharedPreferenceService.getString(AppConstants.authTokenPref);
       final String? userId =
@@ -86,7 +106,7 @@ class _SplashViewState extends ConsumerState<SplashView> with BaseScreenView {
     _viewModel = ref.watch(authViewModel);
 
     return Scaffold(
-      backgroundColor: bgColor,
+      backgroundColor: Color(0xFF1A1A1A),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [

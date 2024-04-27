@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:ondemand/core/constants.dart';
 import 'package:ondemand/data/home/models/saved_videos_model.dart';
 import 'package:ondemand/data/home/models/search_video_models.dart';
 import 'package:ondemand/utils/app_sizes.dart';
@@ -26,6 +27,7 @@ class _SavedTabState extends ConsumerState<SearchVideoView>
 
     _viewModel = ref.read(bottomNavigationViewModel);
     _viewModel.attachView(this);
+    // _viewModel.searchList.clear();
     // Future.delayed(Duration(milliseconds: 2)).then((value) async {
     //   _viewModel.toggleLoading();
     // await _viewModel.fetchSavedVideos(SavedVideosRequest(
@@ -49,38 +51,93 @@ class _SavedTabState extends ConsumerState<SearchVideoView>
 
     return Scaffold(
       backgroundColor: Color(0xFF171718),
-      appBar: PreferredSize(
-          preferredSize: Size.fromHeight(40),
-          child: CustomAppBar(
-            isSearchDisabled: true,
-            showBack: true,
-          )),
+      appBar:
+          // PreferredSize(
+          //     preferredSize: Size.fromHeight(40),
+          // child: CustomAppBar(
+          //       isSearchDisabled: true,
+          //       showBack: true,
+          //     )),
+          AppBar(
+        centerTitle: false,
+        backgroundColor: kBlack,
+        leadingWidth: 150,
+        leading: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          // mainAxisAlignment: MainAxisAlignment.,
+          children: [
+            gapW10,
+            InkWell(
+              onTap: () {
+                context.pop();
+              },
+              child: Icon(
+                Icons.arrow_back_ios,
+                color: Colors.white,
+              ),
+            ),
+            Padding(
+                padding: const EdgeInsets.only(
+                  left: 16,
+                ),
+                child: Text(
+                  "Search",
+                  style: TextStyle(color: Colors.white, fontFamily: 'Good'),
+                )),
+          ],
+        ),
+        //   actions: [
+        //     InkWell(
+        //       onTap: () {
+        //         navigateToScreen(AppRoute.searchVideoView);
+        //       },
+        //       child: Icon(
+        //         Icons.search,
+        //         color: Colors.white,
+        //       ),
+        //     ),
+        //     gapW16
+        //     // Padding(
+        //     //   padding: const EdgeInsets.only(left: 16, right: 16),
+        //     //   child: Icon(
+        //     //     Icons.notifications,
+        //     //     color: Colors.white,
+        //     //   ),
+        //     // )
+        //   ],
+      ),
       body: Column(
         children: [
-          Container(
-            padding: EdgeInsets.symmetric(vertical: 16),
-            decoration: BoxDecoration(
-              color: Color(0xFF171718),
-              // border: Border.symmetric(
-              //     horizontal: BorderSide(color: Color(0xFF71717A))
-              //     //  Border.all(color: Color(0xFF71717A)
+          // Container(
+          //   padding: EdgeInsets.symmetric(vertical: 16),
+          //   decoration: BoxDecoration(
+          //     color: Color(0xFF171718),
+          //     // border: Border.symmetric(
+          //     //     horizontal: BorderSide(color: Color(0xFF71717A))
+          //     //     //  Border.all(color: Color(0xFF71717A)
 
-              //     )
-            ),
-            child: Center(
-                child: Text(
-              "Search results".toUpperCase(),
-              style: TextStyle(
-                  fontFamily: "Good",
-                  color: Color(0xFF3CB4E4),
-                  fontWeight: FontWeight.w700,
-                  fontSize: 18),
-            )),
-          ),
+          //     //     )
+          //   ),
+          //   child: Center(
+          //       child: Text(
+          //     "Search results".toUpperCase(),
+          //     style: TextStyle(
+          //         fontFamily: "Good",
+          //         color: Color(0xFF3CB4E4),
+          //         fontWeight: FontWeight.w700,
+          //         fontSize: 18),
+          //   )),
+          // ),
           gapH10,
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: TextFormField(
+              onSaved: (va) {
+                _viewModel.getsearchVideos(_searchController.text);
+              },
+              onFieldSubmitted: (va) {
+                _viewModel.getsearchVideos(_searchController.text);
+              },
               cursorColor: Colors.white,
               controller: _searchController,
               style: TextStyle(
@@ -171,27 +228,36 @@ class _SavedTabState extends ConsumerState<SearchVideoView>
                     ],
                   ),
                 ),
-          _viewModel.searchList.isEmpty ?? true
-              ? Container()
-              : Expanded(
-                  child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 16),
-                    color: Color(0xFF171718),
-                    child: GridView.builder(
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
-                          crossAxisSpacing: 16,
-                          mainAxisExtent:
-                              MediaQuery.of(context).size.height / 3.7),
-                      shrinkWrap: true,
-                      itemCount: _viewModel.searchList.length,
-                      itemBuilder: (context, index) => SavedItems(
-                        viewModel: _viewModel,
-                        items: _viewModel.searchList[index],
+          _viewModel.isSearching
+              ? Center(
+                  child: CircularProgressIndicator(
+                    color: Colors.white,
+                  ),
+                )
+              : _viewModel.searchList.isEmpty
+                  ? Container(
+                      child: Text("No Videos"),
+                    )
+                  : Expanded(
+                      child: Container(
+                        padding: EdgeInsets.symmetric(horizontal: 16),
+                        color: Color(0xFF171718),
+                        child: GridView.builder(
+                          gridDelegate:
+                              SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: 2,
+                                  crossAxisSpacing: 16,
+                                  mainAxisExtent:
+                                      MediaQuery.of(context).size.height / 3.7),
+                          shrinkWrap: true,
+                          itemCount: _viewModel.searchList.length,
+                          itemBuilder: (context, index) => SavedItems(
+                            viewModel: _viewModel,
+                            items: _viewModel.searchList[index],
+                          ),
+                        ),
                       ),
                     ),
-                  ),
-                ),
         ],
       ),
     );
@@ -237,10 +303,15 @@ class _SavedItemsState extends State<SavedItems> with BaseScreenView {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        context.pushNamed(
-          AppRoute.videoPageView.name,
-          pathParameters: {'id': widget.items.id ?? ""},
-        );
+        if (AppConstants.isSubscribed) {
+          context.pushNamed(
+            AppRoute.videoPageView.name,
+            pathParameters: {'id': widget.items.id ?? ""},
+          );
+        } else {
+          context.pushNamed(AppRoute.subscriptionView.name);
+        }
+
         // navigateToScreen(AppRoute.videoPageView);
       },
       child: Container(
@@ -461,7 +532,6 @@ class _SavedItemsState extends State<SavedItems> with BaseScreenView {
   }
 
   String convertTime(int time) {
-    print(time);
     int originalDuration = time;
 
     int hours = originalDuration ~/ 60;

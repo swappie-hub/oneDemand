@@ -1,11 +1,17 @@
+import 'package:chargebee_flutter/chargebee_flutter.dart';
 import 'package:custom_sliding_segmented_control/custom_sliding_segmented_control.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import 'package:ondemand/helpers/locator.dart';
+import 'package:ondemand/services/user_detail_service.dart';
 import 'package:ondemand/utils/colors.dart';
 import 'package:ondemand/utils/utils.dart';
 import 'package:ondemand/view/screens/signup/signup_view_model.dart';
 import 'package:ondemand/view/screens/subscribe/subscription_view_model.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class SubscriptionView extends ConsumerStatefulWidget {
   const SubscriptionView({super.key});
@@ -16,6 +22,8 @@ class SubscriptionView extends ConsumerStatefulWidget {
 
 class _SubscriptionViewState extends ConsumerState<SubscriptionView>
     with BaseScreenView {
+  final UserDetailService _userDetailService = getIt<UserDetailService>();
+  bool isSubscribeLoading = false;
   int val = 1;
   late SubscriptionViewModel _viewModel;
   String priceForYearly = "";
@@ -62,7 +70,8 @@ class _SubscriptionViewState extends ConsumerState<SubscriptionView>
     return Scaffold(
       backgroundColor: bgColor,
       appBar: AppBar(
-        // centerTitle: true,
+        centerTitle: true,
+        leadingWidth: 0,
         backgroundColor: kBlack,
         title: Center(
           child: Image.asset(
@@ -213,17 +222,15 @@ class _SubscriptionViewState extends ConsumerState<SubscriptionView>
                       ),
                       gapH16,
                       Text(
-                        "\$${val == 2 ? priceForMonthly : priceForYearly}" +
-                            " / month",
+                        "\$${val == 2 ? priceForMonthly : newPrice / 100}" +
+                            "${val == 1 ? " / year" : " / month"}",
                         style: TextStyle(
                             color: Colors.white,
                             fontSize: 18,
                             fontWeight: FontWeight.bold),
                       ),
                       Text(
-                        val == 2
-                            ? "billed monthly"
-                            : "\$" + "${newPrice / 100} billed annually",
+                        val == 2 ? "Billed monthly" : "Billed annually",
                         style: TextStyle(
                             color: Color(0xFFACACAC),
                             fontSize: 16,
@@ -231,8 +238,64 @@ class _SubscriptionViewState extends ConsumerState<SubscriptionView>
                       ),
                       gapH8,
                       InkWell(
-                        onTap: () {
-                          navigateToScreen(AppRoute.bottomNavigationView);
+                        onTap: () async {
+                          // navigateToScreen(AppRoute.bottomNavigationView);
+                          isSubscribeLoading = true;
+                          setState(() {});
+                          try {
+                            final customer = CBCustomer(
+                                _userDetailService.userDetailResponse?.email ??
+                                    "",
+                                _userDetailService
+                                        .userDetailResponse?.firstname ??
+                                    "",
+                                _userDetailService
+                                        .userDetailResponse?.lastname ??
+                                    "",
+                                _userDetailService.userDetailResponse?.email ??
+                                    "");
+                            final result = val == 1
+                                ? await Chargebee.purchaseStoreProduct(
+                                    Product(
+                                        "Month",
+                                        _viewModel.subscriptionResponse?.list
+                                                ?.first.itemPrice?.price ??
+                                            0,
+                                        (_viewModel.subscriptionResponse?.list
+                                                    ?.first.itemPrice?.price ??
+                                                0)
+                                            .toString(),
+                                        "Yearly Subscription renew after one year from the date of purchase",
+                                        "US",
+                                        SubscriptionPeriod.fromMap(
+                                          {"periodUnit": 1, "numberOfUnits": 1},
+                                        )),
+                                    customer: customer)
+                                : await Chargebee.purchaseStoreProduct(
+                                    Product(
+                                        "Monthly",
+                                        _viewModel.subscriptionResponse?.list
+                                                ?.last.itemPrice?.price ??
+                                            0,
+                                        (_viewModel.subscriptionResponse?.list
+                                                    ?.last.itemPrice?.price ??
+                                                0)
+                                            .toString(),
+                                        "Montly Subscription renew after one month from the date of purchase",
+                                        "US",
+                                        SubscriptionPeriod.fromMap(
+                                          {"periodUnit": 1, "numberOfUnits": 1},
+                                        )),
+                                    customer: customer);
+                            print("subscription id : ${result.subscriptionId}");
+                            print("subscription status : ${result.status}");
+                            await _viewModel.isSubscribed(context);
+                          } on PlatformException catch (e) {
+                            print(
+                                'Error Message: ${e.message}, Error Details: ${e.details}, Error Code: ${e.code}');
+                          }
+                          isSubscribeLoading = false;
+                          setState(() {});
                         },
                         child: Container(
                           padding: EdgeInsets.symmetric(vertical: 6),
@@ -242,13 +305,17 @@ class _SubscriptionViewState extends ConsumerState<SubscriptionView>
                               color: Color(0xFF0D6386),
                               borderRadius: BorderRadius.circular(12)),
                           child: Center(
-                            child: Text(
-                              "START FREE TRIAL NOW",
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold),
-                            ),
+                            child: isSubscribeLoading
+                                ? CircularProgressIndicator(
+                                    color: Colors.white,
+                                  )
+                                : Text(
+                                    val == 1 ? "JOIN NOW" : "JOIN NOW",
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold),
+                                  ),
                           ),
                         ),
                       ),
@@ -265,7 +332,129 @@ class _SubscriptionViewState extends ConsumerState<SubscriptionView>
                         "assets/images/subheading.png",
                         height: 100,
                       ),
-                      gapH16
+                      gapH16,
+                      // Padding(
+                      //   padding: const EdgeInsets.symmetric(horizontal: 16),
+                      //   child: InkWell(
+                      //     onTap: () {
+                      //       launchUrl(Uri.parse(
+                      //           "https://thegodfreymethod.com/pages/terms-of-use-eula"));
+                      //     },
+                      //     child: Text(
+                      //       val == 1
+                      //           ? "By continuing, you agree to our terms and conditions. At the end of the 7 day trial period, your first payment will be processed and automatically renewed every year. Cancel anytime.:"
+                      //           : "By continuing, you agree to our terms and conditions. At the end of the 3 day trial period, your first payment will be processed and automatically renewed every month. Cancel anytime.",
+                      //       style: TextStyle(
+                      //           color: Colors.white,
+                      //           fontSize: 10,
+                      //           fontWeight: FontWeight.bold),
+                      //     ),
+                      //   ),
+                      // ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        child: RichText(
+                          text: TextSpan(
+                            children: [
+                              TextSpan(
+                                text: "By continuing, you agree to our ",
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 10,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              TextSpan(
+                                text: "Terms and Conditions",
+                                style: TextStyle(
+                                    color: Color(0xFF0D6386),
+                                    decoration: TextDecoration.underline,
+                                    fontSize: 10,
+                                    fontWeight: FontWeight.bold),
+                                recognizer: TapGestureRecognizer()
+                                  ..onTap = () {
+                                    launchUrl(Uri.parse(
+                                        "https://thegodfreymethod.com/pages/terms-conditions"));
+                                  },
+                              ),
+                              TextSpan(
+                                text: " and ",
+                                style: TextStyle(
+                                    // color: primaryColor,
+
+                                    fontSize: 10,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              TextSpan(
+                                text: "Privacy Policy",
+                                style: TextStyle(
+                                    color: Color(0xFF0D6386),
+                                    decoration: TextDecoration.underline,
+                                    fontSize: 10,
+                                    fontWeight: FontWeight.bold),
+                                recognizer: TapGestureRecognizer()
+                                  ..onTap = () {
+                                    launchUrl(Uri.parse(
+                                        "https://thegodfreymethod.com/pages/privacypolicy"));
+                                  },
+                              ),
+                              // TextSpan(
+                              //   text: ". At the end of the ",
+                              //   style: TextStyle(
+                              //       color: Colors.white,
+                              //       fontSize: 10,
+                              //       fontWeight: FontWeight.bold),
+                              // ),
+                              // val == 1
+                              //     ? TextSpan(
+                              //         text: "7 day trial period",
+                              //         style: TextStyle(
+                              //             color: Colors.white,
+                              //             fontSize: 10,
+                              //             fontWeight: FontWeight.bold),
+                              //       )
+                              //     : TextSpan(
+                              //         text: "3 day trial period",
+                              //         style: TextStyle(
+                              //             color: Colors.white,
+                              //             fontSize: 10,
+                              //             fontWeight: FontWeight.bold),
+                              //       ),
+                              TextSpan(
+                                text:
+                                    " Your first payment will be processed and automatically renewed every ",
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 10,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              val == 1
+                                  ? TextSpan(
+                                      text: "year",
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 10,
+                                          fontWeight: FontWeight.bold),
+                                    )
+                                  : TextSpan(
+                                      text: "month",
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 10,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                              TextSpan(
+                                text: ". Cancel anytime.",
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 10,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+
+                      gapH16,
                     ],
                   ),
                 ),

@@ -153,6 +153,8 @@ class MultiPartClient extends http.BaseClient {
     request.persistentConnection = false;
 
     request.headers["Content-Type"] = "application/json";
+    request.headers["Cookie"] = "token=" + AppConstants.token;
+
     print(request.headers.toString());
 
     print(request.url.toString());

@@ -3,7 +3,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:intl/intl.dart';
+import 'package:ondemand/core/constants.dart';
 import 'package:ondemand/data/home/models/get_playlist_model.dart';
 import 'package:ondemand/data/videoDetail/models/add_comments_model.dart';
 import 'package:ondemand/data/videoDetail/models/video_detail_model.dart'
@@ -12,6 +14,7 @@ import 'package:ondemand/utils/app_sizes.dart';
 import 'package:ondemand/utils/utils.dart';
 import 'package:ondemand/view/screens/bottomNavigation/bottom_navigation_view_model.dart';
 import 'package:ondemand/view/screens/bottomNavigation/tabs/home_tab.dart';
+import 'package:ondemand/view/screens/login/login_view_model.dart';
 import 'package:ondemand/view/screens/videoPage/video_page_view_model.dart';
 import 'package:pod_player/pod_player.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -28,6 +31,7 @@ class _VideoPageViewState extends ConsumerState<VideoPageView>
     with BaseScreenView {
   PodPlayerController? controller;
   late VideoPageViewModel _viewModel;
+  late LoginViewModel _viewModel2;
 
   bool isSaved = false;
   bool isBottomSheetopen = false;
@@ -36,6 +40,8 @@ class _VideoPageViewState extends ConsumerState<VideoPageView>
   @override
   void initState() {
     _viewModel = ref.read(videoPageViewModel);
+    _viewModel2 = ref.read(authViewModel);
+
     _viewModel.attachView(this);
     Future.delayed(Duration(milliseconds: 200)).then((value) async {
       await _viewModel.getVideoDetails(widget.id).then((value) async {
@@ -60,6 +66,7 @@ class _VideoPageViewState extends ConsumerState<VideoPageView>
       controller?.pause();
       _viewModel.getComments(widget.id);
       await _viewModel.getPlaylistList();
+      await _viewModel2.isSubscribed(context);
 
       isSaved = _viewModel.videoDetailResponse?.first.savedvideo ?? false;
       setState(() {});
@@ -77,6 +84,8 @@ class _VideoPageViewState extends ConsumerState<VideoPageView>
   @override
   Widget build(BuildContext context) {
     _viewModel = ref.watch(videoPageViewModel);
+    _viewModel2 = ref.watch(authViewModel);
+
     return Scaffold(
       backgroundColor: Color(0xFF171718),
       appBar: PreferredSize(
@@ -90,8 +99,16 @@ class _VideoPageViewState extends ConsumerState<VideoPageView>
               children: [
                 // controller?.isInitialised ?? false
                 //     ?
-                PodVideoPlayer(
-                    alwaysShowProgressBar: true, controller: controller!),
+                !(AppConstants.isSubscribed)
+                    ? Container(
+                        height: 100,
+                        width: double.infinity,
+                        child: Center(
+                          child: Text("Please Subscribe"),
+                        ),
+                      )
+                    : PodVideoPlayer(
+                        alwaysShowProgressBar: true, controller: controller!),
                 // : Center(
                 //     child: CircularProgressIndicator(),
                 //   ),
@@ -601,7 +618,8 @@ class _VideoPageViewState extends ConsumerState<VideoPageView>
                                                 color: Color(0xFF1AA2D9)),
                                           ),
                                           Icon(
-                                            Icons.arrow_forward_ios,
+                                            Icons.expand_less_outlined,
+                                            size: 40,
                                             color: Color(0xFF149BD1),
                                           )
                                         ],
@@ -916,6 +934,7 @@ class MoreDescriptionBottomSheet extends StatelessWidget with BaseScreenView {
                           context.pop();
                         },
                         child: Icon(
+                          size: 40,
                           Icons.expand_more_outlined,
                           color: Color(0xFF149BD1),
                         ))
@@ -925,17 +944,46 @@ class MoreDescriptionBottomSheet extends StatelessWidget with BaseScreenView {
             ),
           ),
           gapH16,
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Text(
-              fulldescription,
-              style: TextStyle(fontSize: 11),
+          InkWell(
+            onTap: () {
+              String? extractedUrl = extractUrl(fulldescription);
+              launchUrl(Uri.parse(extractedUrl ?? ""));
+            },
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              // child: Text(
+              //   fulldescription,
+              //   style: TextStyle(fontSize: 11),
+              // ),
+              child: Html(
+                data: fulldescription,
+                // padding: EdgeInsets.all(8.0),
+                onLinkTap: (url, attributes, element) =>
+                    {launchUrl(Uri.parse(url ?? ""))},
+                // onLinkTap: (url) {
+                //   print("Opening $url...");
+                // },
+              ),
             ),
           ),
           gapH32,
         ],
       ),
     );
+  }
+
+  String? extractUrl(String htmlString) {
+    RegExp regExp = RegExp(
+      r'(https?://[^\s]+)',
+      caseSensitive: false,
+      multiLine: false,
+    );
+
+    final matches = regExp.allMatches(htmlString);
+    for (final Match match in matches) {
+      return match.group(0); // Return the first URL found
+    }
+    return null; // No URL found
   }
 
   @override

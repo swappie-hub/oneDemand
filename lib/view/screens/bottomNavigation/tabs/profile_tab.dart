@@ -8,6 +8,7 @@ import 'package:ondemand/utils/app_sizes.dart';
 import 'package:ondemand/utils/utils.dart';
 import 'package:ondemand/view/screens/bottomNavigation/tabs/home_tab.dart';
 import 'package:ondemand/view/screens/login/login_view_model.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ProfileTab extends ConsumerStatefulWidget {
   const ProfileTab({super.key});
@@ -34,29 +35,59 @@ class _ProfileTabState extends ConsumerState<ProfileTab> with BaseScreenView {
 
     return Scaffold(
       appBar: PreferredSize(
-          preferredSize: Size.fromHeight(40), child: CustomAppBar()),
+          preferredSize: Size.fromHeight(40),
+          child: AppBar(
+            centerTitle: false,
+            backgroundColor: kBlack,
+            leadingWidth: 200,
+            leading: Padding(
+                padding: const EdgeInsets.only(left: 16, top: 14),
+                child: Text(
+                  "My Account",
+                  style: TextStyle(color: Colors.white, fontFamily: 'Good'),
+                )),
+            actions: [
+              InkWell(
+                onTap: () {
+                  navigateToScreen(AppRoute.searchVideoView);
+                },
+                child: Icon(
+                  Icons.search,
+                  color: Colors.white,
+                ),
+              ),
+              gapW16
+              // Padding(
+              //   padding: const EdgeInsets.only(left: 16, right: 16),
+              //   child: Icon(
+              //     Icons.notifications,
+              //     color: Colors.white,
+              //   ),
+              // )
+            ],
+          )),
       backgroundColor: Color(0xFF171718),
       body: Column(
         children: [
-          Container(
-            padding: EdgeInsets.symmetric(vertical: 16),
-            decoration: BoxDecoration(
-                color: Color(0xFF27272A),
-                border: Border.symmetric(
-                    horizontal: BorderSide(color: Color(0xFF71717A))
-                    //  Border.all(color: Color(0xFF71717A)
+          // Container(
+          //   padding: EdgeInsets.symmetric(vertical: 16),
+          //   decoration: BoxDecoration(
+          //       color: Color(0xFF27272A),
+          //       border: Border.symmetric(
+          //           horizontal: BorderSide(color: Color(0xFF71717A))
+          //           //  Border.all(color: Color(0xFF71717A)
 
-                    )),
-            child: Center(
-                child: Text(
-              "MY ACCOUNT",
-              style: TextStyle(
-                  fontFamily: "Good",
-                  color: Color(0xFF3CB4E4),
-                  fontWeight: FontWeight.w700,
-                  fontSize: 18),
-            )),
-          ),
+          //           )),
+          //   child: Center(
+          //       child: Text(
+          //     "MY ACCOUNT",
+          //     style: TextStyle(
+          //         fontFamily: "Good",
+          //         color: Color(0xFF3CB4E4),
+          //         fontWeight: FontWeight.w700,
+          //         fontSize: 18),
+          //   )),
+          // ),
           Container(
               width: double.infinity,
               padding: EdgeInsets.symmetric(vertical: 16),
@@ -72,9 +103,15 @@ class _ProfileTabState extends ConsumerState<ProfileTab> with BaseScreenView {
                     width: 100,
                     decoration: BoxDecoration(
                         shape: BoxShape.circle,
+                        color: Colors.black,
                         image: DecorationImage(
-                            image: NetworkImage(
-                                "https://img.freepik.com/premium-vector/businessman-avatar-illustration-cartoon-user-portrait-user-profile-icon_118339-4382.jpg"))),
+                            image: NetworkImage(_userDetailService
+                                        .userDetailResponse?.image !=
+                                    null
+                                ? _userDetailService
+                                        .userDetailResponse?.image ??
+                                    ""
+                                : "https://img.freepik.com/premium-vector/businessman-avatar-illustration-cartoon-user-portrait-user-profile-icon_118339-4382.jpg"))),
                   ),
                   gapH8,
                   Text(
@@ -105,7 +142,7 @@ class _ProfileTabState extends ConsumerState<ProfileTab> with BaseScreenView {
                   ),
                   gapW8,
                   Text(
-                    "Account Details",
+                    "Account",
                     style: TextStyle(color: Color(0xFfC4C4C4), fontSize: 16),
                   )
                 ],
@@ -119,7 +156,8 @@ class _ProfileTabState extends ConsumerState<ProfileTab> with BaseScreenView {
           ),
           InkWell(
             onTap: () {
-              navigateToScreen(AppRoute.subscriptionView);
+              // navigateToScreen(AppRoute.subscriptionView);
+              launchUrl(Uri.parse("https://app.thegodfreymethod.com/"));
             },
             child: Container(
               margin: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
@@ -145,10 +183,8 @@ class _ProfileTabState extends ConsumerState<ProfileTab> with BaseScreenView {
           ),
           InkWell(
             onTap: () {
-              SharedPreferenceService.clearAll();
-              AppConstants.token = "";
-              AppConstants.userId = "";
-              context.pushReplacementNamed(AppRoute.onboardingView.name);
+              launchUrl(Uri.parse(
+                  "https://thegodfreymethod.com/pages/privacypolicy"));
             },
             child: Container(
               margin: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
@@ -158,13 +194,13 @@ class _ProfileTabState extends ConsumerState<ProfileTab> with BaseScreenView {
                     flipY: true,
                     flipX: true,
                     child: Icon(
-                      Icons.logout,
+                      Icons.policy_outlined,
                       color: Color(0xFFD9D9D9),
                     ),
                   ),
                   gapW8,
                   Text(
-                    "Logout",
+                    "Privacy Policy",
                     style: TextStyle(color: Color(0xFfC4C4C4), fontSize: 16),
                   )
                 ],
@@ -176,237 +212,34 @@ class _ProfileTabState extends ConsumerState<ProfileTab> with BaseScreenView {
             width: double.infinity,
             decoration: BoxDecoration(color: Color(0xFF71717A)),
           ),
+
           InkWell(
             onTap: () {
-              showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return AlertDialog(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(16)),
-                    insetPadding: EdgeInsets.zero,
-                    titlePadding: EdgeInsets.zero,
-                    backgroundColor: Color(0xFF171718),
-                    surfaceTintColor: Color(0xFF171718),
-                    title: Column(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                'Delete account'.toUpperCase(),
-                                style: TextStyle(
-                                    fontFamily: "Good",
-                                    color: Color(0xFF008BC3),
-                                    fontSize: 16),
-                              ),
-                              InkWell(
-                                  onTap: () {
-                                    context.pop();
-                                  },
-                                  child: Icon(Icons.close))
-                            ],
-                          ),
-                        ),
-                        Container(
-                          height: 2,
-                          decoration: BoxDecoration(color: Color(0xFF27272A)),
-                        )
-                      ],
-                    ),
-                    content: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text(
-                            "Are you sure you want to delete your account?",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold),
-                          ),
-                          gapH8,
-                          Text(
-                            "All account data and history will be deleted and your subscription will no longer be accessible.",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.normal),
-                          ),
-                          gapH8,
-                          TextButton(
-                            child: Container(
-                                padding: EdgeInsets.symmetric(
-                                    vertical: 8, horizontal: 16),
-                                decoration: BoxDecoration(
-                                    color: Color(0xFF008BC3),
-                                    borderRadius: BorderRadius.circular(9)),
-                                child: Text(
-                                  'NO Go Back'.toUpperCase(),
-                                  style: TextStyle(
-                                      fontFamily: "Good",
-                                      color: Colors.white,
-                                      fontSize: 15),
-                                )),
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                              // navigateToScreen(AppRoute.accountDetailsView);
-
-                              // Handle the submit action
-                            },
-                          ),
-                          TextButton(
-                            child: Text(
-                              'Delete'.toUpperCase(),
-                              style: TextStyle(
-                                  fontFamily: "Good",
-                                  color: Color(0xFFA11E1E),
-                                  fontSize: 15),
-                            ),
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                              showDialog(
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return AlertDialog(
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(16)),
-                                    insetPadding: EdgeInsets.zero,
-                                    titlePadding: EdgeInsets.zero,
-                                    backgroundColor: Color(0xFF171718),
-                                    surfaceTintColor: Color(0xFF171718),
-                                    title: Column(
-                                      children: [
-                                        Padding(
-                                          padding: const EdgeInsets.all(16.0),
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Text(
-                                                'Delete account'.toUpperCase(),
-                                                style: TextStyle(
-                                                    fontFamily: "Good",
-                                                    color: Color(0xFF008BC3),
-                                                    fontSize: 16),
-                                              ),
-                                              InkWell(
-                                                  onTap: () {
-                                                    context.pop();
-                                                  },
-                                                  child: Icon(Icons.close))
-                                            ],
-                                          ),
-                                        ),
-                                        Container(
-                                          height: 2,
-                                          decoration: BoxDecoration(
-                                              color: Color(0xFF27272A)),
-                                        )
-                                      ],
-                                    ),
-                                    content: Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 16),
-                                      child: Column(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          Text(
-                                            "Are you sure you want to proceed with deleting your account?",
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(
-                                                color: Colors.white,
-                                                fontWeight: FontWeight.bold),
-                                          ),
-                                          gapH8,
-                                          Text(
-                                            "This action is not reversible and no refunds will be provided for active subscriptions.",
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(
-                                                color: Colors.white,
-                                                fontWeight: FontWeight.normal),
-                                          ),
-                                          gapH8,
-                                          TextButton(
-                                            child: Container(
-                                                padding: EdgeInsets.symmetric(
-                                                    vertical: 8,
-                                                    horizontal: 16),
-                                                decoration: BoxDecoration(
-                                                    color: Color(0xFF008BC3),
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            9)),
-                                                child: Text(
-                                                  'NO Go Back'.toUpperCase(),
-                                                  style: TextStyle(
-                                                      fontFamily: "Good",
-                                                      color: Colors.white,
-                                                      fontSize: 15),
-                                                )),
-                                            onPressed: () {
-                                              Navigator.of(context).pop();
-                                              // Handle the submit action
-                                            },
-                                          ),
-                                          TextButton(
-                                            child: Padding(
-                                              padding:
-                                                  const EdgeInsets.all(16.0),
-                                              child: Text(
-                                                'YES, I AM SURE.\nDELETE MY ACCOUNT'
-                                                    .toUpperCase(),
-                                                textAlign: TextAlign.center,
-                                                style: TextStyle(
-                                                    fontFamily: "Good",
-                                                    color: Color(0xFFA11E1E),
-                                                    fontSize: 15),
-                                              ),
-                                            ),
-                                            onPressed: () {
-                                              _viewModel.deleteAccount(context);
-                                            },
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    actions: <Widget>[],
-                                  );
-                                },
-                              );
-                            },
-                          ),
-                        ],
-                      ),
-                    ),
-                    actions: <Widget>[],
-                  );
-                },
-              );
-
-              // navigateToScreen(AppRoute.accountDetailsView);
+              launchUrl(Uri.parse(
+                  "https://thegodfreymethod.com/pages/terms-conditions"));
             },
             child: Container(
               margin: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
               child: Row(
                 children: [
-                  Icon(
-                    Icons.delete_outline,
-                    color: Color(0xFFD9D9D9),
+                  Transform.flip(
+                    flipY: true,
+                    flipX: true,
+                    child: Icon(
+                      Icons.shield_outlined,
+                      color: Color(0xFFD9D9D9),
+                    ),
                   ),
                   gapW8,
                   Text(
-                    "Delete Account",
+                    "Terms and Conditions",
                     style: TextStyle(color: Color(0xFfC4C4C4), fontSize: 16),
                   )
                 ],
               ),
             ),
           ),
+
           Container(
             height: 1,
             width: double.infinity,

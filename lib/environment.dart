@@ -4,6 +4,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:ondemand/app.dart';
 import 'package:ondemand/core/constants.dart';
 import 'package:ondemand/domain/providers/firebase_messaging_provider.dart';
@@ -27,6 +28,10 @@ class Environment {
     WidgetsFlutterBinding.ensureInitialized();
     // await EasyLocalization.ensureInitialized();
     // await Firebase.initializeApp();
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
     await Firebase.initializeApp();
     await FirebaseMessagingProvider.setupFirebaseConfig();
     final String? token = await FirebaseMessaging.instance.getToken();
