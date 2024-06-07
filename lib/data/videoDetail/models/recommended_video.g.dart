@@ -9,12 +9,14 @@ part of 'recommended_video.dart';
 _$RecomendedVideoRequestImpl _$$RecomendedVideoRequestImplFromJson(
         Map<String, dynamic> json) =>
     _$RecomendedVideoRequestImpl(
+      videoId: json['videoId'] as String?,
       tags: (json['tags'] as List<dynamic>?)?.map((e) => e as String).toList(),
     );
 
 Map<String, dynamic> _$$RecomendedVideoRequestImplToJson(
         _$RecomendedVideoRequestImpl instance) =>
     <String, dynamic>{
+      'videoId': instance.videoId,
       'tags': instance.tags,
     };
 

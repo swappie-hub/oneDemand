@@ -12,6 +12,7 @@ import 'package:ondemand/data/auth/models/subscription_model.dart';
 import 'package:ondemand/data/auth/models/update_email_model.dart';
 import 'package:ondemand/data/auth/models/update_password_model.dart';
 import 'package:ondemand/data/auth/models/update_username_model.dart';
+import 'package:ondemand/data/auth/models/upload_image_to_profile_model.dart';
 import 'package:ondemand/data/auth/models/upload_model.dart';
 
 abstract class AuthRepo {
@@ -30,8 +31,10 @@ abstract class AuthRepo {
   Future<Either<ApiException, UpdatePasswordResponse>> updatePassword(
       UpdatePasswordRequest updatePasswordRequest);
   Future<Either<ApiException, DeleteAccountResponse>> deleteAccount();
-  Future<Either<ApiException, List<UploadResponse>>> uploadSingleFile(
+  Future<Either<ApiException, UploadResponse>> uploadSingleFile(
     File file,
   );
   Future<Either<ApiException, FetchSubscriptionResponse>> fetchSubscription();
+  Future<Either<ApiException, UploadImageProfileResponse>> uploadImageProfile(
+      UploadImageProfileRequest uploadImageProfileRequest);
 }

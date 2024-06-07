@@ -9,6 +9,7 @@ import 'package:ondemand/data/auth/models/signup_model.dart';
 import 'package:ondemand/data/auth/models/update_email_model.dart';
 import 'package:ondemand/data/auth/models/update_password_model.dart';
 import 'package:ondemand/data/auth/models/update_username_model.dart';
+import 'package:ondemand/data/auth/models/upload_image_to_profile_model.dart';
 import 'package:ondemand/domain/providers/repository_provider.dart';
 import 'package:ondemand/helpers/base_screen_view.dart';
 import 'package:ondemand/helpers/base_view_model.dart';
@@ -70,9 +71,15 @@ class LoginViewModel extends BaseViewModel<BaseScreenView> {
             print("this is subscription status" + r.toString());
             notifyListeners();
             if (AppConstants.isSubscribed == true) {
-              view!.navigateToScreen(AppRoute.bottomNavigationView);
+              // Navigator.of(context).pushNamedAndRemoveUntil(
+              //     AppRoute.bottomNavigationView.name, (route) => false);
+              context.pushReplacementNamed(AppRoute.bottomNavigationView.name);
             } else {
-              view!.navigateToScreen(AppRoute.subscriptionView);
+              // Navigator.of(context).pushNamedAndRemoveUntil(
+              //     AppRoute.z.name, (route) => false);
+              context.pushReplacementNamed(AppRoute.subscriptionView.name);
+
+              // view!.navigateToScreen(AppRoute.subscriptionView);
             }
             Logger.write(r.toString());
 
@@ -82,20 +89,41 @@ class LoginViewModel extends BaseViewModel<BaseScreenView> {
     toggleLoading();
   }
 
-  Future<String?> uploadSingleFile(File file, BuildContext context) async {
-    String? fileUrl;
-
+  Future<void> uploadSingleFile(File file, BuildContext context) async {
     await _authRepo.uploadSingleFile(file).then(
           (value) => value.fold((l) {
             view?.showSnackbar(l.message);
-            return "";
-          }, (r) {
-            context.pop();
-            getUserDetails(AppConstants.userId, context);
+          }, (r) async {
+            print(r);
+            await uploadImageAToProf(
+                UploadImageProfileRequest(
+                    userId: AppConstants.userId,
+                    imageUrl: r.data?.cdnLink ??
+                        r.data?.fileLink ??
+                        r.data?.responseData?.location ??
+                        ""),
+                context);
+
+            // context.pop();
+
             // fileUrl = r.;
           }),
         );
-    return fileUrl;
+  }
+
+  Future<void> uploadImageAToProf(
+      UploadImageProfileRequest uploadImageProfileRequest,
+      BuildContext context) async {
+    await _authRepo.uploadImageProfile(uploadImageProfileRequest).then(
+          (value) => value.fold((l) {
+            view?.showSnackbar(l.message);
+          }, (r) {
+            getUserDetails(AppConstants.userId, context);
+            // context.pop();
+            // getUserDetails(AppConstants.userId, context);
+            // fileUrl = r.;
+          }),
+        );
   }
 
   Future<void> getUserDetails(String ID, BuildContext context,

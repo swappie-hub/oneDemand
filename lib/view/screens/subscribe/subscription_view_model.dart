@@ -32,7 +32,8 @@ class SubscriptionViewModel extends BaseViewModel<BaseScreenView> {
             view!.showSnackbar(l.message);
           }, (r) async {
             _subscriptionResponse = r;
-            Logger.write(r.toString());
+            print(_subscriptionResponse.toString());
+            Logger.write("this is pricing " + r.toString());
             // view!.navigateToScreen(AppRoute.bottomNavigationView);
             notifyListeners();
           }),

@@ -88,6 +88,7 @@ _$VideoImpl _$$VideoImplFromJson(Map<String, dynamic> json) => _$VideoImpl(
       label: json['label'] as String?,
       value: json['value'] as String?,
       wishlist: json['wishlist'] as bool?,
+      savedVideo: json['savedvideo'] as bool?,
       updatedAt: json['updatedAt'] == null
           ? null
           : DateTime.parse(json['updatedAt'] as String),
@@ -117,6 +118,7 @@ Map<String, dynamic> _$$VideoImplToJson(_$VideoImpl instance) =>
       'label': instance.label,
       'value': instance.value,
       'wishlist': instance.wishlist,
+      'savedvideo': instance.savedVideo,
       'updatedAt': instance.updatedAt?.toIso8601String(),
       'isFeatured': instance.isFeatured,
     };

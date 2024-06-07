@@ -16,6 +16,7 @@ import 'package:ondemand/data/auth/models/subscription_model.dart';
 import 'package:ondemand/data/auth/models/update_email_model.dart';
 import 'package:ondemand/data/auth/models/update_password_model.dart';
 import 'package:ondemand/data/auth/models/update_username_model.dart';
+import 'package:ondemand/data/auth/models/upload_image_to_profile_model.dart';
 import 'package:ondemand/data/auth/models/upload_model.dart';
 import 'package:ondemand/services/shared_preference_service.dart';
 import 'package:ondemand/utils/logger.dart';
@@ -189,24 +190,22 @@ class AuthRepoImpl implements AuthRepo {
   }
 
   @override
-  Future<Either<ApiException, List<UploadResponse>>> uploadSingleFile(
+  Future<Either<ApiException, UploadResponse>> uploadSingleFile(
     File file,
   ) async {
     // ignore: prefer_final_locals
     http.MultipartRequest request = http.MultipartRequest(
-        'POST',
-        Uri.parse(
-            '${AppConstants.baseUrl}/uploadthing?actionType=upload&slug=profileImage'));
+        'POST', Uri.parse('${AppConstants.baseUrl}/common/file-upload'));
 
-    request.files.add(await http.MultipartFile.fromPath("files", file.path));
+    request.files.add(await http.MultipartFile.fromPath("file", file.path));
     try {
       final http.StreamedResponse streamedResponse =
           await _apiClient2.send(request);
       final http.Response response =
           await http.Response.fromStream(streamedResponse);
-      print(uploadResponseFromJson(jsonEncode(response.body)));
+      print(uploadResponseFromJson(response.body));
       return Right(
-        uploadResponseFromJson(jsonEncode(response.body)),
+        uploadResponseFromJson(response.body),
       );
     } catch (e) {
       return Left(ApiException(e.toString()));
@@ -223,6 +222,22 @@ class AuthRepoImpl implements AuthRepo {
       );
 
       return Right(FetchSubscriptionResponse.fromJson(response.data!));
+    } catch (e) {
+      return Left(ApiException(e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<ApiException, UploadImageProfileResponse>> uploadImageProfile(
+      UploadImageProfileRequest uploadImageProfileRequest) async {
+    try {
+      final response = await _apiClient.post(
+          sendCookies: true,
+          "${AppConstants.baseUrl}/uploadthing",
+          addCookies: true,
+          uploadImageProfileRequestToJson(uploadImageProfileRequest));
+
+      return Right(UploadImageProfileResponse.fromJson(response.data!));
     } catch (e) {
       return Left(ApiException(e.toString()));
     }

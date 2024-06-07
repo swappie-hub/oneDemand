@@ -7,6 +7,7 @@ import 'package:ondemand/data/videoDetail/models/add_comments_model.dart';
 import 'package:ondemand/data/videoDetail/models/comments_model.dart';
 import 'package:ondemand/data/videoDetail/models/recommended_video.dart';
 import 'package:ondemand/data/videoDetail/models/video_detail_model.dart';
+import 'package:ondemand/data/videoDetail/models/vimeo_video_model.dart';
 
 abstract class VideoRepo {
   Future<Either<ApiException, List<VideoDetailResponse>>> getVideoDetails(
@@ -16,4 +17,5 @@ abstract class VideoRepo {
   Future<Either<ApiException, CommentsResponse>> getComments(String videoId);
   Future<Either<ApiException, AddCommentsResponse>> addComments(
       AddCommentsRequest addCommentsRequest);
+  Future<Either<ApiException, VimeoVideoResponse>> getViemeoUrl(String videoId);
 }

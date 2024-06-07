@@ -543,6 +543,8 @@ mixin _$Video {
   String? get value => throw _privateConstructorUsedError;
   @JsonKey(name: "wishlist")
   bool? get wishlist => throw _privateConstructorUsedError;
+  @JsonKey(name: "savedvideo")
+  bool? get savedVideo => throw _privateConstructorUsedError;
   @JsonKey(name: "updatedAt")
   DateTime? get updatedAt => throw _privateConstructorUsedError;
   @JsonKey(name: "isFeatured")
@@ -580,6 +582,7 @@ abstract class $VideoCopyWith<$Res> {
       @JsonKey(name: "label") String? label,
       @JsonKey(name: "value") String? value,
       @JsonKey(name: "wishlist") bool? wishlist,
+      @JsonKey(name: "savedvideo") bool? savedVideo,
       @JsonKey(name: "updatedAt") DateTime? updatedAt,
       @JsonKey(name: "isFeatured") bool? isFeatured});
 }
@@ -618,6 +621,7 @@ class _$VideoCopyWithImpl<$Res, $Val extends Video>
     Object? label = freezed,
     Object? value = freezed,
     Object? wishlist = freezed,
+    Object? savedVideo = freezed,
     Object? updatedAt = freezed,
     Object? isFeatured = freezed,
   }) {
@@ -706,6 +710,10 @@ class _$VideoCopyWithImpl<$Res, $Val extends Video>
           ? _value.wishlist
           : wishlist // ignore: cast_nullable_to_non_nullable
               as bool?,
+      savedVideo: freezed == savedVideo
+          ? _value.savedVideo
+          : savedVideo // ignore: cast_nullable_to_non_nullable
+              as bool?,
       updatedAt: freezed == updatedAt
           ? _value.updatedAt
           : updatedAt // ignore: cast_nullable_to_non_nullable
@@ -747,6 +755,7 @@ abstract class _$$VideoImplCopyWith<$Res> implements $VideoCopyWith<$Res> {
       @JsonKey(name: "label") String? label,
       @JsonKey(name: "value") String? value,
       @JsonKey(name: "wishlist") bool? wishlist,
+      @JsonKey(name: "savedvideo") bool? savedVideo,
       @JsonKey(name: "updatedAt") DateTime? updatedAt,
       @JsonKey(name: "isFeatured") bool? isFeatured});
 }
@@ -783,6 +792,7 @@ class __$$VideoImplCopyWithImpl<$Res>
     Object? label = freezed,
     Object? value = freezed,
     Object? wishlist = freezed,
+    Object? savedVideo = freezed,
     Object? updatedAt = freezed,
     Object? isFeatured = freezed,
   }) {
@@ -871,6 +881,10 @@ class __$$VideoImplCopyWithImpl<$Res>
           ? _value.wishlist
           : wishlist // ignore: cast_nullable_to_non_nullable
               as bool?,
+      savedVideo: freezed == savedVideo
+          ? _value.savedVideo
+          : savedVideo // ignore: cast_nullable_to_non_nullable
+              as bool?,
       updatedAt: freezed == updatedAt
           ? _value.updatedAt
           : updatedAt // ignore: cast_nullable_to_non_nullable
@@ -909,6 +923,7 @@ class _$VideoImpl implements _Video {
       @JsonKey(name: "label") this.label,
       @JsonKey(name: "value") this.value,
       @JsonKey(name: "wishlist") this.wishlist,
+      @JsonKey(name: "savedvideo") this.savedVideo,
       @JsonKey(name: "updatedAt") this.updatedAt,
       @JsonKey(name: "isFeatured") this.isFeatured})
       : _tags = tags,
@@ -1033,6 +1048,9 @@ class _$VideoImpl implements _Video {
   @JsonKey(name: "wishlist")
   final bool? wishlist;
   @override
+  @JsonKey(name: "savedvideo")
+  final bool? savedVideo;
+  @override
   @JsonKey(name: "updatedAt")
   final DateTime? updatedAt;
   @override
@@ -1041,7 +1059,7 @@ class _$VideoImpl implements _Video {
 
   @override
   String toString() {
-    return 'Video(id: $id, vId: $vId, title: $title, description: $description, duration: $duration, categoryId: $categoryId, videolink: $videolink, thumnailLink: $thumnailLink, videoId: $videoId, tags: $tags, createdAt: $createdAt, releaseDateTime: $releaseDateTime, v: $v, products: $products, videoLevel: $videoLevel, categoryDetails: $categoryDetails, tagsData: $tagsData, productsData: $productsData, label: $label, value: $value, wishlist: $wishlist, updatedAt: $updatedAt, isFeatured: $isFeatured)';
+    return 'Video(id: $id, vId: $vId, title: $title, description: $description, duration: $duration, categoryId: $categoryId, videolink: $videolink, thumnailLink: $thumnailLink, videoId: $videoId, tags: $tags, createdAt: $createdAt, releaseDateTime: $releaseDateTime, v: $v, products: $products, videoLevel: $videoLevel, categoryDetails: $categoryDetails, tagsData: $tagsData, productsData: $productsData, label: $label, value: $value, wishlist: $wishlist, savedVideo: $savedVideo, updatedAt: $updatedAt, isFeatured: $isFeatured)';
   }
 
   @override
@@ -1081,6 +1099,8 @@ class _$VideoImpl implements _Video {
             (identical(other.value, value) || other.value == value) &&
             (identical(other.wishlist, wishlist) ||
                 other.wishlist == wishlist) &&
+            (identical(other.savedVideo, savedVideo) ||
+                other.savedVideo == savedVideo) &&
             (identical(other.updatedAt, updatedAt) ||
                 other.updatedAt == updatedAt) &&
             (identical(other.isFeatured, isFeatured) ||
@@ -1112,6 +1132,7 @@ class _$VideoImpl implements _Video {
         label,
         value,
         wishlist,
+        savedVideo,
         updatedAt,
         isFeatured
       ]);
@@ -1154,6 +1175,7 @@ abstract class _Video implements Video {
       @JsonKey(name: "label") final String? label,
       @JsonKey(name: "value") final String? value,
       @JsonKey(name: "wishlist") final bool? wishlist,
+      @JsonKey(name: "savedvideo") final bool? savedVideo,
       @JsonKey(name: "updatedAt") final DateTime? updatedAt,
       @JsonKey(name: "isFeatured") final bool? isFeatured}) = _$VideoImpl;
 
@@ -1222,6 +1244,9 @@ abstract class _Video implements Video {
   @override
   @JsonKey(name: "wishlist")
   bool? get wishlist;
+  @override
+  @JsonKey(name: "savedvideo")
+  bool? get savedVideo;
   @override
   @JsonKey(name: "updatedAt")
   DateTime? get updatedAt;

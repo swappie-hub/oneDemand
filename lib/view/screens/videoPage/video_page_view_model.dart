@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:ondemand/core/constants.dart';
 import 'package:ondemand/data/auth/auth_repo.dart';
 import 'package:ondemand/data/auth/models/login_model.dart';
 import 'package:ondemand/data/auth/models/signup_model.dart';
@@ -11,6 +12,7 @@ import 'package:ondemand/data/videoDetail/models/add_comments_model.dart';
 import 'package:ondemand/data/videoDetail/models/comments_model.dart';
 import 'package:ondemand/data/videoDetail/models/recommended_video.dart';
 import 'package:ondemand/data/videoDetail/models/video_detail_model.dart';
+import 'package:ondemand/data/videoDetail/models/vimeo_video_model.dart' as vid;
 import 'package:ondemand/data/videoDetail/video_detail_repo.dart';
 import 'package:ondemand/domain/providers/repository_provider.dart';
 import 'package:ondemand/helpers/base_screen_view.dart';
@@ -24,6 +26,7 @@ final videoPageViewModel = ChangeNotifierProvider.autoDispose(
   (ref) => VideoPageViewModel(
     ref.read(videoDetailRepositoryProvider),
     ref.read(homeRepositoryProvider),
+    ref.read(authRepositoryProvider),
   ),
 );
 
@@ -33,18 +36,24 @@ class VideoPageViewModel extends BaseViewModel<BaseScreenView> {
   VideoPageViewModel(
     this._videoRepo,
     this._homeRepo,
+    this._authRepo,
   );
+  final AuthRepo _authRepo;
+
   final VideoRepo _videoRepo;
   final HomeRepo _homeRepo;
   List<GetAllPlaylistResponse> selectedPlayList = [];
   List<GetAllPlaylistResponse>? _getAllPlaylistResponse;
   List<GetAllPlaylistResponse>? get getAllPlaylistResponse =>
       _getAllPlaylistResponse;
-  List<String> tags = [];
+  List<String>? tags = [];
   List<VideoDetailResponse>? _videoDetailResponse;
   List<VideoDetailResponse>? get videoDetailResponse => _videoDetailResponse;
   CommentsResponse? _commentsResponse;
   CommentsResponse? get commentsResponse => _commentsResponse;
+  vid.VimeoVideoResponse? _vimeoVideoResponse;
+  vid.VimeoVideoResponse? get vimeoVideoResponse => _vimeoVideoResponse;
+
   List<RecomendedVideoResponse>? _recommendedVideoResponse;
   List<RecomendedVideoResponse>? get recommendedVideoResponse =>
       _recommendedVideoResponse;
@@ -59,9 +68,10 @@ class VideoPageViewModel extends BaseViewModel<BaseScreenView> {
               for (var i = 0;
                   i < _videoDetailResponse!.first.tagsDetails!.length;
                   i++) {
-                tags.add(_videoDetailResponse!.first.tagsDetails![i].id ?? "");
+                tags?.add(_videoDetailResponse!.first.tagsDetails![i].id ?? "");
               }
-              await getRecommendedVideo(RecomendedVideoRequest(tags: tags));
+              await getRecommendedVideo(
+                  RecomendedVideoRequest(videoId: id, tags: tags ?? []));
             }
 
             print(_videoDetailResponse);
@@ -69,6 +79,36 @@ class VideoPageViewModel extends BaseViewModel<BaseScreenView> {
 
             Logger.write(r.toString());
             // view!.navigateToScreen(AppRoute.bottomNavigationView);
+            notifyListeners();
+          }),
+        );
+    toggleLoading();
+  }
+
+  Future<void> isSubscribed(BuildContext context) async {
+    toggleLoading();
+    await _authRepo.fetchSubscription().then(
+          (value) => value.fold((l) {
+            view!.showSnackbar(l.message);
+          }, (r) async {
+            if (r.data == "active") {
+              AppConstants.isSubscribed = true;
+            } else if (r.data == "in_trial") {
+              AppConstants.isSubscribed = true;
+            } else if (r.data == "non_renewing") {
+              AppConstants.isSubscribed = true;
+            } else {
+              AppConstants.isSubscribed = false;
+            }
+            print("this is subscription status" + r.toString());
+            notifyListeners();
+            if (AppConstants.isSubscribed == true) {
+              view!.navigateToScreen(AppRoute.bottomNavigationView);
+            } else {
+              view!.navigateToScreen(AppRoute.subscriptionView);
+            }
+            Logger.write(r.toString());
+
             notifyListeners();
           }),
         );
@@ -182,6 +222,22 @@ class VideoPageViewModel extends BaseViewModel<BaseScreenView> {
             view!.showSnackbar(l.message);
           }, (r) async {
             _recommendedVideoResponse = r;
+
+            Logger.write(r.toString());
+            // view!.navigateToScreen(AppRoute.bottomNavigationView);
+            notifyListeners();
+          }),
+        );
+    toggleLoading();
+  }
+
+  Future<void> getVideoUrl(String videoID) async {
+    toggleLoading();
+    await _videoRepo.getViemeoUrl(videoID).then(
+          (value) => value.fold((l) {
+            view!.showSnackbar(l.message);
+          }, (r) async {
+            _vimeoVideoResponse = r;
 
             Logger.write(r.toString());
             // view!.navigateToScreen(AppRoute.bottomNavigationView);

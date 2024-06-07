@@ -12,6 +12,7 @@ import 'package:ondemand/data/videoDetail/models/add_comments_model.dart';
 import 'package:ondemand/data/videoDetail/models/comments_model.dart';
 import 'package:ondemand/data/videoDetail/models/recommended_video.dart';
 import 'package:ondemand/data/videoDetail/models/video_detail_model.dart';
+import 'package:ondemand/data/videoDetail/models/vimeo_video_model.dart';
 import 'package:ondemand/data/videoDetail/video_detail_repo.dart';
 import 'package:ondemand/utils/logger.dart';
 
@@ -73,6 +74,20 @@ class VideoDetailRepoImpl implements VideoRepo {
           sendCookies: true);
 
       return Right(AddCommentsResponse.fromJson(response.data));
+    } catch (e) {
+      return Left(ApiException(e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<ApiException, VimeoVideoResponse>> getViemeoUrl(
+      String videoId) async {
+    try {
+      final response = await _apiClient.getForVimeo(
+        "https://api.vimeo.com/videos/$videoId",
+      );
+
+      return Right(VimeoVideoResponse.fromJson(response.data));
     } catch (e) {
       return Left(ApiException(e.toString()));
     }

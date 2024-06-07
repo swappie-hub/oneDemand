@@ -31,19 +31,21 @@ class _SplashViewState extends ConsumerState<SplashView> with BaseScreenView {
             "thegodfreymethod",
             "live_TcSjRmd7vOHtlD9eeon8NjowsgzLw0im",
             "cb-z6r4nv6eafg3hbwmqtjxfjpoee",
-            "cb-yoaivqsm4rhv5eojomk2vvgcc4");
+            "cb-zvhjxynjmzbkzpcjyzjtotspdq");
       } on PlatformException catch (e) {
         print(
             'Error cargebee: ${e.message}, Error Details: ${e.details}, Error Code: ${e.code}');
       }
       try {
         final result =
-            await Chargebee.retrieveProductIdentifiers({"limit": "100"});
+            await Chargebee.retrieveProductIdentifiers({"limit": "10"});
         print("these are products" + result.toString());
       } on PlatformException catch (e) {
         print(
             'Error Message: ${e.message}, Error Details: ${e.details}, Error Code: ${e.code}');
       }
+    });
+    Future.delayed(const Duration(milliseconds: 200)).then((value) async {
       final String? token =
           SharedPreferenceService.getString(AppConstants.authTokenPref);
       final String? userId =
@@ -60,11 +62,9 @@ class _SplashViewState extends ConsumerState<SplashView> with BaseScreenView {
       } else {
         navigateToScreen(AppRoute.onboardingView);
       }
-    }
-        //  getNavigation()
-
-        );
+    });
   }
+  //  getNavigation()
 
   // Future<void> getNavigation() async {
   //   final String? lang =

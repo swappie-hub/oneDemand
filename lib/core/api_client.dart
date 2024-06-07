@@ -143,6 +143,21 @@ class ApiClient {
       throw ApiException(e.response!.data["message"].toString());
     }
   }
+
+  Future<Response> getForVimeo(
+    String path,
+  ) async {
+    try {
+      return await dio.get(path,
+          options: Options(headers: {
+            // "Cookie": AppConstants.cookies,
+            "Authorization": "Bearer 8cbbea3472c5fce4625f7d61ee437a86"
+          }));
+    } on DioError catch (e) {
+      Logger.write(e.message.toString());
+      throw ApiException(e.response!.data["message"].toString());
+    }
+  }
 }
 
 class MultiPartClient extends http.BaseClient {

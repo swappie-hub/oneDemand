@@ -49,7 +49,8 @@ class Environment {
     }
     runApp(
       const ProviderScope(
-        child: MyApp(),
+        child: MyApp()
+      
       ),
     );
   }

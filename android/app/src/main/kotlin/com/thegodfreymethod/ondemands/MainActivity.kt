@@ -1,4 +1,4 @@
-package com.thegodfreymethod.ondemand
+package com.thegodfreymethod.ondemands
 
 import io.flutter.embedding.android.FlutterActivity
 

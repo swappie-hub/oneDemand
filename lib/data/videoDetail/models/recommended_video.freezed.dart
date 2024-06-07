@@ -21,6 +21,8 @@ RecomendedVideoRequest _$RecomendedVideoRequestFromJson(
 
 /// @nodoc
 mixin _$RecomendedVideoRequest {
+  @JsonKey(name: "videoId")
+  String? get videoId => throw _privateConstructorUsedError;
   @JsonKey(name: "tags")
   List<String>? get tags => throw _privateConstructorUsedError;
 
@@ -36,7 +38,9 @@ abstract class $RecomendedVideoRequestCopyWith<$Res> {
           $Res Function(RecomendedVideoRequest) then) =
       _$RecomendedVideoRequestCopyWithImpl<$Res, RecomendedVideoRequest>;
   @useResult
-  $Res call({@JsonKey(name: "tags") List<String>? tags});
+  $Res call(
+      {@JsonKey(name: "videoId") String? videoId,
+      @JsonKey(name: "tags") List<String>? tags});
 }
 
 /// @nodoc
@@ -53,9 +57,14 @@ class _$RecomendedVideoRequestCopyWithImpl<$Res,
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? videoId = freezed,
     Object? tags = freezed,
   }) {
     return _then(_value.copyWith(
+      videoId: freezed == videoId
+          ? _value.videoId
+          : videoId // ignore: cast_nullable_to_non_nullable
+              as String?,
       tags: freezed == tags
           ? _value.tags
           : tags // ignore: cast_nullable_to_non_nullable
@@ -73,7 +82,9 @@ abstract class _$$RecomendedVideoRequestImplCopyWith<$Res>
       __$$RecomendedVideoRequestImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({@JsonKey(name: "tags") List<String>? tags});
+  $Res call(
+      {@JsonKey(name: "videoId") String? videoId,
+      @JsonKey(name: "tags") List<String>? tags});
 }
 
 /// @nodoc
@@ -89,9 +100,14 @@ class __$$RecomendedVideoRequestImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? videoId = freezed,
     Object? tags = freezed,
   }) {
     return _then(_$RecomendedVideoRequestImpl(
+      videoId: freezed == videoId
+          ? _value.videoId
+          : videoId // ignore: cast_nullable_to_non_nullable
+              as String?,
       tags: freezed == tags
           ? _value._tags
           : tags // ignore: cast_nullable_to_non_nullable
@@ -104,12 +120,16 @@ class __$$RecomendedVideoRequestImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$RecomendedVideoRequestImpl implements _RecomendedVideoRequest {
   const _$RecomendedVideoRequestImpl(
-      {@JsonKey(name: "tags") final List<String>? tags})
+      {@JsonKey(name: "videoId") this.videoId,
+      @JsonKey(name: "tags") final List<String>? tags})
       : _tags = tags;
 
   factory _$RecomendedVideoRequestImpl.fromJson(Map<String, dynamic> json) =>
       _$$RecomendedVideoRequestImplFromJson(json);
 
+  @override
+  @JsonKey(name: "videoId")
+  final String? videoId;
   final List<String>? _tags;
   @override
   @JsonKey(name: "tags")
@@ -123,7 +143,7 @@ class _$RecomendedVideoRequestImpl implements _RecomendedVideoRequest {
 
   @override
   String toString() {
-    return 'RecomendedVideoRequest(tags: $tags)';
+    return 'RecomendedVideoRequest(videoId: $videoId, tags: $tags)';
   }
 
   @override
@@ -131,13 +151,14 @@ class _$RecomendedVideoRequestImpl implements _RecomendedVideoRequest {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$RecomendedVideoRequestImpl &&
+            (identical(other.videoId, videoId) || other.videoId == videoId) &&
             const DeepCollectionEquality().equals(other._tags, _tags));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, const DeepCollectionEquality().hash(_tags));
+  int get hashCode => Object.hash(
+      runtimeType, videoId, const DeepCollectionEquality().hash(_tags));
 
   @JsonKey(ignore: true)
   @override
@@ -156,12 +177,16 @@ class _$RecomendedVideoRequestImpl implements _RecomendedVideoRequest {
 
 abstract class _RecomendedVideoRequest implements RecomendedVideoRequest {
   const factory _RecomendedVideoRequest(
-          {@JsonKey(name: "tags") final List<String>? tags}) =
+          {@JsonKey(name: "videoId") final String? videoId,
+          @JsonKey(name: "tags") final List<String>? tags}) =
       _$RecomendedVideoRequestImpl;
 
   factory _RecomendedVideoRequest.fromJson(Map<String, dynamic> json) =
       _$RecomendedVideoRequestImpl.fromJson;
 
+  @override
+  @JsonKey(name: "videoId")
+  String? get videoId;
   @override
   @JsonKey(name: "tags")
   List<String>? get tags;

@@ -743,7 +743,7 @@ class _PlaylistTabState extends ConsumerState<PlaylistTab> with BaseScreenView {
                         }
                       }
                       _viewModel.fetchList.addAll(tempList);
-                      
+
                       setState(() {});
                       print("these are the videsos added" +
                           _viewModel.addedVideos.toString());
@@ -1026,8 +1026,10 @@ class _LibraryItemsState extends State<LibraryItems> with BaseScreenView {
   void initState() {
     // TODO: implement initState
     super.initState();
-    isSaved = widget.items.wishlist ?? false;
-    setState(() {});
+
+    setState(() {
+      isSaved = widget.items.savedVideo ?? widget.items.wishlist ?? false;
+    });
   }
 
   @override

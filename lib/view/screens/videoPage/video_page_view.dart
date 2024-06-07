@@ -1,9 +1,12 @@
+import 'dart:io';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_html/flutter_html.dart';
+import 'package:flutter_to_airplay/flutter_to_airplay.dart';
 import 'package:intl/intl.dart';
 import 'package:ondemand/core/constants.dart';
 import 'package:ondemand/data/home/models/get_playlist_model.dart';
@@ -31,7 +34,7 @@ class _VideoPageViewState extends ConsumerState<VideoPageView>
     with BaseScreenView {
   PodPlayerController? controller;
   late VideoPageViewModel _viewModel;
-  late LoginViewModel _viewModel2;
+  // late LoginViewModel _viewModel2;
 
   bool isSaved = false;
   bool isBottomSheetopen = false;
@@ -40,36 +43,44 @@ class _VideoPageViewState extends ConsumerState<VideoPageView>
   @override
   void initState() {
     _viewModel = ref.read(videoPageViewModel);
-    _viewModel2 = ref.read(authViewModel);
-
     _viewModel.attachView(this);
+    // _viewModel.attachView(this);
+    // _viewModel2 = ref.read(authViewModel);
+
     Future.delayed(Duration(milliseconds: 200)).then((value) async {
+      await _viewModel.isSubscribed(context);
+
       await _viewModel.getVideoDetails(widget.id).then((value) async {
         Uri uri = await Uri.parse(
             _viewModel.videoDetailResponse?.first.videolink ?? "");
         print("this is the video id" + uri.toString());
 
         videoID = await uri.pathSegments.last;
-
-        print("this is the video id" + videoID);
-        String token = "8cbbea3472c5fce4625f7d61ee437a86";
-        final Map<String, String> headers = <String, String>{};
-        headers['Authorization'] = 'Bearer ${token}';
-        controller = await PodPlayerController(
-          playVideoFrom: PlayVideoFrom.vimeoPrivateVideos(
-              // _viewModel.videoDetailResponse?.videolink ?? "",
-              videoID,
-              httpHeaders: headers),
-        )
-          ..initialise();
+        if (Platform.isIOS) {
+          await _viewModel.getVideoUrl(videoID);
+        } else {
+          print("this is the video id" + videoID);
+          String token = "8cbbea3472c5fce4625f7d61ee437a86";
+          final Map<String, String> headers = <String, String>{};
+          headers['Authorization'] = 'Bearer ${token}';
+          controller = await PodPlayerController(
+            playVideoFrom: PlayVideoFrom.vimeoPrivateVideos(
+                // _viewModel.videoDetailResponse?.videolink ?? "",
+                videoID,
+                httpHeaders: headers),
+          )
+            ..initialise().then((value) => setState(() {
+                  controller?.play();
+                }));
+        }
       });
-      controller?.pause();
+
       _viewModel.getComments(widget.id);
       await _viewModel.getPlaylistList();
-      await _viewModel2.isSubscribed(context);
 
-      isSaved = _viewModel.videoDetailResponse?.first.savedvideo ?? false;
-      setState(() {});
+      setState(() {
+        isSaved = _viewModel.videoDetailResponse?.first.savedvideo ?? false;
+      });
     });
 
     super.initState();
@@ -84,7 +95,7 @@ class _VideoPageViewState extends ConsumerState<VideoPageView>
   @override
   Widget build(BuildContext context) {
     _viewModel = ref.watch(videoPageViewModel);
-    _viewModel2 = ref.watch(authViewModel);
+    // _viewModel2 = ref.watch(authViewModel);
 
     return Scaffold(
       backgroundColor: Color(0xFF171718),
@@ -93,25 +104,48 @@ class _VideoPageViewState extends ConsumerState<VideoPageView>
           child: CustomAppBar(
             showBack: true,
           )),
-      body: controller == null
+      body:   !Platform.isIOS&& controller == null
           ? Container()
           : Column(
               children: [
-                // controller?.isInitialised ?? false
-                //     ?
-                !(AppConstants.isSubscribed)
-                    ? Container(
-                        height: 100,
-                        width: double.infinity,
-                        child: Center(
-                          child: Text("Please Subscribe"),
-                        ),
-                      )
-                    : PodVideoPlayer(
-                        alwaysShowProgressBar: true, controller: controller!),
-                // : Center(
-                //     child: CircularProgressIndicator(),
-                //   ),
+                Platform.isIOS
+                    ? _viewModel.vimeoVideoResponse == null
+                        ? Center(
+                            child: CircularProgressIndicator(),
+                          )
+                        : SizedBox(
+                            height: 200,
+                            width: 500,
+                            child: FlutterAVPlayerView(
+                              urlString: _viewModel
+                                  .vimeoVideoResponse?.files?.first.link,
+                            ),
+                          )
+                    : controller?.isInitialised ?? false
+                        ? !(AppConstants.isSubscribed)
+                            ? Container(
+                                height: 100,
+                                width: double.infinity,
+                                child: Center(
+                                  child: Text("Please Subscribe"),
+                                ),
+                              )
+                            : PodVideoPlayer(
+                                alwaysShowProgressBar: true,
+                                controller: controller!)
+
+                        // _viewModel.vimeoVideoResponse==null?Center(
+                        //        child: CircularProgressIndicator(),
+                        //     ):  SizedBox(
+                        //     height: 200,
+                        //     width: 500,
+                        //     child: FlutterAVPlayerView(
+                        //       urlString: _viewModel.vimeoVideoResponse?.files?.first.link,
+                        //     ),
+                        //   ),
+                        : Center(
+                            child: CircularProgressIndicator(),
+                          ),
                 Expanded(
                   child: SingleChildScrollView(
                     controller: _scrollController,
@@ -170,7 +204,7 @@ class _VideoPageViewState extends ConsumerState<VideoPageView>
                                       },
                                       child: Column(
                                         children: [
-                                          isSaved
+                                          !isSaved
                                               ? Icon(
                                                   Icons.favorite_outline,
                                                   size: 20,

@@ -17,6 +17,7 @@ String recomendedVideoRequestToJson(RecomendedVideoRequest data) =>
 @freezed
 class RecomendedVideoRequest with _$RecomendedVideoRequest {
   const factory RecomendedVideoRequest({
+    @JsonKey(name: "videoId") String? videoId,
     @JsonKey(name: "tags") List<String>? tags,
   }) = _RecomendedVideoRequest;
 

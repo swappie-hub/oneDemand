@@ -65,9 +65,9 @@ class Video with _$Video {
     @JsonKey(name: "label") String? label,
     @JsonKey(name: "value") String? value,
     @JsonKey(name: "wishlist") bool? wishlist,
+    @JsonKey(name: "savedvideo") bool? savedVideo,
     @JsonKey(name: "updatedAt") DateTime? updatedAt,
     @JsonKey(name: "isFeatured") bool? isFeatured,
-    
   }) = _Video;
 
   factory Video.fromJson(Map<String, dynamic> json) => _$VideoFromJson(json);

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:chargebee_flutter/chargebee_flutter.dart';
 import 'package:custom_sliding_segmented_control/custom_sliding_segmented_control.dart';
 import 'package:flutter/cupertino.dart';
@@ -5,7 +7,9 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import 'package:ondemand/core/constants.dart';
 import 'package:ondemand/helpers/locator.dart';
+import 'package:ondemand/services/shared_preference_service.dart';
 import 'package:ondemand/services/user_detail_service.dart';
 import 'package:ondemand/utils/colors.dart';
 import 'package:ondemand/utils/utils.dart';
@@ -257,7 +261,7 @@ class _SubscriptionViewState extends ConsumerState<SubscriptionView>
                             final result = val == 1
                                 ? await Chargebee.purchaseStoreProduct(
                                     Product(
-                                        "Month",
+                                        Platform.isAndroid ? "yearly" : "Month",
                                         _viewModel.subscriptionResponse?.list
                                                 ?.first.itemPrice?.price ??
                                             0,
@@ -273,7 +277,9 @@ class _SubscriptionViewState extends ConsumerState<SubscriptionView>
                                     customer: customer)
                                 : await Chargebee.purchaseStoreProduct(
                                     Product(
-                                        "Monthly",
+                                        Platform.isAndroid
+                                            ? "monthly"
+                                            : "Monthly",
                                         _viewModel.subscriptionResponse?.list
                                                 ?.last.itemPrice?.price ??
                                             0,
@@ -289,6 +295,14 @@ class _SubscriptionViewState extends ConsumerState<SubscriptionView>
                                     customer: customer);
                             print("subscription id : ${result.subscriptionId}");
                             print("subscription status : ${result.status}");
+                            SharedPreferenceService.clearAll();
+
+                            AppConstants.token = "";
+                            AppConstants.isSubscribed = false;
+
+                            AppConstants.userId = "";
+                            context
+                                .pushReplacementNamed(AppRoute.loginView.name);
                             await _viewModel.isSubscribed(context);
                           } on PlatformException catch (e) {
                             print(
@@ -310,7 +324,9 @@ class _SubscriptionViewState extends ConsumerState<SubscriptionView>
                                     color: Colors.white,
                                   )
                                 : Text(
-                                    val == 1 ? "JOIN NOW" : "JOIN NOW",
+                                    val == 1
+                                        ? "Start Free Trial"
+                                        : "Start Free Trial",
                                     style: TextStyle(
                                         color: Colors.white,
                                         fontSize: 16,

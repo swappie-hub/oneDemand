@@ -105,6 +105,7 @@ class _ProfileTabState extends ConsumerState<ProfileTab> with BaseScreenView {
                         shape: BoxShape.circle,
                         color: Colors.black,
                         image: DecorationImage(
+                            fit: BoxFit.fill,
                             image: NetworkImage(_userDetailService
                                         .userDetailResponse?.image !=
                                     null
@@ -157,7 +158,8 @@ class _ProfileTabState extends ConsumerState<ProfileTab> with BaseScreenView {
           InkWell(
             onTap: () {
               // navigateToScreen(AppRoute.subscriptionView);
-              launchUrl(Uri.parse("https://app.thegodfreymethod.com/"));
+              launchUrl(
+                  Uri.parse("https://thegodfreymethod.chargebeeportal.com"));
             },
             child: Container(
               margin: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
@@ -176,6 +178,7 @@ class _ProfileTabState extends ConsumerState<ProfileTab> with BaseScreenView {
               ),
             ),
           ),
+
           Container(
             height: 1,
             width: double.infinity,

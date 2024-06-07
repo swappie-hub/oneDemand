@@ -23,6 +23,25 @@
           "other_platform_oauth_client": []
         }
       }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:956244940807:android:05b631dadd9fdf54dbb2a2",
+        "android_client_info": {
+          "package_name": "com.thegodfreymethod.ondemands"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAB37opTvG5zLfQsDzfYV3EnD4jksDbvlA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
     }
   ],
   "configuration_version": "1"

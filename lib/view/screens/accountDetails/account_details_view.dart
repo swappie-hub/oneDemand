@@ -103,6 +103,7 @@ class _AccountDetailsViewState extends ConsumerState<AccountDetailsView>
                         color: Colors.black,
                         shape: BoxShape.circle,
                         image: DecorationImage(
+                            fit: BoxFit.fill,
                             image: NetworkImage(_userDetailService
                                         .userDetailResponse?.image !=
                                     null
@@ -112,44 +113,41 @@ class _AccountDetailsViewState extends ConsumerState<AccountDetailsView>
                                 : "https://img.freepik.com/premium-vector/businessman-avatar-illustration-cartoon-user-portrait-user-profile-icon_118339-4382.jpg"))),
                   ),
                   gapH10,
-                  //   InkWell(
-                  //     onTap: () {
-                  //       openPickImageModalSheet(context).then((value) {
-                  //         if (value != null) {
-                  //           _viewModel
-                  //               .uploadSingleFile(value, context)
-                  //               .then((fileURL) {
-                  //             setState(() {
-                  //               // _imageController.text = fileURL ?? "";
-                  //               // file = value;
-                  //             });
-                  //           });
-                  //         }
-                  //       });
-                  //     },
-                  //     child: Row(
-                  //       mainAxisAlignment: MainAxisAlignment.center,
-                  //       children: [
-                  //         Image.asset(
-                  //           "assets/icons/edit.png",
-                  //           height: 26,
-                  //         ),
-                  //         gapW10,
-                  //         Text(
-                  //           "Edit Profile Picture",
-                  //           style: TextStyle(
-                  //               color: Color(0xFF7D7878),
-                  //               decoration: TextDecoration.underline,
-                  //               decorationColor: Color(0xFF7D7878),
-                  //               fontSize: 12),
-                  //         )
-                  //       ],
-                  //     ),
-                  //   )
+                  InkWell(
+                    onTap: () {
+                      openPickImageModalSheet(context).then((value) {
+                        if (value != null) {
+                          _viewModel.uploadSingleFile(value, context);
+                          setState(() {
+                            // uploadImageController.text = fileURL ?? "";
+                          });
+                        }
+                      });
+                    },
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Image.asset(
+                          "assets/icons/edit.png",
+                          height: 26,
+                        ),
+                        gapW10,
+                        Text(
+                          "Edit Profile Picture",
+                          style: TextStyle(
+                              color: Color(0xFF7D7878),
+                              decoration: TextDecoration.underline,
+                              decorationColor: Color(0xFF7D7878),
+                              fontSize: 12),
+                        )
+                      ],
+                    ),
+                  )
                 ],
               )
             ],
           ),
+          gapH10,
           Container(
             height: 1,
             width: double.infinity,
