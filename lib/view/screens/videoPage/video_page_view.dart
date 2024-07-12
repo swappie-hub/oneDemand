@@ -4,6 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_to_airplay/flutter_to_airplay.dart';
@@ -33,6 +34,7 @@ class VideoPageView extends ConsumerStatefulWidget {
 class _VideoPageViewState extends ConsumerState<VideoPageView>
     with BaseScreenView {
   PodPlayerController? controller;
+  bool airplayPlayer = false;
   late VideoPageViewModel _viewModel;
   // late LoginViewModel _viewModel2;
 
@@ -40,6 +42,7 @@ class _VideoPageViewState extends ConsumerState<VideoPageView>
   bool isBottomSheetopen = false;
   String videoID = "";
   final ScrollController _scrollController = ScrollController();
+
   @override
   void initState() {
     _viewModel = ref.read(videoPageViewModel);
@@ -58,21 +61,20 @@ class _VideoPageViewState extends ConsumerState<VideoPageView>
         videoID = await uri.pathSegments.last;
         if (Platform.isIOS) {
           await _viewModel.getVideoUrl(videoID);
-        } else {
-          print("this is the video id" + videoID);
-          String token = "8cbbea3472c5fce4625f7d61ee437a86";
-          final Map<String, String> headers = <String, String>{};
-          headers['Authorization'] = 'Bearer ${token}';
-          controller = await PodPlayerController(
-            playVideoFrom: PlayVideoFrom.vimeoPrivateVideos(
-                // _viewModel.videoDetailResponse?.videolink ?? "",
-                videoID,
-                httpHeaders: headers),
-          )
-            ..initialise().then((value) => setState(() {
-                  controller?.play();
-                }));
-        }
+        } else {}
+        print("this is the video id" + videoID);
+        String token = "8cbbea3472c5fce4625f7d61ee437a86";
+        final Map<String, String> headers = <String, String>{};
+        headers['Authorization'] = 'Bearer ${token}';
+        controller = await PodPlayerController(
+          playVideoFrom: PlayVideoFrom.vimeoPrivateVideos(
+              // _viewModel.videoDetailResponse?.videolink ?? "",
+              videoID,
+              httpHeaders: headers),
+        )
+          ..initialise().then((value) => setState(() {
+                controller?.play();
+              }));
       });
 
       _viewModel.getComments(widget.id);
@@ -97,814 +99,1040 @@ class _VideoPageViewState extends ConsumerState<VideoPageView>
     _viewModel = ref.watch(videoPageViewModel);
     // _viewModel2 = ref.watch(authViewModel);
 
-    return Scaffold(
-      backgroundColor: Color(0xFF171718),
-      appBar: PreferredSize(
-          preferredSize: Size.fromHeight(40),
-          child: CustomAppBar(
-            showBack: true,
-          )),
-      body:   !Platform.isIOS&& controller == null
-          ? Container()
-          : Column(
-              children: [
-                Platform.isIOS
-                    ? _viewModel.vimeoVideoResponse == null
-                        ? Center(
-                            child: CircularProgressIndicator(),
-                          )
-                        : SizedBox(
-                            height: 200,
-                            width: 500,
-                            child: FlutterAVPlayerView(
-                              urlString: _viewModel
-                                  .vimeoVideoResponse?.files?.first.link,
-                            ),
-                          )
-                    : controller?.isInitialised ?? false
-                        ? !(AppConstants.isSubscribed)
-                            ? Container(
-                                height: 100,
-                                width: double.infinity,
-                                child: Center(
-                                  child: Text("Please Subscribe"),
-                                ),
-                              )
-                            : PodVideoPlayer(
-                                alwaysShowProgressBar: true,
-                                controller: controller!)
-
-                        // _viewModel.vimeoVideoResponse==null?Center(
-                        //        child: CircularProgressIndicator(),
-                        //     ):  SizedBox(
-                        //     height: 200,
-                        //     width: 500,
-                        //     child: FlutterAVPlayerView(
-                        //       urlString: _viewModel.vimeoVideoResponse?.files?.first.link,
-                        //     ),
-                        //   ),
-                        : Center(
-                            child: CircularProgressIndicator(),
-                          ),
-                Expanded(
-                  child: SingleChildScrollView(
-                    controller: _scrollController,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        gapH12,
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 16),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Container(
-                                constraints: BoxConstraints(
-                                    maxWidth:
-                                        MediaQuery.of(context).size.width /
-                                            1.98),
-                                child: Text(
-                                  (_viewModel.videoDetailResponse?.first
-                                              .title ??
-                                          "")
-                                      .toUpperCase(),
-                                  style: TextStyle(
-                                      fontSize: 16,
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.fromLTRB(0, 7, 8, 0),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: [
-                                    InkWell(
-                                      onTap: () {
-                                        setState(() {
-                                          isSaved = !isSaved;
-                                        });
-                                        if (isSaved) {
-                                          ref
-                                              .read(bottomNavigationViewModel)
-                                              .saveVideo(_viewModel
-                                                      .videoDetailResponse
-                                                      ?.first
-                                                      .id ??
-                                                  "");
-                                        } else {
-                                          ref
-                                              .read(bottomNavigationViewModel)
-                                              .unSaveVideo(_viewModel
-                                                      .videoDetailResponse
-                                                      ?.first
-                                                      .id ??
-                                                  "");
-                                        }
-                                      },
-                                      child: Column(
-                                        children: [
-                                          !isSaved
-                                              ? Icon(
-                                                  Icons.favorite_outline,
-                                                  size: 20,
-                                                  color: Colors.white,
-                                                )
-                                              : Icon(
-                                                  Icons.favorite,
-                                                  size: 20,
-                                                  color: Colors.red,
-                                                ),
-                                          // Image.asset(
-                                          //   "assets/icons/like.png",
-                                          //   height: 18,
-                                          //   color: Colors.white,
-                                          // ),
-                                          SizedBox(
-                                            height: 4,
-                                          ),
-                                          Text(
-                                            "Save".toUpperCase(),
-                                            style: TextStyle(
-                                                fontSize: 8,
-                                                color: Colors.white,
-                                                fontWeight: FontWeight.bold),
-                                          )
-                                        ],
-                                      ),
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: Color(0xFF171718),
+        appBar: PreferredSize(
+            preferredSize: Size.fromHeight(40),
+            child: CustomAppBar(
+              showBack: true,
+            )),
+        body: !Platform.isIOS && controller == null
+            ? Container()
+            : Column(
+                children: [
+                  Platform.isIOS && airplayPlayer == true
+                      ? _viewModel.vimeoVideoResponse == null
+                          ? Center(
+                              child: CircularProgressIndicator(),
+                            )
+                          : SizedBox(
+                              height: MediaQuery.of(context).size.height / 4,
+                              width: MediaQuery.of(context).size.width,
+                              child: Stack(
+                                alignment: Alignment.topRight,
+                                children: [
+                                  SizedBox(
+                                    height:
+                                        MediaQuery.of(context).size.height / 4,
+                                    width: MediaQuery.of(context).size.width,
+                                    child: FlutterAVPlayerView(
+                                      urlString: _viewModel.vimeoVideoResponse
+                                          ?.files?.first.link,
                                     ),
-                                    gapW8,
-                                    InkWell(
-                                      onTap: () {
-                                        showDialog(
-                                          context: context,
-                                          builder: (BuildContext context) {
-                                            return StatefulBuilder(builder:
-                                                (BuildContext context, setSt) {
-                                              return AlertDialog(
-                                                  shape: RoundedRectangleBorder(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              16)),
-                                                  insetPadding: EdgeInsets.zero,
-                                                  titlePadding: EdgeInsets.zero,
-                                                  backgroundColor:
-                                                      Color(0xFF171718),
-                                                  surfaceTintColor:
-                                                      Color(0xFF171718),
-                                                  actions: <Widget>[
-                                                    TextButton(
-                                                      child: Container(
-                                                          padding: EdgeInsets
-                                                              .symmetric(
-                                                                  vertical: 8,
-                                                                  horizontal:
-                                                                      16),
-                                                          decoration: BoxDecoration(
-                                                              color: Color(
-                                                                  0xFF008BC3),
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          9)),
-                                                          child: const Text(
-                                                            'SAVE',
-                                                            style: TextStyle(
-                                                                color: Colors
-                                                                    .white,
-                                                                fontSize: 15),
-                                                          )),
-                                                      onPressed: () {
-                                                        _viewModel
-                                                            .addVideoToPlaylistHome(
-                                                                widget.id,
-                                                                context);
+                                  ),
+                                  //   InkWell(
+                                  //     onTap: () async {
+                                  //       airplayPlayer = !airplayPlayer;
 
-                                                        // _viewModel.setSortBy(
-                                                        //     _viewModel.sortBy ?? AppConstants.latest,
-                                                        //     val,
-                                                        //     context);
-                                                        // Handle the submit action
-                                                      },
-                                                    ),
-                                                  ],
-                                                  title: Column(
-                                                    children: [
-                                                      Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .all(16.0),
-                                                        child: Row(
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .spaceBetween,
-                                                          children: [
-                                                            Text(
-                                                              'Add to playlist'
-                                                                  .toUpperCase(),
-                                                              style: TextStyle(
-                                                                  fontFamily:
-                                                                      "Good",
-                                                                  color: Color(
-                                                                      0xFF3CB4E4),
-                                                                  fontSize: 16),
-                                                            ),
-                                                            InkWell(
-                                                                onTap: () {
-                                                                  context.pop();
-                                                                },
-                                                                child: Icon(
-                                                                    Icons
-                                                                        .close))
-                                                          ],
-                                                        ),
-                                                      ),
-                                                      Container(
-                                                        height: 2,
-                                                        decoration:
-                                                            BoxDecoration(
-                                                                color: Color(
-                                                                    0xFF27272A)),
-                                                      )
-                                                    ],
-                                                  ),
-                                                  content: Column(
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .start,
-                                                      mainAxisSize:
-                                                          MainAxisSize.min,
-                                                      children: [
-                                                        ...List.generate(
-                                                            _viewModel
-                                                                    .getAllPlaylistResponse
-                                                                    ?.length ??
-                                                                0,
-                                                            (index) => Padding(
-                                                                  padding:
-                                                                      const EdgeInsets
-                                                                          .only(
-                                                                          right:
-                                                                              8),
-                                                                  child: Column(
-                                                                    children: [
-                                                                      InkWell(
-                                                                        onTap:
-                                                                            () {
-                                                                          setSt(
-                                                                              () {
-                                                                            if (_viewModel.selectedPlayList.contains(_viewModel.getAllPlaylistResponse?[index])) {
-                                                                              _viewModel.selectedPlayList.remove(_viewModel.getAllPlaylistResponse?[index]);
-                                                                            } else {
-                                                                              _viewModel.selectedPlayList.add(_viewModel.getAllPlaylistResponse?[index] ?? GetAllPlaylistResponse(label: _viewModel.getAllPlaylistResponse?[index].label, value: _viewModel.getAllPlaylistResponse?[index].value));
-                                                                              // _viewModel.durations.add("5");
-                                                                            }
-                                                                          });
-                                                                        },
-                                                                        child:
-                                                                            Container(
-                                                                          child:
-                                                                              Row(
-                                                                            mainAxisAlignment:
-                                                                                MainAxisAlignment.spaceBetween,
-                                                                            children: [
-                                                                              Text(_viewModel.getAllPlaylistResponse?[index].label ?? ""),
-                                                                              Container(
-                                                                                height: 18,
-                                                                                width: 18,
-                                                                                decoration: BoxDecoration(borderRadius: BorderRadius.circular(2), color: !_viewModel.selectedPlayList.contains(_viewModel.getAllPlaylistResponse?[index]) ? Colors.transparent : Color(0xFF008BC3), border: Border.all(color: _viewModel.selectedPlayList.contains(_viewModel.getAllPlaylistResponse?[index]) ? Colors.transparent : Colors.white)),
-                                                                                child: Icon(
-                                                                                  Icons.check,
-                                                                                  size: 10,
-                                                                                  color: _viewModel.selectedPlayList.contains(_viewModel.getAllPlaylistResponse?[index]) ? Colors.white : Colors.transparent,
-                                                                                ),
-                                                                              )
-                                                                            ],
-                                                                          ),
-                                                                        ),
-                                                                      ),
-                                                                      gapH4,
-                                                                    ],
-                                                                  ),
-                                                                ))
-                                                      ]));
-                                            });
-                                          },
-                                        );
-                                      },
-                                      child: Column(
-                                        children: [
-                                          Icon(
-                                            Icons.playlist_add,
-                                            size: 25,
+                                  //       setState(() {});
+                                  //       if (airplayPlayer) {
+                                  //         controller?.dispose();
+                                  //       } else {
+                                  //         print("this is the video id" + videoID);
+                                  //         String token =
+                                  //             "8cbbea3472c5fce4625f7d61ee437a86";
+                                  //         final Map<String, String> headers =
+                                  //             <String, String>{};
+                                  //         headers['Authorization'] =
+                                  //             'Bearer ${token}';
+                                  //         controller = await PodPlayerController(
+                                  //           playVideoFrom:
+                                  //               PlayVideoFrom.vimeoPrivateVideos(
+                                  //                   // _viewModel.videoDetailResponse?.videolink ?? "",
+                                  //                   videoID,
+                                  //                   httpHeaders: headers),
+                                  //         )
+                                  //           ..initialise()
+                                  //               .then((value) => setState(() {
+                                  //                     controller?.play();
+                                  //                   }));
+                                  //       }
+                                  //     },
+                                  //     child: Padding(
+                                  //       padding: const EdgeInsets.only(
+                                  //           top: 50, right: 16),
+                                  //       child: Icon(
+                                  //         // size: 50,
+                                  //         Icons.video_collection_outlined,
+                                  //         color: Colors.white,
+                                  //       ),
+                                  //     ),
+                                  //   ),
+                                ],
+                              ),
+                            )
+                      : controller?.isInitialised ?? false
+                          ? !(AppConstants.isSubscribed)
+                              ? Container(
+                                  height: 100,
+                                  width: double.infinity,
+                                  child: Center(
+                                    child: Text("Please Subscribe"),
+                                  ),
+                                )
+                              : Stack(
+                                  alignment: Alignment.topLeft,
+                                  children: [
+                                    PodVideoPlayer(
+                                        // matchFrameAspectRatioToVideo: false,
+                                        // matchVideoAspectRatioToFrame: true,
+                                        // onToggleFullScreen: (isFullScreen) {
+                                        //    setState(() {});
+                                        //   if (isFullScreen) {
+                                        //     return SystemChrome
+                                        //         .setPreferredOrientations([
+                                        //       DeviceOrientation.landscapeRight
+                                        //     ]);
+                                        //   } else {
+                                        //     return SystemChrome
+                                        //         .setPreferredOrientations([
+                                        //       DeviceOrientation.portraitUp
+                                        //     ]);
+                                        //   }
+
+                                        // },
+
+                                        alwaysShowProgressBar: true,
+                                        controller: controller!),
+                                    Visibility(
+                                      visible: Platform.isIOS,
+                                      child: InkWell(
+                                        onTap: () async {
+                                          airplayPlayer = !airplayPlayer;
+
+                                          setState(() {});
+                                          if (airplayPlayer) {
+                                            controller?.dispose();
+                                          } else {
+                                            print("this is the video id" +
+                                                videoID);
+                                            String token =
+                                                "8cbbea3472c5fce4625f7d61ee437a86";
+                                            final Map<String, String> headers =
+                                                <String, String>{};
+                                            headers['Authorization'] =
+                                                'Bearer ${token}';
+                                            controller =
+                                                await PodPlayerController(
+                                              playVideoFrom: PlayVideoFrom
+                                                  .vimeoPrivateVideos(
+                                                      // _viewModel.videoDetailResponse?.videolink ?? "",
+                                                      videoID,
+                                                      httpHeaders: headers),
+                                            )
+                                                  ..initialise().then(
+                                                      (value) => setState(() {
+                                                            controller?.play();
+                                                          }));
+                                          }
+                                        },
+                                        child: Padding(
+                                          padding: const EdgeInsets.only(
+                                              top: 16, left: 16),
+                                          child: Icon(
+                                            // size: 50,
+                                            Icons.airplay_outlined,
                                             color: Colors.white,
                                           ),
-                                          // gapH8,
-                                          Text(
-                                            "ADD to playlist".toUpperCase(),
-                                            style: TextStyle(
-                                                fontSize: 8,
-                                                color: Colors.white,
-                                                fontWeight: FontWeight.bold),
-                                          )
-                                        ],
+                                        ),
                                       ),
                                     ),
                                   ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Padding(
-                          padding:
-                              const EdgeInsets.only(right: 8, top: 8, left: 16),
-                          child: Wrap(
-                            children: [
-                              ...List.generate(
-                                _viewModel.videoDetailResponse?.first
-                                        .tagsDetails?.length ??
-                                    0,
-                                (index) => Container(
-                                  margin: EdgeInsets.only(right: 8),
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: 8, vertical: 4),
-                                  decoration: BoxDecoration(
-                                      color: HexColor.fromHex(_viewModel
-                                              .videoDetailResponse
-                                              ?.first
-                                              .tagsDetails?[index]
-                                              .color ??
-                                          "0xFFFFFF"),
-                                      borderRadius: BorderRadius.circular(4)),
+                                )
+
+                          // _viewModel.vimeoVideoResponse==null?Center(
+                          //        child: CircularProgressIndicator(),
+                          //     ):  SizedBox(
+                          //     height: 200,
+                          //     width: 500,
+                          //     child: FlutterAVPlayerView(
+                          //       urlString: _viewModel.vimeoVideoResponse?.files?.first.link,
+                          //     ),
+                          //   ),
+                          : Center(
+                              child: CircularProgressIndicator(),
+                            ),
+                  Expanded(
+                    child: SingleChildScrollView(
+                      controller: _scrollController,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          gapH12,
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 16),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Container(
+                                  constraints: BoxConstraints(
+                                      maxWidth:
+                                          MediaQuery.of(context).size.width /
+                                              1.98),
                                   child: Text(
                                     (_viewModel.videoDetailResponse?.first
-                                                .tagsDetails?[index].name ??
+                                                .title ??
                                             "")
                                         .toUpperCase(),
                                     style: TextStyle(
-                                        fontSize: 8,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.white),
+                                        fontSize: 16,
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold),
                                   ),
                                 ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        InkWell(
-                          onTap: () {
-                            showModalBottomSheet(
-                              context: context,
-                              builder: (context) => MoreDescriptionBottomSheet(
-                                fulldescription: _viewModel
-                                        .videoDetailResponse?.first.description
-                                        ?.replaceAll("<p>", "")
-                                        .replaceAll("</p>", "") ??
-                                    "",
-                              ),
-                            );
-                          },
-                          child: Padding(
-                            padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              crossAxisAlignment: CrossAxisAlignment.end,
-                              children: [
-                                Expanded(
-                                  child: Text(
-                                    style: TextStyle(
-                                        fontSize: 11, color: Color(0xFFACACAC)),
-                                    _viewModel.videoDetailResponse?.first
-                                            .description
-                                            ?.replaceAll("<p>", "")
-                                            .replaceAll("</p>", "") ??
-                                        "",
-                                    overflow: TextOverflow.ellipsis,
-                                    maxLines: 5,
-                                  ),
-                                ),
-                                _viewModel.videoDetailResponse?.first
-                                            .description ==
-                                        null
-                                    ? Container()
-                                    : Text(
-                                        style: TextStyle(
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.bold,
-                                            color: Color(0xFF1AA2D9)),
-                                        "  More")
-                              ],
-                            ),
-                          ),
-                        ),
-                        _viewModel.videoDetailResponse?.first.productsData
-                                    ?.isEmpty ??
-                                true
-                            ? Container()
-                            : InkWell(
-                                onTap: () {
-                                  showModalBottomSheet(
-                                    context: context,
-                                    builder: (context) => ProductsBottomSheet(
-                                      products: _viewModel.videoDetailResponse
-                                          ?.first.productsData,
-                                    ),
-                                  );
-                                },
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 16),
-                                  child: Text(
-                                    "SHOW PRODUCTS SEEN IN VIDEO",
-                                    style: TextStyle(
-                                        fontSize: 13,
-                                        fontWeight: FontWeight.bold,
-                                        color: Color(0xFF1AA2D9)),
-                                  ),
-                                ),
-                              ),
-                        gapH16,
-                        Container(
-                          margin: EdgeInsets.symmetric(horizontal: 16),
-                          height: 1,
-                          decoration: BoxDecoration(color: Colors.white),
-                        ),
-                        gapH8,
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 16),
-                          child: Text(
-                            "RECOMMENDED VIDEOS",
-                            style: TextStyle(
-                                fontFamily: "Good",
-                                fontSize: 14,
-                                fontWeight: FontWeight.bold,
-                                color: Color(0xFF149BD1)),
-                          ),
-                        ),
-                        gapH8,
-                        Container(
-                          height: 100,
-                          child: ListView.builder(
-                            scrollDirection: Axis.horizontal,
-                            itemCount:
-                                _viewModel.recommendedVideoResponse?.length ??
-                                    0,
-                            itemBuilder: (context, index) => InkWell(
-                              onTap: () {
-                                controller?.dispose();
-                                context.pushReplacementNamed(
-                                  AppRoute.videoPageView.name,
-                                  pathParameters: {
-                                    'id': _viewModel
-                                            .recommendedVideoResponse?[index]
-                                            .id ??
-                                        ""
-                                  },
-                                );
-                              },
-                              child: CachedNetworkImage(
-                                  imageUrl: _viewModel
-                                          .recommendedVideoResponse?[index]
-                                          .thumnailLink ??
-                                      "",
-                                  imageBuilder: (context, imageProvider) {
-                                    return Container(
-                                      margin: EdgeInsets.only(
-                                          left: index == 0 ? 16 : 16,
-                                          right: index == 9 ? 16 : 0),
-                                      height: 89,
-                                      width: 159,
-                                      decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                          image: DecorationImage(
-                                              fit: BoxFit.cover,
-                                              image: imageProvider)),
-                                    );
-                                  }),
-                            ),
-                          ),
-                        ),
-                        gapH8,
-                        Container(
-                          margin: EdgeInsets.symmetric(horizontal: 16),
-                          height: 1,
-                          decoration: BoxDecoration(color: Colors.white),
-                        ),
-                        GestureDetector(
-                          onVerticalDragDown: (d) {
-                            if (!isBottomSheetopen) {
-                              isBottomSheetopen = true;
-                              setState(() {});
-                              showModalBottomSheet(
-                                context: context,
-                                builder: (context) => ChatBottomSheet(
-                                  videoID: widget.id,
-                                  videoPageViewModel: _viewModel,
-                                ),
-                              ).then((value) {
-                                isBottomSheetopen = false;
-                                setState(() {});
-                              });
-                            }
-                          },
-                          onTap: () {
-                            if (!isBottomSheetopen) {
-                              isBottomSheetopen = true;
-                              setState(() {});
-
-                              showModalBottomSheet(
-                                context: context,
-                                builder: (context) => ChatBottomSheet(
-                                  videoID: widget.id,
-                                  videoPageViewModel: _viewModel,
-                                ),
-                              ).then((value) {
-                                isBottomSheetopen = false;
-                                setState(() {});
-                              });
-                            }
-                          },
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: Color(
-                                0xFF171718,
-                              ),
-                            ),
-                            child: Column(
-                              children: [
                                 Padding(
-                                  padding: EdgeInsets.symmetric(horizontal: 16),
-                                  child: Column(
-                                    children: [
-                                      gapH16,
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Text(
-                                            "COMMUNITY CHAT",
-                                            style: TextStyle(
-                                                fontFamily: "Good",
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.bold,
-                                                color: Color(0xFF1AA2D9)),
-                                          ),
-                                          Icon(
-                                            Icons.expand_less_outlined,
-                                            size: 40,
-                                            color: Color(0xFF149BD1),
-                                          )
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                gapH16,
-                                Container(
-                                  margin: EdgeInsets.only(left: 16),
-                                  padding: EdgeInsets.all(8),
-                                  decoration: BoxDecoration(
-                                      color: Color(0xFF1b1b1c),
-                                      borderRadius: BorderRadius.only(
-                                          bottomLeft: Radius.circular(8),
-                                          topLeft: Radius.circular(8))),
+                                  padding:
+                                      const EdgeInsets.fromLTRB(0, 7, 8, 0),
                                   child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
                                     children: [
-                                      Container(
-                                        height: 25,
-                                        width: 25,
-                                        decoration: BoxDecoration(
-                                            shape: BoxShape.circle,
-                                            image: DecorationImage(
-                                                image: NetworkImage(
-                                                    "https://img.freepik.com/premium-vector/businessman-avatar-illustration-cartoon-user-portrait-user-profile-icon_118339-4382.jpg"))),
-                                      ),
-                                      gapW16,
-                                      Expanded(
-                                        child: InkWell(
-                                          onTap: () {
-                                            if (!isBottomSheetopen) {
-                                              isBottomSheetopen = true;
-                                              setState(() {});
-                                              showModalBottomSheet(
-                                                context: context,
-                                                builder: (context) =>
-                                                    ChatBottomSheet(
-                                                  videoID: widget.id,
-                                                  videoPageViewModel:
-                                                      _viewModel,
-                                                ),
-                                              );
-                                            } else {
-                                              isBottomSheetopen = false;
-                                              setState(() {});
-                                            }
-                                          },
-                                          child: TextField(
-                                            enabled: false,
-                                            decoration: InputDecoration(
-                                                contentPadding: EdgeInsets.only(
-                                                    left: 16,
-                                                    right: 16,
-                                                    top: 4,
-                                                    bottom: 4),
-                                                filled: true,
-                                                fillColor: Colors.black,
-                                                hintText: "Write a comment",
-                                                hintStyle: TextStyle(
-                                                    color: Color(0xFF71717A),
-                                                    fontWeight: FontWeight.w400,
-                                                    fontSize: 14),
-                                                enabledBorder:
-                                                    OutlineInputBorder(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(12),
-                                                        borderSide: BorderSide(
-                                                          color: Colors
-                                                              .transparent,
-                                                        )),
-                                                border: OutlineInputBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            12),
-                                                    borderSide: BorderSide(
-                                                      color: Colors.transparent,
-                                                    )),
-                                                errorBorder: OutlineInputBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            12),
-                                                    borderSide: BorderSide(
-                                                      color: Colors.transparent,
-                                                    )),
-                                                focusedBorder:
-                                                    OutlineInputBorder(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(12),
-                                                        borderSide: BorderSide(
-                                                          color: Colors
-                                                              .transparent,
-                                                        ))),
-                                          ),
-                                        ),
-                                      ),
                                       InkWell(
                                         onTap: () {
-                                          // navigateToScreen(AppRoute.subscriptionView);
+                                          setState(() {
+                                            isSaved = !isSaved;
+                                          });
+                                          if (isSaved) {
+                                            ref
+                                                .read(bottomNavigationViewModel)
+                                                .saveVideo(_viewModel
+                                                        .videoDetailResponse
+                                                        ?.first
+                                                        .id ??
+                                                    "");
+                                          } else {
+                                            ref
+                                                .read(bottomNavigationViewModel)
+                                                .unSaveVideo(_viewModel
+                                                        .videoDetailResponse
+                                                        ?.first
+                                                        .id ??
+                                                    "");
+                                          }
                                         },
-                                        child: Container(
-                                          // width: double.infinity,
-                                          margin: EdgeInsets.symmetric(
-                                              horizontal: 16),
-                                          padding: EdgeInsets.symmetric(
-                                              horizontal: 16, vertical: 6),
-
-                                          // height: 39.h,
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(8),
-                                            gradient: LinearGradient(colors: [
-                                              Color(0xFF033245),
-                                              Color(0xFF51CBFC)
-                                            ]),
-                                          ),
-                                          child: Center(
-                                            child: Text(
-                                              "POST",
-                                              style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 9,
-                                                fontWeight: FontWeight.bold,
-                                              ),
+                                        child: Column(
+                                          children: [
+                                            !isSaved
+                                                ? Icon(
+                                                    Icons.favorite_outline,
+                                                    size: 20,
+                                                    color: Colors.white,
+                                                  )
+                                                : Icon(
+                                                    Icons.favorite,
+                                                    size: 20,
+                                                    color: Colors.red,
+                                                  ),
+                                            // Image.asset(
+                                            //   "assets/icons/like.png",
+                                            //   height: 18,
+                                            //   color: Colors.white,
+                                            // ),
+                                            SizedBox(
+                                              height: 4,
                                             ),
-                                          ),
+                                            Text(
+                                              "Save".toUpperCase(),
+                                              style: TextStyle(
+                                                  fontSize: 8,
+                                                  color: Colors.white,
+                                                  fontWeight: FontWeight.bold),
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                      gapW8,
+                                      InkWell(
+                                        onTap: () {
+                                          showDialog(
+                                            context: context,
+                                            builder: (BuildContext context) {
+                                              return StatefulBuilder(builder:
+                                                  (BuildContext context,
+                                                      setSt) {
+                                                return AlertDialog(
+                                                    shape: RoundedRectangleBorder(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(16)),
+                                                    insetPadding:
+                                                        EdgeInsets.zero,
+                                                    titlePadding:
+                                                        EdgeInsets.zero,
+                                                    backgroundColor:
+                                                        Color(0xFF171718),
+                                                    surfaceTintColor:
+                                                        Color(0xFF171718),
+                                                    actions: <Widget>[
+                                                      TextButton(
+                                                        child: Container(
+                                                            padding: EdgeInsets
+                                                                .symmetric(
+                                                                    vertical: 8,
+                                                                    horizontal:
+                                                                        16),
+                                                            decoration: BoxDecoration(
+                                                                color: Color(
+                                                                    0xFF008BC3),
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            9)),
+                                                            child: const Text(
+                                                              'SAVE',
+                                                              style: TextStyle(
+                                                                  color: Colors
+                                                                      .white,
+                                                                  fontSize: 15),
+                                                            )),
+                                                        onPressed: () {
+                                                          _viewModel
+                                                              .addVideoToPlaylistHome(
+                                                                  widget.id,
+                                                                  context);
+
+                                                          // _viewModel.setSortBy(
+                                                          //     _viewModel.sortBy ?? AppConstants.latest,
+                                                          //     val,
+                                                          //     context);
+                                                          // Handle the submit action
+                                                        },
+                                                      ),
+                                                    ],
+                                                    title: Column(
+                                                      children: [
+                                                        Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .all(16.0),
+                                                          child: Row(
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .spaceBetween,
+                                                            children: [
+                                                              Text(
+                                                                'Add to playlist'
+                                                                    .toUpperCase(),
+                                                                style: TextStyle(
+                                                                    fontFamily:
+                                                                        "Good",
+                                                                    color: Color(
+                                                                        0xFF3CB4E4),
+                                                                    fontSize:
+                                                                        16),
+                                                              ),
+                                                              InkWell(
+                                                                  onTap: () {
+                                                                    context
+                                                                        .pop();
+                                                                  },
+                                                                  child: Icon(
+                                                                      Icons
+                                                                          .close))
+                                                            ],
+                                                          ),
+                                                        ),
+                                                        Container(
+                                                          height: 2,
+                                                          decoration:
+                                                              BoxDecoration(
+                                                                  color: Color(
+                                                                      0xFF27272A)),
+                                                        )
+                                                      ],
+                                                    ),
+                                                    content: Column(
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .start,
+                                                        mainAxisSize:
+                                                            MainAxisSize.min,
+                                                        children: [
+                                                          ...List.generate(
+                                                              _viewModel
+                                                                      .getAllPlaylistResponse
+                                                                      ?.length ??
+                                                                  0,
+                                                              (index) =>
+                                                                  Padding(
+                                                                    padding: const EdgeInsets
+                                                                        .only(
+                                                                        right:
+                                                                            8),
+                                                                    child:
+                                                                        Column(
+                                                                      children: [
+                                                                        InkWell(
+                                                                          onTap:
+                                                                              () {
+                                                                            setSt(() {
+                                                                              if (_viewModel.selectedPlayList.contains(_viewModel.getAllPlaylistResponse?[index])) {
+                                                                                _viewModel.selectedPlayList.remove(_viewModel.getAllPlaylistResponse?[index]);
+                                                                              } else {
+                                                                                _viewModel.selectedPlayList.add(_viewModel.getAllPlaylistResponse?[index] ?? GetAllPlaylistResponse(label: _viewModel.getAllPlaylistResponse?[index].label, value: _viewModel.getAllPlaylistResponse?[index].value));
+                                                                                // _viewModel.durations.add("5");
+                                                                              }
+                                                                            });
+                                                                          },
+                                                                          child:
+                                                                              Container(
+                                                                            child:
+                                                                                Row(
+                                                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                                              children: [
+                                                                                Text(_viewModel.getAllPlaylistResponse?[index].label ?? ""),
+                                                                                Container(
+                                                                                  height: 18,
+                                                                                  width: 18,
+                                                                                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(2), color: !_viewModel.selectedPlayList.contains(_viewModel.getAllPlaylistResponse?[index]) ? Colors.transparent : Color(0xFF008BC3), border: Border.all(color: _viewModel.selectedPlayList.contains(_viewModel.getAllPlaylistResponse?[index]) ? Colors.transparent : Colors.white)),
+                                                                                  child: Icon(
+                                                                                    Icons.check,
+                                                                                    size: 10,
+                                                                                    color: _viewModel.selectedPlayList.contains(_viewModel.getAllPlaylistResponse?[index]) ? Colors.white : Colors.transparent,
+                                                                                  ),
+                                                                                )
+                                                                              ],
+                                                                            ),
+                                                                          ),
+                                                                        ),
+                                                                        gapH4,
+                                                                      ],
+                                                                    ),
+                                                                  ))
+                                                        ]));
+                                              });
+                                            },
+                                          );
+                                        },
+                                        child: Column(
+                                          children: [
+                                            Icon(
+                                              Icons.playlist_add,
+                                              size: 25,
+                                              color: Colors.white,
+                                            ),
+                                            // gapH8,
+                                            Text(
+                                              "ADD to playlist".toUpperCase(),
+                                              style: TextStyle(
+                                                  fontSize: 8,
+                                                  color: Colors.white,
+                                                  fontWeight: FontWeight.bold),
+                                            )
+                                          ],
                                         ),
                                       ),
                                     ],
                                   ),
                                 ),
-                                gapH16,
-                                _viewModel.commentsResponse?.comments?.length !=
-                                        0
-                                    ? Container(
-                                        margin: EdgeInsets.symmetric(
-                                            horizontal: 16),
-                                        child: Column(
-                                          children: [
-                                            Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              children: [
-                                                Row(
-                                                  children: [
-                                                    Container(
-                                                      height: 25,
-                                                      width: 25,
-                                                      decoration: BoxDecoration(
-                                                          shape:
-                                                              BoxShape.circle,
-                                                          image: DecorationImage(
-                                                              image: NetworkImage(_viewModel
-                                                                      .commentsResponse
-                                                                      ?.comments
-                                                                      ?.first
-                                                                      .image ??
-                                                                  "https://img.freepik.com/premium-vector/businessman-avatar-illustration-cartoon-user-portrait-user-profile-icon_118339-4382.jpg"))),
-                                                    ),
-                                                    gapW8,
-                                                    Text(
-                                                      _viewModel
-                                                              .commentsResponse
-                                                              ?.comments
-                                                              ?.first
-                                                              .userDetails
-                                                              ?.first
-                                                              .firstname ??
-                                                          "",
-                                                      style: TextStyle(
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          fontSize: 11,
-                                                          color: Color(
-                                                              0xFf4A6C7A)),
-                                                    ),
-                                                    gapW8,
-                                                    Text(
-                                                      DateFormat('MMMM d, yyyy')
-                                                          .format(_viewModel
-                                                                  .commentsResponse
-                                                                  ?.comments
-                                                                  ?.first
-                                                                  .createdAt ??
-                                                              DateTime.now()),
-                                                      // "September 14, 2023",
-                                                      style: TextStyle(
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          fontSize: 8,
-                                                          color: Color(
-                                                              0xFf71717A)),
-                                                    )
-                                                  ],
-                                                ),
-                                                Icon(
-                                                  Icons.more_vert_outlined,
-                                                  color: Colors.white,
-                                                )
-                                              ],
-                                            ),
-                                            SizedBox(
-                                              height: 16,
-                                            ),
-                                            Align(
-                                              alignment: Alignment.bottomLeft,
-                                              child: Padding(
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                        horizontal: 16),
-                                                child: Text(
-                                                  _viewModel
-                                                          .commentsResponse
-                                                          ?.comments
-                                                          ?.first
-                                                          .content ??
-                                                      "",
-                                                  style: TextStyle(
-                                                      fontSize: 12,
-                                                      color: Colors.white),
-                                                ),
-                                              ),
-                                            ),
-                                            gapH8,
-                                          ],
-                                        ),
-                                      )
-                                    : Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 16),
-                                        child: Text(
-                                          "Tap here to join the chat! Ask any questions or share your insights.",
-                                          style: TextStyle(
-                                              color: Color(0xFFACACAC),
-                                              fontSize: 11),
-                                        ),
-                                      ),
-                                gapH32,
                               ],
                             ),
                           ),
-                        )
-                      ],
+                          Padding(
+                            padding: const EdgeInsets.only(
+                                right: 8, top: 8, left: 16),
+                            child: Wrap(
+                              children: [
+                                ...List.generate(
+                                  _viewModel.videoDetailResponse?.first
+                                          .tagsDetails?.length ??
+                                      0,
+                                  (index) => Container(
+                                    margin: EdgeInsets.only(right: 8),
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 8, vertical: 4),
+                                    decoration: BoxDecoration(
+                                        color: HexColor.fromHex(_viewModel
+                                                .videoDetailResponse
+                                                ?.first
+                                                .tagsDetails?[index]
+                                                .color ??
+                                            "0xFFFFFF"),
+                                        borderRadius: BorderRadius.circular(4)),
+                                    child: Text(
+                                      (_viewModel.videoDetailResponse?.first
+                                                  .tagsDetails?[index].name ??
+                                              "")
+                                          .toUpperCase(),
+                                      style: TextStyle(
+                                          fontSize: 8,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.white),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          InkWell(
+                            onTap: () {
+                              showModalBottomSheet(
+                                isScrollControlled: true,
+                                context: context,
+                                builder: (context) =>
+                                    MoreDescriptionBottomSheet(
+                                  fulldescription: _viewModel
+                                          .videoDetailResponse
+                                          ?.first
+                                          .description
+                                          ?.replaceAll("<p>", "")
+                                          .replaceAll("</p>", "") ??
+                                      "",
+                                ),
+                              );
+                            },
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.fromLTRB(16, 16, 16, 16),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                crossAxisAlignment: CrossAxisAlignment.end,
+                                children: [
+                                  Expanded(
+                                    child: Text(
+                                      style: TextStyle(
+                                          fontSize: 11,
+                                          color: Color(0xFFACACAC)),
+                                      _viewModel.videoDetailResponse?.first
+                                              .description
+                                              ?.replaceAll("<p>", "")
+                                              .replaceAll("</p>", "") ??
+                                          "",
+                                      overflow: TextOverflow.ellipsis,
+                                      maxLines: 5,
+                                    ),
+                                  ),
+                                  _viewModel.videoDetailResponse?.first
+                                              .description ==
+                                          null
+                                      ? Container()
+                                      : Text(
+                                          style: TextStyle(
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.bold,
+                                              color: Color(0xFF1AA2D9)),
+                                          "  More")
+                                ],
+                              ),
+                            ),
+                          ),
+                          _viewModel.videoDetailResponse?.first.productsData
+                                      ?.isEmpty ??
+                                  true
+                              ? Container()
+                              :
+                              // InkWell(
+                              //             onTap: () {
+                              //               // navigateToScreen(AppRoute.subscriptionView);
+                              //             },
+                              //             child: Container(
+                              //               // width: double.infinity,
+                              //               margin: EdgeInsets.symmetric(
+                              //                   horizontal: 16),
+                              //               padding: EdgeInsets.symmetric(
+                              //                   horizontal: 16, vertical: 6),
+
+                              //               height: 39.h,
+                              //               decoration: BoxDecoration(
+                              //                 borderRadius:
+                              //                     BorderRadius.circular(8),
+                              //                 gradient: LinearGradient(colors: [
+                              //                   Color(0xFF033245),
+                              //                   Color(0xFF51CBFC)
+                              //                 ]),
+                              //               ),
+                              //               child: Center(
+                              //                 child: Text(
+                              //                   "SHOW PRODUCTS SEEN IN VIDEO",
+                              //                   style: TextStyle(
+                              //                     color: Colors.white,
+                              //                     fontSize: 16,
+                              //                     fontWeight: FontWeight.bold,
+                              //                   ),
+                              //                 ),
+                              //               ),
+                              //             ),
+                              //           ),
+
+                              InkWell(
+                                  onTap: () {
+                                    showModalBottomSheet(
+                                      context: context,
+                                      builder: (context) => ProductsBottomSheet(
+                                        products: _viewModel.videoDetailResponse
+                                            ?.first.productsData,
+                                      ),
+                                    );
+                                  },
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 16),
+                                    child: Text(
+                                      "",
+                                      style: TextStyle(
+                                          fontSize: 13,
+                                          fontWeight: FontWeight.bold,
+                                          color: Color(0xFF1AA2D9)),
+                                    ),
+                                  ),
+                                ),
+                          // Visibility(
+                          //   visible: Platform.isIOS,
+                          //   child: Padding(
+                          //     padding: const EdgeInsets.only(left: 16),
+                          //     child: InkWell(
+                          //         onTap: () async {
+                          //           airplayPlayer = !airplayPlayer;
+
+                          //           setState(() {});
+                          //           if (airplayPlayer) {
+                          //             controller?.dispose();
+                          //           } else {
+                          //             print("this is the video id" + videoID);
+                          //             String token =
+                          //                 "8cbbea3472c5fce4625f7d61ee437a86";
+                          //             final Map<String, String> headers =
+                          //                 <String, String>{};
+                          //             headers['Authorization'] =
+                          //                 'Bearer ${token}';
+                          //             controller = await PodPlayerController(
+                          //               playVideoFrom:
+                          //                   PlayVideoFrom.vimeoPrivateVideos(
+                          //                       // _viewModel.videoDetailResponse?.videolink ?? "",
+                          //                       videoID,
+                          //                       httpHeaders: headers),
+                          //             )
+                          //               ..initialise()
+                          //                   .then((value) => setState(() {
+                          //                         controller?.play();
+                          //                       }));
+                          //           }
+                          //         },
+                          //         child: Text(
+                          //           !airplayPlayer
+                          //               ? "Switch to Airplay Player"
+                          //               : "Switch to Normal Player",
+                          //           style: TextStyle(
+                          //               fontSize: 14,
+                          //               fontWeight: FontWeight.bold,
+                          //               color: Color(0xFF149BD1)),
+                          //         )),
+                          //   ),
+                          // ),
+                          // airplayPlayer
+                          //     ? Container()
+                          //     : Visibility(
+                          //         visible: Platform.isIOS,
+                          //         child: Padding(
+                          //           padding: const EdgeInsets.only(
+                          //               right: 16.0, left: 16),
+                          //           child: Text(
+                          //               "If you have any audio-related issues, please check if your device is in silent mode. If it is in silent mode, please unsilent it."),
+                          //         ),
+                          //       ),
+                          gapH16,
+                          Container(
+                            margin: EdgeInsets.symmetric(horizontal: 16),
+                            height: 1,
+                            decoration: BoxDecoration(color: Colors.white),
+                          ),
+                          gapH8,
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 16),
+                            child: Text(
+                              "RECOMMENDED VIDEOS",
+                              style: TextStyle(
+                                  fontFamily: "Good",
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold,
+                                  color: Color(0xFF149BD1)),
+                            ),
+                          ),
+                          gapH8,
+                          Container(
+                            height: 100,
+                            child: ListView.builder(
+                              scrollDirection: Axis.horizontal,
+                              itemCount:
+                                  _viewModel.recommendedVideoResponse?.length ??
+                                      0,
+                              itemBuilder: (context, index) => InkWell(
+                                onTap: () {
+                                  controller?.dispose();
+                                  context.pushReplacementNamed(
+                                    AppRoute.videoPageView.name,
+                                    pathParameters: {
+                                      'id': _viewModel
+                                              .recommendedVideoResponse?[index]
+                                              .id ??
+                                          ""
+                                    },
+                                  );
+                                },
+                                child: CachedNetworkImage(
+                                    imageUrl: _viewModel
+                                            .recommendedVideoResponse?[index]
+                                            .thumnailLink ??
+                                        "",
+                                    imageBuilder: (context, imageProvider) {
+                                      return Container(
+                                        margin: EdgeInsets.only(
+                                            left: index == 0 ? 16 : 16,
+                                            right: index == 9 ? 16 : 0),
+                                        height: 89,
+                                        width: 159,
+                                        decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                            image: DecorationImage(
+                                                fit: BoxFit.cover,
+                                                image: imageProvider)),
+                                      );
+                                    }),
+                              ),
+                            ),
+                          ),
+                          gapH8,
+                          Container(
+                            margin: EdgeInsets.symmetric(horizontal: 16),
+                            height: 1,
+                            decoration: BoxDecoration(color: Colors.white),
+                          ),
+                          GestureDetector(
+                            onVerticalDragDown: (d) {
+                              if (!isBottomSheetopen) {
+                                isBottomSheetopen = true;
+                                setState(() {});
+                                showModalBottomSheet(
+                                  context: context,
+                                  builder: (context) => ChatBottomSheet(
+                                    videoID: widget.id,
+                                    videoPageViewModel: _viewModel,
+                                  ),
+                                ).then((value) {
+                                  isBottomSheetopen = false;
+                                  setState(() {});
+                                });
+                              }
+                            },
+                            onTap: () {
+                              if (!isBottomSheetopen) {
+                                isBottomSheetopen = true;
+                                setState(() {});
+
+                                showModalBottomSheet(
+                                  context: context,
+                                  builder: (context) => ChatBottomSheet(
+                                    videoID: widget.id,
+                                    videoPageViewModel: _viewModel,
+                                  ),
+                                ).then((value) {
+                                  isBottomSheetopen = false;
+                                  setState(() {});
+                                });
+                              }
+                            },
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: Color(
+                                  0xFF171718,
+                                ),
+                              ),
+                              child: Column(
+                                children: [
+                                  Padding(
+                                    padding:
+                                        EdgeInsets.symmetric(horizontal: 16),
+                                    child: Column(
+                                      children: [
+                                        gapH16,
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text(
+                                              "COMMUNITY CHAT",
+                                              style: TextStyle(
+                                                  fontFamily: "Good",
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Color(0xFF1AA2D9)),
+                                            ),
+                                            Icon(
+                                              Icons.expand_less_outlined,
+                                              size: 40,
+                                              color: Color(0xFF149BD1),
+                                            )
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  gapH16,
+                                  Container(
+                                    margin: EdgeInsets.only(left: 16),
+                                    padding: EdgeInsets.all(8),
+                                    decoration: BoxDecoration(
+                                        color: Color(0xFF1b1b1c),
+                                        borderRadius: BorderRadius.only(
+                                            bottomLeft: Radius.circular(8),
+                                            topLeft: Radius.circular(8))),
+                                    child: Row(
+                                      children: [
+                                        Container(
+                                          height: 25,
+                                          width: 25,
+                                          decoration: BoxDecoration(
+                                              shape: BoxShape.circle,
+                                              image: DecorationImage(
+                                                  image: NetworkImage(
+                                                      "https://img.freepik.com/premium-vector/businessman-avatar-illustration-cartoon-user-portrait-user-profile-icon_118339-4382.jpg"))),
+                                        ),
+                                        gapW16,
+                                        Expanded(
+                                          child: InkWell(
+                                            onTap: () {
+                                              if (!isBottomSheetopen) {
+                                                isBottomSheetopen = true;
+                                                setState(() {});
+                                                showModalBottomSheet(
+                                                  context: context,
+                                                  builder: (context) =>
+                                                      ChatBottomSheet(
+                                                    videoID: widget.id,
+                                                    videoPageViewModel:
+                                                        _viewModel,
+                                                  ),
+                                                );
+                                              } else {
+                                                isBottomSheetopen = false;
+                                                setState(() {});
+                                              }
+                                            },
+                                            child: TextField(
+                                              enabled: false,
+                                              decoration: InputDecoration(
+                                                  contentPadding:
+                                                      EdgeInsets.only(
+                                                          left: 16,
+                                                          right: 16,
+                                                          top: 4,
+                                                          bottom: 4),
+                                                  filled: true,
+                                                  fillColor: Colors.black,
+                                                  hintText: "Write a comment",
+                                                  hintStyle: TextStyle(
+                                                      color: Color(0xFF71717A),
+                                                      fontWeight:
+                                                          FontWeight.w400,
+                                                      fontSize: 14),
+                                                  enabledBorder:
+                                                      OutlineInputBorder(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(12),
+                                                          borderSide:
+                                                              BorderSide(
+                                                            color: Colors
+                                                                .transparent,
+                                                          )),
+                                                  border: OutlineInputBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              12),
+                                                      borderSide: BorderSide(
+                                                        color:
+                                                            Colors.transparent,
+                                                      )),
+                                                  errorBorder:
+                                                      OutlineInputBorder(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(12),
+                                                          borderSide:
+                                                              BorderSide(
+                                                            color: Colors
+                                                                .transparent,
+                                                          )),
+                                                  focusedBorder:
+                                                      OutlineInputBorder(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(12),
+                                                          borderSide:
+                                                              BorderSide(
+                                                            color: Colors
+                                                                .transparent,
+                                                          ))),
+                                            ),
+                                          ),
+                                        ),
+                                        InkWell(
+                                          onTap: () {
+                                            // navigateToScreen(AppRoute.subscriptionView);
+                                          },
+                                          child: Container(
+                                            // width: double.infinity,
+                                            margin: EdgeInsets.symmetric(
+                                                horizontal: 16),
+                                            padding: EdgeInsets.symmetric(
+                                                horizontal: 16, vertical: 6),
+
+                                            // height: 39.h,
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(8),
+                                              gradient: LinearGradient(colors: [
+                                                Color(0xFF033245),
+                                                Color(0xFF51CBFC)
+                                              ]),
+                                            ),
+                                            child: Center(
+                                              child: Text(
+                                                "POST",
+                                                style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 9,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  gapH16,
+                                  _viewModel.commentsResponse?.comments
+                                              ?.length !=
+                                          0
+                                      ? Container(
+                                          margin: EdgeInsets.symmetric(
+                                              horizontal: 16),
+                                          child: Column(
+                                            children: [
+                                              Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                children: [
+                                                  Row(
+                                                    children: [
+                                                      Container(
+                                                        height: 25,
+                                                        width: 25,
+                                                        decoration: BoxDecoration(
+                                                            shape:
+                                                                BoxShape.circle,
+                                                            image: DecorationImage(
+                                                                image: NetworkImage(_viewModel
+                                                                        .commentsResponse
+                                                                        ?.comments
+                                                                        ?.first
+                                                                        .image ??
+                                                                    "https://img.freepik.com/premium-vector/businessman-avatar-illustration-cartoon-user-portrait-user-profile-icon_118339-4382.jpg"))),
+                                                      ),
+                                                      gapW8,
+                                                      Text(
+                                                        _viewModel
+                                                                .commentsResponse
+                                                                ?.comments
+                                                                ?.first
+                                                                .userDetails
+                                                                ?.first
+                                                                .firstname ??
+                                                            "",
+                                                        style: TextStyle(
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            fontSize: 11,
+                                                            color: Color(
+                                                                0xFf4A6C7A)),
+                                                      ),
+                                                      gapW8,
+                                                      Text(
+                                                        DateFormat(
+                                                                'MMMM d, yyyy')
+                                                            .format(_viewModel
+                                                                    .commentsResponse
+                                                                    ?.comments
+                                                                    ?.first
+                                                                    .createdAt ??
+                                                                DateTime.now()),
+                                                        // "September 14, 2023",
+                                                        style: TextStyle(
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            fontSize: 8,
+                                                            color: Color(
+                                                                0xFf71717A)),
+                                                      )
+                                                    ],
+                                                  ),
+                                                  Icon(
+                                                    Icons.more_vert_outlined,
+                                                    color: Colors.white,
+                                                  )
+                                                ],
+                                              ),
+                                              SizedBox(
+                                                height: 16,
+                                              ),
+                                              Align(
+                                                alignment: Alignment.bottomLeft,
+                                                child: Padding(
+                                                  padding: const EdgeInsets
+                                                      .symmetric(
+                                                      horizontal: 16),
+                                                  child: Text(
+                                                    _viewModel
+                                                            .commentsResponse
+                                                            ?.comments
+                                                            ?.first
+                                                            .content ??
+                                                        "",
+                                                    style: TextStyle(
+                                                        fontSize: 12,
+                                                        color: Colors.white),
+                                                  ),
+                                                ),
+                                              ),
+                                              gapH8,
+                                            ],
+                                          ),
+                                        )
+                                      : Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 16),
+                                          child: Text(
+                                            "Tap here to join the chat! Ask any questions or share your insights.",
+                                            style: TextStyle(
+                                                color: Color(0xFFACACAC),
+                                                fontSize: 11),
+                                          ),
+                                        ),
+                                  gapH32,
+                                ],
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
                     ),
                   ),
-                ),
-              ],
-            ),
+                ],
+              ),
+      ),
     );
   }
 

@@ -1,10 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:custom_sliding_segmented_control/custom_sliding_segmented_control.dart';
 import 'package:dropdown_search/dropdown_search.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:image_stack/image_stack.dart';
 import 'package:ondemand/core/constants.dart';
 import 'package:ondemand/data/home/models/feature_playlist_model.dart'
     as playlist;
@@ -12,11 +8,8 @@ import 'package:timeago/timeago.dart' as timeago;
 import 'package:ondemand/data/home/models/fetch_all_playlist_model.dart'
     as fetch;
 
-import 'package:ondemand/utils/app_sizes.dart';
-import 'package:ondemand/utils/colors.dart';
 import 'package:ondemand/utils/utils.dart';
 import 'package:ondemand/view/screens/bottomNavigation/bottom_navigation_view_model.dart';
-import 'package:ondemand/view/screens/bottomNavigation/tabs/home_tab.dart';
 
 class PlaylistTab extends ConsumerStatefulWidget {
   const PlaylistTab({super.key});
@@ -26,7 +19,7 @@ class PlaylistTab extends ConsumerStatefulWidget {
 }
 
 class _PlaylistTabState extends ConsumerState<PlaylistTab> with BaseScreenView {
-  int val = 0;
+  int val = 1;
   int initialIndex = -1;
   late BottomNavigationViewModel _viewModel;
   final ScrollController _scrollController = ScrollController();
@@ -41,12 +34,15 @@ class _PlaylistTabState extends ConsumerState<PlaylistTab> with BaseScreenView {
     _viewModel = ref.read(bottomNavigationViewModel);
     _viewModel.attachView(this);
     Future.delayed(Duration(milliseconds: 100)).then((value) async {
-      await _viewModel.allPlaylist(
-          // LibraryListRequest(categoryId:AppCons
+      // await _viewModel.allPlaylist(
+      //     // LibraryListRequest(categoryId:AppCons
 
-          // )
-          );
+      //     // )
+      //     );
+      // await _viewModel.getAllVid();
+      await _viewModel.featuredPlaylist();
       await _viewModel.getAllVid();
+
       setState(() {
         initialIndex = 0;
       });
@@ -229,7 +225,7 @@ class _PlaylistTabState extends ConsumerState<PlaylistTab> with BaseScreenView {
                               ...List.generate(
                                   chipsText.length,
                                   (index3) => InkWell(
-                                        onTap: () {
+                                        onTap: () async {
                                           setState(() {
                                             val = index3;
                                           });
@@ -254,8 +250,15 @@ class _PlaylistTabState extends ConsumerState<PlaylistTab> with BaseScreenView {
                                               );
                                             });
                                           } else if (val == 0) {
+                                            await _viewModel.allPlaylist(
+                                                // LibraryListRequest(categoryId:AppCons
+
+                                                // )
+                                                );
+                                            await _viewModel.getAllVid();
                                             setState(() {
-                                              _viewModel.getPlaylistList();
+                                              // _viewModel.getPlaylistList();
+
                                               _scrollController.animateTo(
                                                 _scrollController
                                                     .position.minScrollExtent,
@@ -318,67 +321,76 @@ class _PlaylistTabState extends ConsumerState<PlaylistTab> with BaseScreenView {
           // gapH16,
           _viewModel.loading
               ? Container()
-              : Expanded(
-                  child: SingleChildScrollView(
-                    controller: _scrollController,
-                    child: Column(
-                      children: [
-                        // gapH8,
-                        initialIndex == -1
-                            ? Container()
-                            : Container(
-                                // decoration:
-                                //     BoxDecoration(color: Color(0xFF27272a)),
-                                height:
-                                    MediaQuery.of(context).size.height / 4.8,
-                                // width: MediaQuery.of(context).size.width / 1.6,
-                                child: ListView.builder(
-                                  itemCount: val == 0
-                                      ? _viewModel.allPlaylistList.length ?? 0
-                                      : val == 1
-                                          ? _viewModel.featuredList.length ?? 0
-                                          : _viewModel
-                                                  .personalPlaylist.length ??
-                                              0,
-                                  scrollDirection: Axis.horizontal,
-                                  itemBuilder: (context, index) => InkWell(
-                                      onTap: () {
-                                        initialIndex = index;
-                                        setState(() {});
-                                      },
-                                      child: playlistSwiper(
-                                          index,
-                                          val == 0
-                                              ? _viewModel.allPlaylistList
-                                              : val == 1
-                                                  ? _viewModel.featuredList
-                                                  : _viewModel
-                                                      .personalPlaylist)),
-                                ),
-                              ),
-                        gapH12,
+              : val == 2 && _viewModel.personalPlaylist.length == 0
+                  ? Text("Create your own Personal Playlist now!")
+                  : Expanded(
+                      child: SingleChildScrollView(
+                        controller: _scrollController,
+                        child: Column(
+                          children: [
+                            // gapH8,
+                            initialIndex == -1
+                                ? Container()
+                                : Container(
+                                    // decoration:
+                                    //     BoxDecoration(color: Color(0xFF27272a)),
+                                    height: MediaQuery.of(context).size.height /
+                                        4.8,
+                                    // width: MediaQuery.of(context).size.width / 1.6,
+                                    child: ListView.builder(
+                                      itemCount: val == 0
+                                          ? _viewModel.allPlaylistList.length ??
+                                              0
+                                          : val == 1
+                                              ? _viewModel
+                                                      .featuredList.length ??
+                                                  0
+                                              : _viewModel.personalPlaylist
+                                                      .length ??
+                                                  0,
+                                      scrollDirection: Axis.horizontal,
+                                      itemBuilder: (context, index) => InkWell(
+                                          onTap: () {
+                                            initialIndex = index;
+                                            setState(() {});
+                                          },
+                                          child: playlistSwiper(
+                                              index,
+                                              val == 0
+                                                  ? _viewModel.allPlaylistList
+                                                  : val == 1
+                                                      ? _viewModel.featuredList
+                                                      : _viewModel
+                                                          .personalPlaylist)),
+                                    ),
+                                  ),
+                            gapH12,
 
-                        initialIndex == -1 ? Container() : heading(),
+                            initialIndex == -1 ? Container() : heading(),
 
-                        initialIndex == -1
-                            ? Container()
-                            : playlists(
-                                context,
-                                val == 0
-                                    ? _viewModel
-                                        .allPlaylistList[initialIndex].videos
-                                    : val == 1
+                            initialIndex == -1
+                                ? Container()
+                                : playlists(
+                                    context,
+                                    val == 0
                                         ? _viewModel
-                                            .featuredList[initialIndex].videos
-                                        : _viewModel.personalPlaylist.isEmpty
-                                            ? null
+                                            .allPlaylistList[initialIndex]
+                                            .videos
+                                        : val == 1
+                                            ? _viewModel
+                                                .featuredList[initialIndex]
+                                                .videos
                                             : _viewModel
-                                                .personalPlaylist[initialIndex]
-                                                .videos)
-                      ],
-                    ),
-                  ),
-                )
+                                                    .personalPlaylist.isEmpty
+                                                ? null
+                                                : _viewModel
+                                                    .personalPlaylist[
+                                                        initialIndex]
+                                                    .videos)
+                          ],
+                        ),
+                      ),
+                    )
         ],
       ),
     );
@@ -571,7 +583,7 @@ class _PlaylistTabState extends ConsumerState<PlaylistTab> with BaseScreenView {
 
   InkWell addPlaylist(BuildContext context) {
     return InkWell(
-      onTap: () {
+      onTap: () async {
         showDialog(
           context: context,
           builder: (BuildContext context) {

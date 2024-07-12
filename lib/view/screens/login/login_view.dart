@@ -20,8 +20,8 @@ class _LoginViewState extends ConsumerState<LoginView> with BaseScreenView {
 
   TextEditingController _emailController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
+bool isObscure=true;
 
-  bool isChecked = false;
   final _formkey = GlobalKey<FormState>();
   final _formkey2 = GlobalKey<FormState>();
 

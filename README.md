@@ -1,5 +1,5 @@
 [![style: lint](https://img.shields.io/badge/style-lint-4BC0F5.svg)](https://pub.dev/packages/lint)
-# sweetlifesaver
+# godfreymethod
 
 A boilerplate project created in flutter using RiverPod. Boilerplate supports both web and mobile.
 

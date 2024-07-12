@@ -61,7 +61,7 @@ Future<File?> openPickImageModalSheet(BuildContext context,
                         "Camera",
                         style: Theme.of(context)
                             .textTheme
-                            .bodyText1
+                            .bodyLarge
                             ?.copyWith(fontSize: 16, color: Colors.black),
                       ),
                     ],
@@ -94,7 +94,7 @@ Future<File?> openPickImageModalSheet(BuildContext context,
                         "Gallery",
                         style: Theme.of(context)
                             .textTheme
-                            .bodyText1
+                            .bodyLarge
                             ?.copyWith(fontSize: 16, color: Colors.black),
                       ),
                     ],
@@ -119,7 +119,7 @@ Future<File?> openPickImageModalSheet(BuildContext context,
                               "Pdf",
                               style: Theme.of(context)
                                   .textTheme
-                                  .bodyText1
+                                  .bodyLarge
                                   ?.copyWith(fontSize: 16, color: Colors.black),
                             ),
                           ],
@@ -207,7 +207,7 @@ Future<File?> openPickImageVideoModalSheet(BuildContext context,
                         "Image from Camera",
                         style: Theme.of(context)
                             .textTheme
-                            .bodyText1
+                            .bodyLarge
                             ?.copyWith(fontSize: 16, color: Colors.black),
                       ),
                     ],
@@ -240,7 +240,7 @@ Future<File?> openPickImageVideoModalSheet(BuildContext context,
                         "Image from Gallery",
                         style: Theme.of(context)
                             .textTheme
-                            .bodyText1
+                            .bodyLarge
                             ?.copyWith(fontSize: 16, color: Colors.black),
                       ),
                     ],
@@ -278,14 +278,14 @@ Future<File?> openPickImageVideoModalSheet(BuildContext context,
 Future<CroppedFile?> _cropImage(File imageToCrop, BuildContext context) async {
   final CroppedFile? croppedImage = await ImageCropper().cropImage(
     sourcePath: imageToCrop.path,
-    cropStyle: CropStyle.circle,
-    aspectRatioPresets: [
-      CropAspectRatioPreset.square,
-      CropAspectRatioPreset.ratio3x2,
-      CropAspectRatioPreset.original,
-      CropAspectRatioPreset.ratio4x3,
-      CropAspectRatioPreset.ratio16x9
-    ],
+    // cropStyle: CropStyle.circle,
+    // aspectRatioPresets: [
+    //   CropAspectRatioPreset.square,
+    //   CropAspectRatioPreset.ratio3x2,
+    //   CropAspectRatioPreset.original,
+    //   CropAspectRatioPreset.ratio4x3,
+    //   CropAspectRatioPreset.ratio16x9
+    // ],
     uiSettings: [
       AndroidUiSettings(
           toolbarTitle: 'Crop Image',

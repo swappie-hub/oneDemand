@@ -22,6 +22,9 @@ class _SignupViewState extends ConsumerState<SignupView> with BaseScreenView {
   TextEditingController _passwordController = TextEditingController();
   TextEditingController _cPasswordController = TextEditingController();
   bool isChecked = false;
+    bool isObscuredPassword = true;
+    bool isObscuredCPassword = true;
+
   final _formkey = GlobalKey<FormState>();
   @override
   void initState() {
@@ -229,17 +232,26 @@ class _SignupViewState extends ConsumerState<SignupView> with BaseScreenView {
                 ),
                 gapH10,
                 TextFormField(
+                
                   cursorColor: Colors.white,
                   validator: (value) => _passwordController.text.isEmpty
                       ? "Please enter the password"
                       : null,
-                  obscureText: true,
+                  obscureText: isObscuredPassword,
                   controller: _passwordController,
                   style: TextStyle(
+                  
                       color: Colors.white,
                       fontWeight: FontWeight.w400,
                       fontSize: 16),
                   decoration: InputDecoration(
+                    suffixIcon: InkWell(
+                      onTap: (){
+                        setState(() {
+                        isObscuredPassword=!isObscuredPassword;  
+                        });
+                      },
+                      child: Icon( isObscuredPassword?Icons.visibility_off:Icons.visibility,      color: Colors.white,)),
                       contentPadding: EdgeInsets.all(16),
                       filled: true,
                       fillColor: Colors.black,
@@ -277,13 +289,20 @@ class _SignupViewState extends ConsumerState<SignupView> with BaseScreenView {
                       : (_passwordController.text != _cPasswordController.text)
                           ? "Password dosen't match"
                           : null,
-                  obscureText: true,
+                  obscureText: isObscuredCPassword,
                   controller: _cPasswordController,
                   style: TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.w400,
                       fontSize: 16),
                   decoration: InputDecoration(
+                    suffixIcon:  InkWell(
+                      onTap: (){
+                        setState(() {
+                        isObscuredCPassword=!isObscuredCPassword;  
+                        });
+                      },
+                      child: Icon( isObscuredCPassword?Icons.visibility_off:Icons.visibility,      color: Colors.white,)),
                       contentPadding: EdgeInsets.all(16),
                       filled: true,
                       fillColor: Colors.black,

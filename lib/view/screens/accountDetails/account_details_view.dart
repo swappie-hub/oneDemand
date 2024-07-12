@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:ondemand/core/constants.dart';
 import 'package:ondemand/data/auth/models/update_email_model.dart';
 import 'package:ondemand/data/auth/models/update_password_model.dart';
@@ -33,6 +34,9 @@ class _AccountDetailsViewState extends ConsumerState<AccountDetailsView>
 
   final _emailformkey = GlobalKey<FormState>();
   final _passformkey = GlobalKey<FormState>();
+  bool isObscuredPassword = true;
+  bool isObscuredCPassword = true;
+  bool isObscuredOldPassword = true;
 
   @override
   void initState() {
@@ -648,6 +652,7 @@ class _AccountDetailsViewState extends ConsumerState<AccountDetailsView>
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             TextFormField(
+                              obscureText: isObscuredOldPassword,
                               cursorColor: Colors.white,
                               validator: (value) {
                                 if (value?.isEmpty ?? true) {
@@ -661,6 +666,19 @@ class _AccountDetailsViewState extends ConsumerState<AccountDetailsView>
                                   fontSize: 16),
                               controller: _oldPasswordController,
                               decoration: InputDecoration(
+                                  suffixIcon: InkWell(
+                                      onTap: () {
+                                        setSt(() {
+                                          isObscuredOldPassword =
+                                              !isObscuredOldPassword;
+                                        });
+                                      },
+                                      child: Icon(
+                                        isObscuredOldPassword
+                                            ? Icons.visibility_off
+                                            : Icons.visibility,
+                                        color: Colors.white,
+                                      )),
                                   contentPadding: EdgeInsets.all(8),
                                   filled: true,
                                   fillColor: Colors.black,
@@ -692,6 +710,7 @@ class _AccountDetailsViewState extends ConsumerState<AccountDetailsView>
                             ),
                             gapH8,
                             TextFormField(
+                              obscureText: isObscuredPassword,
                               cursorColor: Colors.white,
                               validator: (value) {
                                 if (value?.isEmpty ?? true) {
@@ -705,6 +724,19 @@ class _AccountDetailsViewState extends ConsumerState<AccountDetailsView>
                                   fontSize: 16),
                               controller: _newPassController,
                               decoration: InputDecoration(
+                                  suffixIcon: InkWell(
+                                      onTap: () {
+                                        setSt(() {
+                                          isObscuredPassword =
+                                              !isObscuredPassword;
+                                        });
+                                      },
+                                      child: Icon(
+                                        isObscuredPassword
+                                            ? Icons.visibility_off
+                                            : Icons.visibility,
+                                        color: Colors.white,
+                                      )),
                                   contentPadding: EdgeInsets.all(8),
                                   filled: true,
                                   fillColor: Colors.black,
@@ -736,6 +768,7 @@ class _AccountDetailsViewState extends ConsumerState<AccountDetailsView>
                             ),
                             gapH8,
                             TextFormField(
+                              obscureText: isObscuredCPassword,
                               cursorColor: Colors.white,
                               validator: (value) {
                                 if (value?.isEmpty ?? true) {
@@ -751,6 +784,19 @@ class _AccountDetailsViewState extends ConsumerState<AccountDetailsView>
                                   fontSize: 16),
                               controller: _confirmNewPassController,
                               decoration: InputDecoration(
+                                  suffixIcon: InkWell(
+                                      onTap: () {
+                                        setSt(() {
+                                          isObscuredCPassword =
+                                              !isObscuredCPassword;
+                                        });
+                                      },
+                                      child: Icon(
+                                        isObscuredCPassword
+                                            ? Icons.visibility_off
+                                            : Icons.visibility,
+                                        color: Colors.white,
+                                      )),
                                   contentPadding: EdgeInsets.all(8),
                                   filled: true,
                                   fillColor: Colors.black,

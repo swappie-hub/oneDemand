@@ -62,7 +62,7 @@ class FirebaseMessagingProvider {
         .setForegroundNotificationPresentationOptions();
 
     const AndroidInitializationSettings initializationSettingsAndroid =
-        AndroidInitializationSettings('ic_launcher.png');
+        AndroidInitializationSettings("ic_launcher");
 
     /// Note: permissions aren't requested here just to demonstrate that can be
     /// done later

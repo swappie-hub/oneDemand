@@ -32,6 +32,11 @@ class Environment {
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
     ]);
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark.copyWith(
+        // Color for Android
+        statusBarBrightness:
+            Brightness.dark // Dark == white status bar -- for IOS.
+        ));
     await Firebase.initializeApp();
     await FirebaseMessagingProvider.setupFirebaseConfig();
     final String? token = await FirebaseMessaging.instance.getToken();
@@ -48,10 +53,7 @@ class Environment {
       Logger.write(e.toString());
     }
     runApp(
-      const ProviderScope(
-        child: MyApp()
-      
-      ),
+      const ProviderScope(child: MyApp()),
     );
   }
 }
