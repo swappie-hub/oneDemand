@@ -57,6 +57,7 @@ class VideoPageViewModel extends BaseViewModel<BaseScreenView> {
   List<RecomendedVideoResponse>? _recommendedVideoResponse;
   List<RecomendedVideoResponse>? get recommendedVideoResponse =>
       _recommendedVideoResponse;
+      
   Future<void> getVideoDetails(String id) async {
     toggleLoading();
     await _videoRepo.getVideoDetails(id).then(

@@ -1,6 +1,6 @@
 PODS:
   - Chargebee (1.0.28)
-  - chargebee_flutter (0.4.2):
+  - chargebee_flutter (0.4.5):
     - Chargebee (= 1.0.28)
     - Flutter
   - connectivity_plus (0.0.1):
@@ -255,7 +255,7 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   Chargebee: eec8b44710e64d4f39849230999c105bd49a210c
-  chargebee_flutter: 86d7dc134ef96c3ed5da8a186720ad42c612e608
+  chargebee_flutter: 732e090b7d8161773f3a1773294735e32f5d01c8
   connectivity_plus: ddd7f30999e1faaef5967c23d5b6d503d10434db
   DKImagePickerController: 946cec48c7873164274ecc4624d19e3da4c1ef3c
   DKPhotoGallery: b3834fecb755ee09a593d7c9e389d8b5d6deed60

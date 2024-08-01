@@ -1395,6 +1395,7 @@ class ChatBottomSheet extends ConsumerStatefulWidget {
 class _ChatBottomSheetState extends ConsumerState<ChatBottomSheet>
     with BaseScreenView {
   bool showReply = true;
+  bool isLoadig = false;
   FocusNode f1 = FocusNode();
   TextEditingController _commentsController = new TextEditingController();
   String replyid = "";
@@ -1478,7 +1479,9 @@ class _ChatBottomSheetState extends ConsumerState<ChatBottomSheet>
                 borderRadius: BorderRadius.only(
                     bottomLeft: Radius.circular(8),
                     topLeft: Radius.circular(8))),
-            child: Row(
+            child: isLoadig?CircularProgressIndicator(
+              color: Colors.white,
+            ): Row(
               children: [
                 Container(
                   height: 25,
@@ -1530,6 +1533,8 @@ class _ChatBottomSheetState extends ConsumerState<ChatBottomSheet>
                 ),
                 InkWell(
                   onTap: () {
+                    isLoadig = true;
+                    setState(() {});
                     ref
                         .watch(videoPageViewModel)
                         .addComments(
@@ -1540,8 +1545,11 @@ class _ChatBottomSheetState extends ConsumerState<ChatBottomSheet>
                             context)
                         .then((value) {
                       replyid = "";
+
                       _commentsController.clear();
-                      setState(() {});
+                      setState(() {
+                        isLoadig = false;
+                      });
                     });
                     // navigateToScreen(AppRoute.subscriptionView);
                   },
@@ -1575,7 +1583,7 @@ class _ChatBottomSheetState extends ConsumerState<ChatBottomSheet>
           Expanded(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: ListView.separated(
+              child:  ListView.separated(
                 shrinkWrap: true,
                 itemCount: widget.videoPageViewModel.commentsResponse?.comments
                         ?.length ??
