@@ -43,6 +43,8 @@ class _SavedTabState extends ConsumerState<SavedTab> with BaseScreenView {
 
   @override
   Widget build(BuildContext context) {
+    var shortestSide = MediaQuery.of(context).size.shortestSide;
+    final bool useMobileLayout = shortestSide < 600;
     _viewModel = ref.watch(bottomNavigationViewModel);
 
     return Scaffold(
@@ -154,8 +156,9 @@ class _SavedTabState extends ConsumerState<SavedTab> with BaseScreenView {
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: 2,
                           crossAxisSpacing: 16,
-                          mainAxisExtent:
-                              MediaQuery.of(context).size.height / 3.7),
+                          mainAxisExtent: useMobileLayout
+                              ? MediaQuery.of(context).size.height / 3.7
+                              : MediaQuery.of(context).size.height / 3.3),
                       shrinkWrap: true,
                       itemCount: _viewModel.savedList.length,
                       itemBuilder: (context, index) => SavedItems(
@@ -208,6 +211,8 @@ class _SavedItemsState extends State<SavedItems> with BaseScreenView {
 
   @override
   Widget build(BuildContext context) {
+    var shortestSide = MediaQuery.of(context).size.shortestSide;
+    final bool useMobileLayout = shortestSide < 600;
     return InkWell(
       onTap: () {
         if (AppConstants.isSubscribed) {
@@ -229,7 +234,9 @@ class _SavedItemsState extends State<SavedItems> with BaseScreenView {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             CachedNetworkImage(
-                height: 80.h,
+                height: useMobileLayout
+                    ? 80.h
+                    : MediaQuery.of(context).size.height / 5,
                 imageUrl: widget.items.thumnailLink ?? "",
                 imageBuilder: (context, imageProvider) {
                   return Container(

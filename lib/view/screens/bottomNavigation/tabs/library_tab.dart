@@ -59,6 +59,8 @@ class _LibraryViewState extends ConsumerState<LibraryView> with BaseScreenView {
 
   @override
   Widget build(BuildContext context) {
+    var shortestSide = MediaQuery.of(context).size.shortestSide;
+    final bool useMobileLayout = shortestSide < 600;
     _viewModel = ref.watch(bottomNavigationViewModel);
     return Scaffold(
       backgroundColor: Color(0xFF171718),
@@ -334,7 +336,9 @@ class _LibraryViewState extends ConsumerState<LibraryView> with BaseScreenView {
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2,
                     crossAxisSpacing: 16,
-                    mainAxisExtent: MediaQuery.of(context).size.height / 4.3),
+                    mainAxisExtent: useMobileLayout
+                        ? MediaQuery.of(context).size.height / 4.3
+                        : MediaQuery.of(context).size.height / 3.3),
                 shrinkWrap: true,
                 itemCount: _viewModel.libraryList.length ?? 0,
                 itemBuilder: (context, index) => LibraryItems(
@@ -1634,18 +1638,19 @@ class _LibraryItemsState extends State<LibraryItems> with BaseScreenView {
 
   @override
   Widget build(BuildContext context) {
+    var shortestSide = MediaQuery.of(context).size.shortestSide;
+    final bool useMobileLayout = shortestSide < 600;
     return InkWell(
       onTap: () {
-          if(AppConstants.isSubscribed){
-  context.pushNamed(
-          AppRoute.videoPageView.name,
-          pathParameters: {'id': widget.items.id ?? ""},
-        );
-        }else{
+        if (AppConstants.isSubscribed) {
+          context.pushNamed(
+            AppRoute.videoPageView.name,
+            pathParameters: {'id': widget.items.id ?? ""},
+          );
+        } else {
           context.pushNamed(AppRoute.subscriptionView.name);
         }
-      
-        
+
         // navigateToScreen(AppRoute.videoPageView);
       },
       child: Container(
@@ -1656,7 +1661,9 @@ class _LibraryItemsState extends State<LibraryItems> with BaseScreenView {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             CachedNetworkImage(
-                height: 80.h,
+                height: useMobileLayout
+                    ? 80.h
+                    : MediaQuery.of(context).size.height / 5,
                 imageUrl: widget.items.thumnailLink ?? "",
                 imageBuilder: (context, imageProvider) {
                   return Container(
@@ -1666,7 +1673,8 @@ class _LibraryItemsState extends State<LibraryItems> with BaseScreenView {
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(7),
                         image: DecorationImage(
-                            fit: BoxFit.cover, image: imageProvider)),
+                            fit: useMobileLayout ? BoxFit.cover : BoxFit.fill,
+                            image: imageProvider)),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [

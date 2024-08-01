@@ -54,6 +54,8 @@ class _PlaylistTabState extends ConsumerState<PlaylistTab> with BaseScreenView {
   List<String> chipsText = ["All", "featured", "Personal"];
   @override
   Widget build(BuildContext context) {
+    var shortestSide = MediaQuery.of(context).size.shortestSide;
+    final bool useMobileLayout = shortestSide < 600;
     _viewModel = ref.watch(bottomNavigationViewModel);
     return Scaffold(
       backgroundColor: Color(0xFF171718),
@@ -334,8 +336,11 @@ class _PlaylistTabState extends ConsumerState<PlaylistTab> with BaseScreenView {
                                 : Container(
                                     // decoration:
                                     //     BoxDecoration(color: Color(0xFF27272a)),
-                                    height: MediaQuery.of(context).size.height /
-                                        4.8,
+                                    height: useMobileLayout
+                                        ? MediaQuery.of(context).size.height /
+                                            4.8
+                                        : MediaQuery.of(context).size.height /
+                                            5.5,
                                     // width: MediaQuery.of(context).size.width / 1.6,
                                     child: ListView.builder(
                                       itemCount: val == 0
@@ -819,11 +824,15 @@ class _PlaylistTabState extends ConsumerState<PlaylistTab> with BaseScreenView {
   }
 
   Widget playlistSwiper(int index, List<playlist.ExistingVideo> videosList) {
+    var shortestSide = MediaQuery.of(context).size.shortestSide;
+    final bool useMobileLayout = shortestSide < 600;
     return Container(
       padding: EdgeInsets.all(8),
 
       // width: double.infinity,
-      width: MediaQuery.of(context).size.width / 1.2,
+      width: useMobileLayout
+          ? MediaQuery.of(context).size.width / 1.2
+          : MediaQuery.of(context).size.width / 2,
       // height: 4,
 
       child: Container(
@@ -987,6 +996,8 @@ class _PlaylistTabState extends ConsumerState<PlaylistTab> with BaseScreenView {
   }
 
   Widget playlists(BuildContext context, List<playlist.Video>? videoList) {
+    var shortestSide = MediaQuery.of(context).size.shortestSide;
+    final bool useMobileLayout = shortestSide < 600;
     return videoList?.isEmpty ?? true
         ? Container()
         : Container(
@@ -997,7 +1008,9 @@ class _PlaylistTabState extends ConsumerState<PlaylistTab> with BaseScreenView {
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2,
                     crossAxisSpacing: 16,
-                    mainAxisExtent: MediaQuery.of(context).size.height / 4.8),
+                    mainAxisExtent: useMobileLayout
+                        ? MediaQuery.of(context).size.height / 4.8
+                        : MediaQuery.of(context).size.height / 3.3),
                 shrinkWrap: true,
                 itemCount: videoList?.length ?? 0,
                 itemBuilder: (context, index) => LibraryItems(
@@ -1046,6 +1059,8 @@ class _LibraryItemsState extends State<LibraryItems> with BaseScreenView {
 
   @override
   Widget build(BuildContext context) {
+    var shortestSide = MediaQuery.of(context).size.shortestSide;
+    final bool useMobileLayout = shortestSide < 600;
     return InkWell(
       onTap: () {
         if (AppConstants.isSubscribed) {
@@ -1067,7 +1082,9 @@ class _LibraryItemsState extends State<LibraryItems> with BaseScreenView {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             CachedNetworkImage(
-                height: 80.h,
+                height: useMobileLayout
+                    ? 80.h
+                    : MediaQuery.of(context).size.height / 5,
                 imageUrl: widget.items.thumnailLink ?? "",
                 imageBuilder: (context, imageProvider) {
                   return Container(
@@ -1077,7 +1094,8 @@ class _LibraryItemsState extends State<LibraryItems> with BaseScreenView {
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(7),
                         image: DecorationImage(
-                            fit: BoxFit.cover, image: imageProvider)),
+                            fit: useMobileLayout ? BoxFit.cover : BoxFit.fill,
+                            image: imageProvider)),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [

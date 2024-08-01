@@ -64,7 +64,7 @@ class _HomeViewState extends ConsumerState<HomeView> with BaseScreenView {
             //       "Home",
             //       style: TextStyle(color: Colors.white, fontFamily: 'Good'),
             //     )),
-            
+
             title: Padding(
               padding: const EdgeInsets.only(right: 16),
               child: Image.asset(
@@ -82,14 +82,14 @@ class _HomeViewState extends ConsumerState<HomeView> with BaseScreenView {
             //       color: Colors.white,
             //     ),
             //   ),
-              // gapW16
-              // Padding(
-              //   padding: const EdgeInsets.only(left: 16, right: 16),
-              //   child: Icon(
-              //     Icons.notifications,
-              //     color: Colors.white,
-              //   ),
-              // )
+            // gapW16
+            // Padding(
+            //   padding: const EdgeInsets.only(left: 16, right: 16),
+            //   child: Icon(
+            //     Icons.notifications,
+            //     color: Colors.white,
+            //   ),
+            // )
             // ],
           )),
       body: Column(
@@ -336,6 +336,8 @@ class _HomeItemsState extends State<HomeItems> {
 
   @override
   Widget build(BuildContext context) {
+    var shortestSide = MediaQuery.of(context).size.shortestSide;
+    final bool useMobileLayout = shortestSide < 600;
     return InkWell(
       onTap: () {
         if (AppConstants.isSubscribed) {
@@ -358,7 +360,9 @@ class _HomeItemsState extends State<HomeItems> {
             Padding(
               padding: EdgeInsets.fromLTRB(16, 8, 16, 0),
               child: CachedNetworkImage(
-                  height: 170.h,
+                  height: useMobileLayout
+                      ? 170.h
+                      : MediaQuery.of(context).size.height / 3,
                   imageUrl: widget.items?.thumnailLink ?? "",
                   imageBuilder: (context, imageProvider) => Container(
                         height: 170.h,
@@ -366,7 +370,10 @@ class _HomeItemsState extends State<HomeItems> {
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(20),
                             image: DecorationImage(
-                                fit: BoxFit.cover, image: imageProvider)),
+                                fit: useMobileLayout
+                                    ? BoxFit.cover
+                                    : BoxFit.fill,
+                                image: imageProvider)),
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
