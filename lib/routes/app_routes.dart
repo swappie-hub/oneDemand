@@ -2,7 +2,6 @@ import 'package:ondemand/view/screens/accountDetails/account_details_view.dart';
 import 'package:ondemand/view/screens/bottomNavigation/bottom_navigation_view.dart';
 import 'package:ondemand/view/screens/login/login_view.dart';
 import 'package:ondemand/view/screens/onboarding/onboarding_view.dart';
-import 'package:ondemand/view/screens/onboarding/onboarding_view.dart';
 import 'package:ondemand/view/screens/searchVideo/search_video_view.dart';
 import 'package:ondemand/view/screens/signup/signup_view.dart';
 import 'package:ondemand/view/screens/splash/splash_view.dart';

@@ -1,8 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:custom_sliding_segmented_control/custom_sliding_segmented_control.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:ondemand/core/core.dart';
 import 'package:ondemand/data/home/models/get_playlist_model.dart';
 import 'package:ondemand/data/home/models/library_list_model.dart';
@@ -36,7 +33,6 @@ class _LibraryViewState extends ConsumerState<LibraryView> with BaseScreenView {
   late BottomNavigationViewModel _viewModel;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
 
     _viewModel = ref.read(bottomNavigationViewModel);
@@ -340,7 +336,7 @@ class _LibraryViewState extends ConsumerState<LibraryView> with BaseScreenView {
                         ? MediaQuery.of(context).size.height / 4.3
                         : MediaQuery.of(context).size.height / 3.3),
                 shrinkWrap: true,
-                itemCount: _viewModel.libraryList.length ?? 0,
+                itemCount: _viewModel.libraryList.length,
                 itemBuilder: (context, index) => LibraryItems(
                   viewModel: _viewModel,
                   val: val,
@@ -1600,14 +1596,10 @@ class _LibraryViewState extends ConsumerState<LibraryView> with BaseScreenView {
   }
 
   @override
-  void navigateToScreen(AppRoute appRoute, {Map<String, String>? params}) {
-    // TODO: implement navigateToScreen
-  }
+  void navigateToScreen(AppRoute appRoute, {Map<String, String>? params}) {}
 
   @override
-  void showSnackbar(String message, {Color? color}) {
-    // TODO: implement showSnackbar
-  }
+  void showSnackbar(String message, {Color? color}) {}
 }
 
 class LibraryItems extends StatefulWidget {
@@ -1630,7 +1622,6 @@ class _LibraryItemsState extends State<LibraryItems> with BaseScreenView {
   bool isSaved = false;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     isSaved = widget.items.savedvideo ?? false;
     setState(() {});
@@ -1697,7 +1688,7 @@ class _LibraryItemsState extends State<LibraryItems> with BaseScreenView {
                                     color: Color(0xFF27272A),
                                     borderRadius: BorderRadius.circular(16)),
                                 child: Text(
-                                  "${convertTime(widget.items?.duration ?? 100)}",
+                                  "${convertTime(widget.items.duration ?? 100)}",
                                   // (((widget.items.duration ?? 100) / 60)
                                   // .toStringAsFixed(2)),
                                   style: TextStyle(
@@ -2038,12 +2029,9 @@ class _LibraryItemsState extends State<LibraryItems> with BaseScreenView {
 
   @override
   void navigateToScreen(AppRoute appRoute, {Map<String, String>? params}) {
-    // TODO: implement navigateToScreen
     context.pushNamed(appRoute.name);
   }
 
   @override
-  void showSnackbar(String message, {Color? color}) {
-    // TODO: implement showSnackbar
-  }
+  void showSnackbar(String message, {Color? color}) {}
 }

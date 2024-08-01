@@ -1,10 +1,6 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:ondemand/core/constants.dart';
 import 'package:ondemand/data/auth/auth_repo.dart';
-import 'package:ondemand/data/auth/models/login_model.dart';
-import 'package:ondemand/data/auth/models/signup_model.dart';
-import 'package:ondemand/data/auth/models/subscription_model.dart';
 import 'package:ondemand/data/home/home_repo.dart';
 import 'package:ondemand/data/home/models/add_playlist_model.dart';
 import 'package:ondemand/data/home/models/get_playlist_model.dart';
@@ -15,11 +11,9 @@ import 'package:ondemand/data/videoDetail/models/video_detail_model.dart';
 import 'package:ondemand/data/videoDetail/models/vimeo_video_model.dart' as vid;
 import 'package:ondemand/data/videoDetail/video_detail_repo.dart';
 import 'package:ondemand/domain/providers/repository_provider.dart';
-import 'package:ondemand/helpers/base_screen_view.dart';
 import 'package:ondemand/data/home/models/add_playlist_model.dart' as add;
 
 import 'package:ondemand/helpers/base_view_model.dart';
-import 'package:ondemand/helpers/locator.dart';
 import 'package:ondemand/utils/utils.dart';
 
 final videoPageViewModel = ChangeNotifierProvider.autoDispose(
@@ -57,7 +51,7 @@ class VideoPageViewModel extends BaseViewModel<BaseScreenView> {
   List<RecomendedVideoResponse>? _recommendedVideoResponse;
   List<RecomendedVideoResponse>? get recommendedVideoResponse =>
       _recommendedVideoResponse;
-      
+
   Future<void> getVideoDetails(String id) async {
     toggleLoading();
     await _videoRepo.getVideoDetails(id).then(
@@ -288,7 +282,6 @@ class VideoPageViewModel extends BaseViewModel<BaseScreenView> {
                 ),
               );
               ScaffoldMessenger.of(context).showSnackBar(snackBar);
-              // TODO: implement showSnackbar
             }
 
             Logger.write("these are comments" + r.toString());

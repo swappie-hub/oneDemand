@@ -1,8 +1,5 @@
 import 'package:dartz/dartz.dart';
 import 'package:ondemand/core/exceptions.dart';
-import 'package:ondemand/data/auth/models/login_model.dart';
-import 'package:ondemand/data/auth/models/signup_model.dart';
-import 'package:ondemand/data/auth/models/subscription_model.dart';
 import 'package:ondemand/data/videoDetail/models/add_comments_model.dart';
 import 'package:ondemand/data/videoDetail/models/comments_model.dart';
 import 'package:ondemand/data/videoDetail/models/recommended_video.dart';

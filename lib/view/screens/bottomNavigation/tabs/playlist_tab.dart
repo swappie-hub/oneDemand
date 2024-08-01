@@ -28,7 +28,6 @@ class _PlaylistTabState extends ConsumerState<PlaylistTab> with BaseScreenView {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
 
     _viewModel = ref.read(bottomNavigationViewModel);
@@ -344,15 +343,11 @@ class _PlaylistTabState extends ConsumerState<PlaylistTab> with BaseScreenView {
                                     // width: MediaQuery.of(context).size.width / 1.6,
                                     child: ListView.builder(
                                       itemCount: val == 0
-                                          ? _viewModel.allPlaylistList.length ??
-                                              0
+                                          ? _viewModel.allPlaylistList.length
                                           : val == 1
-                                              ? _viewModel
-                                                      .featuredList.length ??
-                                                  0
-                                              : _viewModel.personalPlaylist
-                                                      .length ??
-                                                  0,
+                                              ? _viewModel.featuredList.length
+                                              : _viewModel
+                                                  .personalPlaylist.length,
                                       scrollDirection: Axis.horizontal,
                                       itemBuilder: (context, index) => InkWell(
                                           onTap: () {
@@ -1021,14 +1016,10 @@ class _PlaylistTabState extends ConsumerState<PlaylistTab> with BaseScreenView {
   }
 
   @override
-  void navigateToScreen(AppRoute appRoute, {Map<String, String>? params}) {
-    // TODO: implement navigateToScreen
-  }
+  void navigateToScreen(AppRoute appRoute, {Map<String, String>? params}) {}
 
   @override
-  void showSnackbar(String message, {Color? color}) {
-    // TODO: implement showSnackbar
-  }
+  void showSnackbar(String message, {Color? color}) {}
 }
 
 class LibraryItems extends StatefulWidget {
@@ -1049,7 +1040,6 @@ class _LibraryItemsState extends State<LibraryItems> with BaseScreenView {
   bool isSaved = false;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
 
     setState(() {
@@ -1123,7 +1113,7 @@ class _LibraryItemsState extends State<LibraryItems> with BaseScreenView {
                                     color: Color(0xFF27272A),
                                     borderRadius: BorderRadius.circular(16)),
                                 child: Text(
-                                  "${convertTime(widget.items?.duration ?? 100)}",
+                                  "${convertTime(widget.items.duration ?? 100)}",
                                   // (((widget.items.duration ?? 100) / 60)
                                   // .toStringAsFixed(2)),
                                   style: TextStyle(
@@ -1250,7 +1240,7 @@ class _LibraryItemsState extends State<LibraryItems> with BaseScreenView {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 0),
               child: Text(
-                timeago.format(widget.items?.releaseDateTime ?? DateTime.now()),
+                timeago.format(widget.items.releaseDateTime ?? DateTime.now()),
                 style: TextStyle(
                     fontSize: 10,
                     color: Color(0xFF9E9E9E),
@@ -1278,12 +1268,9 @@ class _LibraryItemsState extends State<LibraryItems> with BaseScreenView {
 
   @override
   void navigateToScreen(AppRoute appRoute, {Map<String, String>? params}) {
-    // TODO: implement navigateToScreen
     context.pushNamed(appRoute.name);
   }
 
   @override
-  void showSnackbar(String message, {Color? color}) {
-    // TODO: implement showSnackbar
-  }
+  void showSnackbar(String message, {Color? color}) {}
 }

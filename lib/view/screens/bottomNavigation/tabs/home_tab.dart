@@ -1,5 +1,4 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:custom_sliding_segmented_control/custom_sliding_segmented_control.dart';
 import 'package:flutter/material.dart';
 import 'package:ondemand/core/constants.dart';
 import 'package:ondemand/data/home/models/get_playlist_model.dart';
@@ -29,7 +28,6 @@ class _HomeViewState extends ConsumerState<HomeView> with BaseScreenView {
   late BottomNavigationViewModel _viewModel;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
 
     _viewModel = ref.read(bottomNavigationViewModel);
@@ -300,13 +298,10 @@ class _HomeViewState extends ConsumerState<HomeView> with BaseScreenView {
   @override
   void navigateToScreen(AppRoute appRoute, {Map<String, String>? params}) {
     context.pushNamed(appRoute.name);
-    // TODO: implement navigateToScreen
   }
 
   @override
-  void showSnackbar(String message, {Color? color}) {
-    // TODO: implement showSnackbar
-  }
+  void showSnackbar(String message, {Color? color}) {}
 }
 
 class HomeItems extends StatefulWidget {
@@ -328,7 +323,6 @@ class _HomeItemsState extends State<HomeItems> {
   bool isSaved = false;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     isSaved = widget.items?.savedvideo ?? false;
     setState(() {});
@@ -763,14 +757,11 @@ class _CustomAppBarState extends State<CustomAppBar> with BaseScreenView {
 
   @override
   void navigateToScreen(AppRoute appRoute, {Map<String, String>? params}) {
-    // TODO: implement navigateToScreen
     context.pushNamed(appRoute.name);
   }
 
   @override
-  void showSnackbar(String message, {Color? color}) {
-    // TODO: implement showSnackbar
-  }
+  void showSnackbar(String message, {Color? color}) {}
 }
 
 extension HexColor on Color {

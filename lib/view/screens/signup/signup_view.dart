@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ondemand/core/core.dart';
 import 'package:ondemand/data/auth/models/signup_model.dart';
-import 'package:ondemand/utils/app_sizes.dart';
-import 'package:ondemand/utils/colors.dart';
 import 'package:ondemand/utils/utils.dart';
 import 'package:ondemand/view/screens/signup/signup_view_model.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -22,13 +20,12 @@ class _SignupViewState extends ConsumerState<SignupView> with BaseScreenView {
   TextEditingController _passwordController = TextEditingController();
   TextEditingController _cPasswordController = TextEditingController();
   bool isChecked = false;
-    bool isObscuredPassword = true;
-    bool isObscuredCPassword = true;
+  bool isObscuredPassword = true;
+  bool isObscuredCPassword = true;
 
   final _formkey = GlobalKey<FormState>();
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
 
     _viewModel = ref.read(signupViewModel);
@@ -232,7 +229,6 @@ class _SignupViewState extends ConsumerState<SignupView> with BaseScreenView {
                 ),
                 gapH10,
                 TextFormField(
-                
                   cursorColor: Colors.white,
                   validator: (value) => _passwordController.text.isEmpty
                       ? "Please enter the password"
@@ -240,18 +236,22 @@ class _SignupViewState extends ConsumerState<SignupView> with BaseScreenView {
                   obscureText: isObscuredPassword,
                   controller: _passwordController,
                   style: TextStyle(
-                  
                       color: Colors.white,
                       fontWeight: FontWeight.w400,
                       fontSize: 16),
                   decoration: InputDecoration(
-                    suffixIcon: InkWell(
-                      onTap: (){
-                        setState(() {
-                        isObscuredPassword=!isObscuredPassword;  
-                        });
-                      },
-                      child: Icon( isObscuredPassword?Icons.visibility_off:Icons.visibility,      color: Colors.white,)),
+                      suffixIcon: InkWell(
+                          onTap: () {
+                            setState(() {
+                              isObscuredPassword = !isObscuredPassword;
+                            });
+                          },
+                          child: Icon(
+                            isObscuredPassword
+                                ? Icons.visibility_off
+                                : Icons.visibility,
+                            color: Colors.white,
+                          )),
                       contentPadding: EdgeInsets.all(16),
                       filled: true,
                       fillColor: Colors.black,
@@ -296,13 +296,18 @@ class _SignupViewState extends ConsumerState<SignupView> with BaseScreenView {
                       fontWeight: FontWeight.w400,
                       fontSize: 16),
                   decoration: InputDecoration(
-                    suffixIcon:  InkWell(
-                      onTap: (){
-                        setState(() {
-                        isObscuredCPassword=!isObscuredCPassword;  
-                        });
-                      },
-                      child: Icon( isObscuredCPassword?Icons.visibility_off:Icons.visibility,      color: Colors.white,)),
+                      suffixIcon: InkWell(
+                          onTap: () {
+                            setState(() {
+                              isObscuredCPassword = !isObscuredCPassword;
+                            });
+                          },
+                          child: Icon(
+                            isObscuredCPassword
+                                ? Icons.visibility_off
+                                : Icons.visibility,
+                            color: Colors.white,
+                          )),
                       contentPadding: EdgeInsets.all(16),
                       filled: true,
                       fillColor: Colors.black,
@@ -440,9 +445,7 @@ class _SignupViewState extends ConsumerState<SignupView> with BaseScreenView {
   }
 
   @override
-  void navigateToScreen(AppRoute appRoute, {Map<String, String>? params}) {
-    // TODO: implement navigateToScreen
-  }
+  void navigateToScreen(AppRoute appRoute, {Map<String, String>? params}) {}
 
   @override
   void showSnackbar(String message, {Color? color}) {
@@ -458,6 +461,5 @@ class _SignupViewState extends ConsumerState<SignupView> with BaseScreenView {
       ),
     );
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
-    // TODO: implement showSnackbar
   }
 }

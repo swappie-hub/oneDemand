@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:ondemand/utils/app_sizes.dart';
-import 'package:ondemand/utils/colors.dart';
 import 'package:ondemand/utils/utils.dart';
 import 'package:video_player/video_player.dart';
 
@@ -129,11 +126,8 @@ class _OnboardingViewState extends State<OnboardingView> with BaseScreenView {
   @override
   void navigateToScreen(AppRoute appRoute, {Map<String, String>? params}) {
     context.pushNamed(appRoute.name);
-    // TODO: implement navigateToScreen
   }
 
   @override
-  void showSnackbar(String message, {Color? color}) {
-    // TODO: implement showSnackbar
-  }
+  void showSnackbar(String message, {Color? color}) {}
 }

@@ -2,7 +2,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:ondemand/core/constants.dart';
 import 'package:ondemand/data/home/models/saved_videos_model.dart';
-import 'package:ondemand/utils/app_sizes.dart';
 import 'package:ondemand/utils/utils.dart';
 import 'package:ondemand/view/screens/bottomNavigation/bottom_navigation_view_model.dart';
 import 'package:ondemand/view/screens/bottomNavigation/tabs/home_tab.dart';
@@ -19,7 +18,6 @@ class _SavedTabState extends ConsumerState<SavedTab> with BaseScreenView {
   late BottomNavigationViewModel _viewModel;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
 
     _viewModel = ref.read(bottomNavigationViewModel);
@@ -146,7 +144,7 @@ class _SavedTabState extends ConsumerState<SavedTab> with BaseScreenView {
           //     ],
           //   ),
           // ),
-          _viewModel.savedList.isEmpty ?? true
+          _viewModel.savedList.isEmpty
               ? Container()
               : Expanded(
                   child: Container(
@@ -175,14 +173,11 @@ class _SavedTabState extends ConsumerState<SavedTab> with BaseScreenView {
 
   @override
   void navigateToScreen(AppRoute appRoute, {Map<String, String>? params}) {
-    // TODO: implement navigateToScreen
     context.pushNamed(appRoute.name);
   }
 
   @override
-  void showSnackbar(String message, {Color? color}) {
-    // TODO: implement showSnackbar
-  }
+  void showSnackbar(String message, {Color? color}) {}
 }
 
 class SavedItems extends StatefulWidget {
@@ -203,7 +198,6 @@ class _SavedItemsState extends State<SavedItems> with BaseScreenView {
   bool isSaved = false;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     isSaved = widget.items.savedvideo ?? false;
     setState(() {});
@@ -455,12 +449,9 @@ class _SavedItemsState extends State<SavedItems> with BaseScreenView {
 
   @override
   void navigateToScreen(AppRoute appRoute, {Map<String, String>? params}) {
-    // TODO: implement navigateToScreen
     context.pushNamed(appRoute.name);
   }
 
   @override
-  void showSnackbar(String message, {Color? color}) {
-    // TODO: implement showSnackbar
-  }
+  void showSnackbar(String message, {Color? color}) {}
 }

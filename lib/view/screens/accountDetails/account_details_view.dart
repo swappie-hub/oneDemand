@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:ondemand/core/constants.dart';
 import 'package:ondemand/data/auth/models/update_email_model.dart';
 import 'package:ondemand/data/auth/models/update_password_model.dart';
@@ -7,7 +6,6 @@ import 'package:ondemand/data/auth/models/update_username_model.dart';
 import 'package:ondemand/helpers/locator.dart';
 import 'package:ondemand/services/shared_preference_service.dart';
 import 'package:ondemand/services/user_detail_service.dart';
-import 'package:ondemand/utils/app_sizes.dart';
 import 'package:ondemand/utils/file_picker.dart';
 import 'package:ondemand/utils/utils.dart';
 import 'package:ondemand/view/screens/login/login_view_model.dart';
@@ -40,7 +38,6 @@ class _AccountDetailsViewState extends ConsumerState<AccountDetailsView>
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _viewModel = ref.read(authViewModel);
     _viewModel.attachView(this);
@@ -1197,12 +1194,8 @@ class _AccountDetailsViewState extends ConsumerState<AccountDetailsView>
   }
 
   @override
-  void navigateToScreen(AppRoute appRoute, {Map<String, String>? params}) {
-    // TODO: implement navigateToScreen
-  }
+  void navigateToScreen(AppRoute appRoute, {Map<String, String>? params}) {}
 
   @override
-  void showSnackbar(String message, {Color? color}) {
-    // TODO: implement showSnackbar
-  }
+  void showSnackbar(String message, {Color? color}) {}
 }

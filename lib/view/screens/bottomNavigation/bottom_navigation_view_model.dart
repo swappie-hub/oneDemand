@@ -11,7 +11,6 @@ import 'package:ondemand/data/home/models/library_list_model.dart' as lib;
 import 'package:ondemand/data/home/models/library_list_model.dart';
 import 'package:ondemand/data/home/models/saved_videos_model.dart';
 import 'package:ondemand/data/home/models/search_video_models.dart' as search;
-import 'package:ondemand/data/home/models/home_model.dart' as home;
 import 'package:ondemand/data/videoDetail/models/video_detail_model.dart';
 import 'package:ondemand/data/videoDetail/video_detail_repo.dart';
 import 'package:ondemand/domain/providers/repository_provider.dart';
@@ -20,8 +19,6 @@ import 'package:ondemand/data/home/models/create_playlist_request.dart'
 import 'package:ondemand/helpers/base_view_model.dart';
 import 'package:ondemand/data/home/models/add_playlist_model.dart' as add;
 import 'package:ondemand/utils/utils.dart';
-import 'package:ondemand/data/videoDetail/models/video_detail_model.dart'
-    as details;
 
 final bottomNavigationViewModel = ChangeNotifierProvider.autoDispose(
   (ref) => BottomNavigationViewModel(

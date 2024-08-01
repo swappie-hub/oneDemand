@@ -1,7 +1,6 @@
 // import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:ondemand/data/auth/models/forget_password_model.dart';
 import 'package:ondemand/data/auth/models/login_model.dart';
 import 'package:ondemand/utils/utils.dart';
@@ -20,14 +19,13 @@ class _LoginViewState extends ConsumerState<LoginView> with BaseScreenView {
 
   TextEditingController _emailController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
-bool isObscure=true;
+  bool isObscure = true;
 
   final _formkey = GlobalKey<FormState>();
   final _formkey2 = GlobalKey<FormState>();
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
 
     _viewModel = ref.read(authViewModel);
@@ -389,12 +387,10 @@ bool isObscure=true;
   @override
   void navigateToScreen(AppRoute appRoute, {Map<String, String>? params}) {
     context.pushNamed(appRoute.name);
-    // TODO: implement navigateToScreen
   }
 
   @override
   void showSnackbar(String message, {Color? color}) {
-    // TODO: implement showSnackbar
     final snackBar = SnackBar(
       backgroundColor: color,
       content: Text(message.toString()),
@@ -407,6 +403,5 @@ bool isObscure=true;
       ),
     );
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
-    // TODO: implement showSnackbar
   }
 }

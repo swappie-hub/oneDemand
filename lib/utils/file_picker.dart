@@ -2,7 +2,6 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:file_picker/file_picker.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_cropper/image_cropper.dart';
 
@@ -136,7 +135,7 @@ Future<File?> openPickImageModalSheet(BuildContext context,
   Uint8List? testunit = await file?.readAsBytes();
   // print("Actual file size in byte==" + testunit?.lengthInBytes.toString());
   if (testunit!.lengthInBytes >= 500000) {
-    double quality = (500000 / testunit.lengthInBytes) * 100;
+    // double quality = (500000 / testunit.lengthInBytes) * 100;
     // print("=====ddd $quality");
     // String test = quality.toStringAsFixed(0);
     // int imgQuality = int.parse(test);
@@ -257,7 +256,7 @@ Future<File?> openPickImageVideoModalSheet(BuildContext context,
   Uint8List? testunit = await file?.readAsBytes();
   // print("Actual file size in byte==" + testunit?.lengthInBytes.toString());
   if (testunit!.lengthInBytes >= 500000) {
-    double quality = (500000 / testunit.lengthInBytes) * 100;
+    // double quality = (500000 / testunit.lengthInBytes) * 100;
     // print("=====ddd $quality");
     // String test = quality.toStringAsFixed(0);
     // int imgQuality = int.parse(test);

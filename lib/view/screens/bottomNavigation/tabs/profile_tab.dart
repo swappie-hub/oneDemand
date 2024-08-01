@@ -1,12 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:ondemand/core/core.dart';
 import 'package:ondemand/helpers/locator.dart';
-import 'package:ondemand/services/shared_preference_service.dart';
 import 'package:ondemand/services/user_detail_service.dart';
-import 'package:ondemand/utils/app_sizes.dart';
 import 'package:ondemand/utils/utils.dart';
-import 'package:ondemand/view/screens/bottomNavigation/tabs/home_tab.dart';
 import 'package:ondemand/view/screens/login/login_view_model.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -22,7 +17,6 @@ class _ProfileTabState extends ConsumerState<ProfileTab> with BaseScreenView {
   late LoginViewModel _viewModel;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
 
     _viewModel = ref.read(authViewModel);
@@ -255,12 +249,9 @@ class _ProfileTabState extends ConsumerState<ProfileTab> with BaseScreenView {
 
   @override
   void navigateToScreen(AppRoute appRoute, {Map<String, String>? params}) {
-    // TODO: implement navigateToScreen
     context.pushNamed(appRoute.name);
   }
 
   @override
-  void showSnackbar(String message, {Color? color}) {
-    // TODO: implement showSnackbar
-  }
+  void showSnackbar(String message, {Color? color}) {}
 }

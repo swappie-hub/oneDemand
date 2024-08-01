@@ -1,11 +1,7 @@
 import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_to_airplay/flutter_to_airplay.dart';
 import 'package:intl/intl.dart';
@@ -14,11 +10,9 @@ import 'package:ondemand/data/home/models/get_playlist_model.dart';
 import 'package:ondemand/data/videoDetail/models/add_comments_model.dart';
 import 'package:ondemand/data/videoDetail/models/video_detail_model.dart'
     as Products;
-import 'package:ondemand/utils/app_sizes.dart';
 import 'package:ondemand/utils/utils.dart';
 import 'package:ondemand/view/screens/bottomNavigation/bottom_navigation_view_model.dart';
 import 'package:ondemand/view/screens/bottomNavigation/tabs/home_tab.dart';
-import 'package:ondemand/view/screens/login/login_view_model.dart';
 import 'package:ondemand/view/screens/videoPage/video_page_view_model.dart';
 import 'package:pod_player/pod_player.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -1137,14 +1131,10 @@ class _VideoPageViewState extends ConsumerState<VideoPageView>
   }
 
   @override
-  void navigateToScreen(AppRoute appRoute, {Map<String, String>? params}) {
-    // TODO: implement navigateToScreen
-  }
+  void navigateToScreen(AppRoute appRoute, {Map<String, String>? params}) {}
 
   @override
-  void showSnackbar(String message, {Color? color}) {
-    // TODO: implement showSnackbar
-  }
+  void showSnackbar(String message, {Color? color}) {}
 }
 
 class MoreDescriptionBottomSheet extends StatelessWidget with BaseScreenView {
@@ -1250,14 +1240,11 @@ class MoreDescriptionBottomSheet extends StatelessWidget with BaseScreenView {
 
   @override
   void navigateToScreen(AppRoute appRoute, {Map<String, String>? params}) {
-    // TODO: implement navigateToScreen
     // context.pushNamed(appRoute.name);
   }
 
   @override
-  void showSnackbar(String message, {Color? color}) {
-    // TODO: implement showSnackbar
-  }
+  void showSnackbar(String message, {Color? color}) {}
 }
 
 class ProductsBottomSheet extends StatefulWidget {
@@ -1322,8 +1309,7 @@ class _ProductsBottomSheetState extends State<ProductsBottomSheet> {
                   onTap: () {
                     launchUrl(Uri.parse(
                         "https://thegodfreymethod.com/products/" +
-                                widget.products![index].handle.toString() ??
-                            ""));
+                            widget.products![index].handle.toString()));
                   },
                   child: Column(
                     children: [
@@ -1347,9 +1333,7 @@ class _ProductsBottomSheetState extends State<ProductsBottomSheet> {
                         onTap: () {
                           launchUrl(Uri.parse(
                               "https://thegodfreymethod.com/products/" +
-                                      widget.products![index].handle
-                                          .toString() ??
-                                  ""));
+                                  widget.products![index].handle.toString()));
                         },
                         child: Container(
                           padding:
@@ -1447,7 +1431,7 @@ class _ChatBottomSheetState extends ConsumerState<ChatBottomSheet>
                               color: Color(0xFF014966),
                               borderRadius: BorderRadius.circular(12)),
                           child: Text(
-                            widget.videoPageViewModel?.commentsResponse?.total
+                            widget.videoPageViewModel.commentsResponse?.total
                                     .toString() ??
                                 "0",
                             style: TextStyle(color: Colors.white),
@@ -1479,111 +1463,114 @@ class _ChatBottomSheetState extends ConsumerState<ChatBottomSheet>
                 borderRadius: BorderRadius.only(
                     bottomLeft: Radius.circular(8),
                     topLeft: Radius.circular(8))),
-            child: isLoadig?CircularProgressIndicator(
-              color: Colors.white,
-            ): Row(
-              children: [
-                Container(
-                  height: 25,
-                  width: 25,
-                  decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      image: DecorationImage(
-                          image: NetworkImage(
-                              "https://img.freepik.com/premium-vector/businessman-avatar-illustration-cartoon-user-portrait-user-profile-icon_118339-4382.jpg"))),
-                ),
-                gapW16,
-                Expanded(
-                  child: TextFormField(
-                    cursorColor: Colors.white,
-                    style: TextStyle(color: Colors.white),
-                    controller: _commentsController,
-                    focusNode: f1,
-                    decoration: InputDecoration(
-                        contentPadding: EdgeInsets.only(
-                            left: 16, right: 16, top: 4, bottom: 4),
-                        filled: true,
-                        fillColor: Colors.black,
-                        hintText: "Write a comment",
-                        hintStyle: TextStyle(
-                            color: Color(0xFF71717A),
-                            fontWeight: FontWeight.w400,
-                            fontSize: 14),
-                        enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12),
-                            borderSide: BorderSide(
-                              color: Colors.transparent,
-                            )),
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12),
-                            borderSide: BorderSide(
-                              color: Colors.transparent,
-                            )),
-                        errorBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12),
-                            borderSide: BorderSide(
-                              color: Colors.transparent,
-                            )),
-                        focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12),
-                            borderSide: BorderSide(
-                              color: Colors.transparent,
-                            ))),
-                  ),
-                ),
-                InkWell(
-                  onTap: () {
-                    isLoadig = true;
-                    setState(() {});
-                    ref
-                        .watch(videoPageViewModel)
-                        .addComments(
-                            AddCommentsRequest(
-                                content: _commentsController.text,
-                                replyTo: replyid != "" ? replyid : null,
-                                videoId: widget.videoID),
-                            context)
-                        .then((value) {
-                      replyid = "";
-
-                      _commentsController.clear();
-                      setState(() {
-                        isLoadig = false;
-                      });
-                    });
-                    // navigateToScreen(AppRoute.subscriptionView);
-                  },
-                  child: Container(
-                    // width: double.infinity,
-                    margin: EdgeInsets.symmetric(horizontal: 16),
-                    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-
-                    // height: 39.h,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(8),
-                      gradient: LinearGradient(
-                          colors: [Color(0xFF033245), Color(0xFF51CBFC)]),
-                    ),
-                    child: Center(
-                      child: Text(
-                        "POST",
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 9,
-                          fontWeight: FontWeight.bold,
+            child: isLoadig
+                ? CircularProgressIndicator(
+                    color: Colors.white,
+                  )
+                : Row(
+                    children: [
+                      Container(
+                        height: 25,
+                        width: 25,
+                        decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            image: DecorationImage(
+                                image: NetworkImage(
+                                    "https://img.freepik.com/premium-vector/businessman-avatar-illustration-cartoon-user-portrait-user-profile-icon_118339-4382.jpg"))),
+                      ),
+                      gapW16,
+                      Expanded(
+                        child: TextFormField(
+                          cursorColor: Colors.white,
+                          style: TextStyle(color: Colors.white),
+                          controller: _commentsController,
+                          focusNode: f1,
+                          decoration: InputDecoration(
+                              contentPadding: EdgeInsets.only(
+                                  left: 16, right: 16, top: 4, bottom: 4),
+                              filled: true,
+                              fillColor: Colors.black,
+                              hintText: "Write a comment",
+                              hintStyle: TextStyle(
+                                  color: Color(0xFF71717A),
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 14),
+                              enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                  borderSide: BorderSide(
+                                    color: Colors.transparent,
+                                  )),
+                              border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                  borderSide: BorderSide(
+                                    color: Colors.transparent,
+                                  )),
+                              errorBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                  borderSide: BorderSide(
+                                    color: Colors.transparent,
+                                  )),
+                              focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                  borderSide: BorderSide(
+                                    color: Colors.transparent,
+                                  ))),
                         ),
                       ),
-                    ),
+                      InkWell(
+                        onTap: () {
+                          isLoadig = true;
+                          setState(() {});
+                          ref
+                              .watch(videoPageViewModel)
+                              .addComments(
+                                  AddCommentsRequest(
+                                      content: _commentsController.text,
+                                      replyTo: replyid != "" ? replyid : null,
+                                      videoId: widget.videoID),
+                                  context)
+                              .then((value) {
+                            replyid = "";
+
+                            _commentsController.clear();
+                            setState(() {
+                              isLoadig = false;
+                            });
+                          });
+                          // navigateToScreen(AppRoute.subscriptionView);
+                        },
+                        child: Container(
+                          // width: double.infinity,
+                          margin: EdgeInsets.symmetric(horizontal: 16),
+                          padding:
+                              EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+
+                          // height: 39.h,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(8),
+                            gradient: LinearGradient(
+                                colors: [Color(0xFF033245), Color(0xFF51CBFC)]),
+                          ),
+                          child: Center(
+                            child: Text(
+                              "POST",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 9,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
-                ),
-              ],
-            ),
           ),
           gapH16,
           Expanded(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
-              child:  ListView.separated(
+              child: ListView.separated(
                 shrinkWrap: true,
                 itemCount: widget.videoPageViewModel.commentsResponse?.comments
                         ?.length ??
@@ -1844,7 +1831,6 @@ class _ChatBottomSheetState extends ConsumerState<ChatBottomSheet>
 
   @override
   void navigateToScreen(AppRoute appRoute, {Map<String, String>? params}) {
-    // TODO: implement navigateToScreen
     context.pushReplacementNamed(appRoute.name);
   }
 
@@ -1862,6 +1848,5 @@ class _ChatBottomSheetState extends ConsumerState<ChatBottomSheet>
       ),
     );
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
-    // TODO: implement showSnackbar
   }
 }

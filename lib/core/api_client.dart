@@ -54,7 +54,7 @@ class ApiClient {
                       // "Cookie": AppConstants.cookies,
                       "Authorization": AppConstants.token
                     }));
-    } on DioError catch (e) {
+    } on DioException catch (e) {
       Logger.write(e.message.toString());
       throw ApiException(e.response!.data["message"].toString());
     }
@@ -74,7 +74,7 @@ class ApiClient {
                   // "Cookie": AppConstants.cookies,
                   "Authorization": AppConstants.token
                 }));
-    } on DioError catch (e) {
+    } on DioException catch (e) {
       Logger.write(e.message.toString());
       throw ApiException(e.response!.data["message"].toString());
     }
@@ -93,7 +93,7 @@ class ApiClient {
                   // "Cookie": AppConstants.cookies,
                   "Authorization": AppConstants.token
                 }));
-    } on DioError catch (e) {
+    } on DioException catch (e) {
       Logger.write(e.message.toString());
       throw ApiException(e.response!.data["message"].toString());
     }
@@ -117,7 +117,7 @@ class ApiClient {
                       // "Cookie": AppConstants.cookies,
                       "Authorization": AppConstants.token
                     }));
-    } on DioError catch (e) {
+    } on DioException catch (e) {
       Logger.write(e.message.toString());
       throw ApiException(e.response!.data["message"].toString());
     }
@@ -138,7 +138,7 @@ class ApiClient {
                   // "Cookie": AppConstants.cookies,
                   "Authorization": AppConstants.cookies
                 }));
-    } on DioError catch (e) {
+    } on DioException catch (e) {
       Logger.write(e.message.toString());
       throw ApiException(e.response!.data["message"].toString());
     }
@@ -153,7 +153,7 @@ class ApiClient {
             // "Cookie": AppConstants.cookies,
             "Authorization": "Bearer 8cbbea3472c5fce4625f7d61ee437a86"
           }));
-    } on DioError catch (e) {
+    } on DioException catch (e) {
       Logger.write(e.message.toString());
       throw ApiException(e.response!.data["message"].toString());
     }

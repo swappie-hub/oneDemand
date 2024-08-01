@@ -3,7 +3,6 @@ import 'package:ondemand/core/constants.dart';
 import 'package:ondemand/data/auth/auth_repo.dart';
 import 'package:ondemand/data/auth/models/signup_model.dart';
 import 'package:ondemand/domain/providers/repository_provider.dart';
-import 'package:ondemand/helpers/base_screen_view.dart';
 import 'package:ondemand/helpers/base_view_model.dart';
 import 'package:ondemand/helpers/locator.dart';
 import 'package:ondemand/services/shared_preference_service.dart';

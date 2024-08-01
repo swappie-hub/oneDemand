@@ -2,17 +2,15 @@ import 'dart:io';
 
 import 'package:chargebee_flutter/chargebee_flutter.dart';
 import 'package:custom_sliding_segmented_control/custom_sliding_segmented_control.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
 import 'package:ondemand/core/constants.dart';
 import 'package:ondemand/helpers/locator.dart';
 import 'package:ondemand/services/shared_preference_service.dart';
 import 'package:ondemand/services/user_detail_service.dart';
-import 'package:ondemand/utils/colors.dart';
 import 'package:ondemand/utils/utils.dart';
+// ignore: unused_import
 import 'package:ondemand/view/screens/signup/signup_view_model.dart';
 import 'package:ondemand/view/screens/subscribe/subscription_view_model.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -35,7 +33,6 @@ class _SubscriptionViewState extends ConsumerState<SubscriptionView>
   int newPrice = 0;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
 
     _viewModel = ref.read(subscriptionViewModel);
@@ -486,12 +483,9 @@ class _SubscriptionViewState extends ConsumerState<SubscriptionView>
 
   @override
   void navigateToScreen(AppRoute appRoute, {Map<String, String>? params}) {
-    // TODO: implement navigateToScreen
     context.pushNamed(appRoute.name);
   }
 
   @override
-  void showSnackbar(String message, {Color? color}) {
-    // TODO: implement showSnackbar
-  }
+  void showSnackbar(String message, {Color? color}) {}
 }

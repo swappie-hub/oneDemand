@@ -24,7 +24,7 @@ class _SplashViewState extends ConsumerState<SplashView> with BaseScreenView {
     super.initState();
     _viewModel = ref.read(authViewModel);
     _viewModel.attachView(this);
-    // TODO: implement initState
+
     Future.delayed(const Duration(milliseconds: 200)).then((value) async {
       try {
         await Chargebee.configure(
@@ -127,14 +127,11 @@ class _SplashViewState extends ConsumerState<SplashView> with BaseScreenView {
 
   @override
   void navigateToScreen(AppRoute appRoute, {Map<String, String>? params}) {
-    // TODO: implement navigateToScreen
     context.pushReplacementNamed(
       appRoute.name,
     );
   }
 
   @override
-  void showSnackbar(String message, {Color? color}) {
-    // TODO: implement showSnackbar
-  }
+  void showSnackbar(String message, {Color? color}) {}
 }

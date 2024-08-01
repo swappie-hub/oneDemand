@@ -1,8 +1,5 @@
 import 'package:dartz/dartz.dart';
 import 'package:ondemand/core/exceptions.dart';
-import 'package:ondemand/data/auth/models/login_model.dart';
-import 'package:ondemand/data/auth/models/signup_model.dart';
-import 'package:ondemand/data/auth/models/subscription_model.dart';
 import 'package:ondemand/data/home/models/add_playlist_model.dart';
 import 'package:ondemand/data/home/models/create_playlist_model.dart';
 import 'package:ondemand/data/home/models/create_playlist_request.dart';

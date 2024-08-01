@@ -4,17 +4,12 @@ import 'package:dartz/dartz.dart';
 import 'package:ondemand/core/api_client.dart';
 import 'package:ondemand/core/constants.dart';
 import 'package:ondemand/core/exceptions.dart';
-import 'package:ondemand/data/auth/auth_repo.dart';
-import 'package:ondemand/data/auth/models/login_model.dart';
-import 'package:ondemand/data/auth/models/signup_model.dart';
-import 'package:ondemand/data/auth/models/subscription_model.dart';
 import 'package:ondemand/data/videoDetail/models/add_comments_model.dart';
 import 'package:ondemand/data/videoDetail/models/comments_model.dart';
 import 'package:ondemand/data/videoDetail/models/recommended_video.dart';
 import 'package:ondemand/data/videoDetail/models/video_detail_model.dart';
 import 'package:ondemand/data/videoDetail/models/vimeo_video_model.dart';
 import 'package:ondemand/data/videoDetail/video_detail_repo.dart';
-import 'package:ondemand/utils/logger.dart';
 
 class VideoDetailRepoImpl implements VideoRepo {
   final ApiClient _apiClient;

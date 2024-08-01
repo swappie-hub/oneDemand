@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:dartz/dartz.dart';
-import 'package:dio/dio.dart';
 import 'package:ondemand/core/api_client.dart';
 import 'package:ondemand/core/constants.dart';
 import 'package:ondemand/core/exceptions.dart';

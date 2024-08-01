@@ -1,11 +1,7 @@
-import 'package:custom_sliding_segmented_control/custom_sliding_segmented_control.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:ondemand/domain/providers/firebase_messaging_provider.dart';
-import 'package:ondemand/utils/app_sizes.dart';
-import 'package:ondemand/utils/colors.dart';
 import 'package:ondemand/view/screens/bottomNavigation/tabs/home_tab.dart';
 import 'package:ondemand/view/screens/bottomNavigation/tabs/library_tab.dart';
 import 'package:ondemand/view/screens/bottomNavigation/tabs/playlist_tab.dart';
@@ -32,7 +28,6 @@ class _BottomNavigationViewState extends State<BottomNavigationView> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
       _showNotification(message);
