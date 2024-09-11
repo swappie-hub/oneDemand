@@ -27,92 +27,96 @@ class _OnboardingViewState extends State<OnboardingView> with BaseScreenView {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: bgColor,
-      body: Stack(
-        children: [
-          _controller.value.isInitialized
-              ? Center(
-                  child: VideoPlayer(
-                    _controller,
-                  ),
-                )
-              : Container(),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              gapH48,
-              Image.asset(
-                "assets/images/logo_big.png",
-                height: 100.h,
-                width: 109.w,
-              ),
-              Image.asset(
-                "assets/images/logo_long.png",
-                height: 67.h,
-                width: 270.w,
-              ),
-              Center(
-                child: Image.asset(
-                  "assets/images/elevate_text.png",
-                  height: 55.h,
-                  width: 220.w,
+    return PopScope(
+          canPop: false,
+      onPopInvoked: (didPop) => false,
+      child: Scaffold(
+        backgroundColor: bgColor,
+        body: Stack(
+          children: [
+            _controller.value.isInitialized
+                ? Center(
+                    child: VideoPlayer(
+                      _controller,
+                    ),
+                  )
+                : Container(),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                gapH48,
+                Image.asset(
+                  "assets/images/logo_big.png",
+                  height: 100.h,
+                  width: 109.w,
                 ),
-              ),
-              SizedBox(
-                height: MediaQuery.of(context).size.height / 4,
-              ),
-              InkWell(
-                onTap: () {
-                  navigateToScreen(AppRoute.loginView);
-                },
-                child: Container(
-                  width: double.infinity,
-                  margin: EdgeInsets.symmetric(horizontal: 16),
-                  height: 39.h,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(12),
-                    gradient: LinearGradient(
-                        colors: [Color(0xFF033245), Color(0xFF51CBFC)]),
+                Image.asset(
+                  "assets/images/logo_long.png",
+                  height: 67.h,
+                  width: 270.w,
+                ),
+                Center(
+                  child: Image.asset(
+                    "assets/images/elevate_text.png",
+                    height: 55.h,
+                    width: 220.w,
                   ),
-                  child: Center(
-                    child: Text(
-                      "LOGIN",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
+                ),
+                SizedBox(
+                  height: MediaQuery.of(context).size.height / 4,
+                ),
+                InkWell(
+                  onTap: () {
+                    navigateToScreen(AppRoute.loginView);
+                  },
+                  child: Container(
+                    width: double.infinity,
+                    margin: EdgeInsets.symmetric(horizontal: 16),
+                    height: 39.h,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(12),
+                      gradient: LinearGradient(
+                          colors: [Color(0xFF033245), Color(0xFF51CBFC)]),
+                    ),
+                    child: Center(
+                      child: Text(
+                        "LOGIN",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
                   ),
                 ),
-              ),
-              gapH20,
-              InkWell(
-                onTap: () {
-                  navigateToScreen(AppRoute.signupView);
-                },
-                child: RichText(
-                    text: TextSpan(children: [
-                  TextSpan(
-                    text: "Don't have an account? ",
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16),
-                  ),
-                  TextSpan(
-                      text: "SIGN UP",
+                gapH20,
+                InkWell(
+                  onTap: () {
+                    navigateToScreen(AppRoute.signupView);
+                  },
+                  child: RichText(
+                      text: TextSpan(children: [
+                    TextSpan(
+                      text: "Don't have an account? ",
                       style: TextStyle(
-                          decoration: TextDecoration.underline,
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
-                          fontSize: 16))
-                ])),
-              ),
-            ],
-          ),
-        ],
+                          fontSize: 16),
+                    ),
+                    TextSpan(
+                        text: "SIGN UP",
+                        style: TextStyle(
+                            decoration: TextDecoration.underline,
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16))
+                  ])),
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

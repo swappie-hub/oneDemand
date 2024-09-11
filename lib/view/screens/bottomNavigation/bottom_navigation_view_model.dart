@@ -359,6 +359,7 @@ class BottomNavigationViewModel extends BaseViewModel<BaseScreenView> {
           name: selectedPlayList[i].label,
           objectId: selectedPlayList[i].value,
           videoObject: VideoObject(
+                id: _videoDetailResponse?.first.id,
               categoryDetails: newCat,
               tagsDetails: tagDetails,
               tags: newTag,

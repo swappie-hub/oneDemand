@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ondemand/core/constants.dart';
 import 'package:ondemand/helpers/locator.dart';
 import 'package:ondemand/services/user_detail_service.dart';
 import 'package:ondemand/utils/utils.dart';
@@ -204,13 +205,13 @@ class _ProfileTabState extends ConsumerState<ProfileTab> with BaseScreenView {
               ),
             ),
           ),
-          Container(
+       AppConstants.userType == "subuser" ?SizedBox.shrink():     Container(
             height: 1,
             width: double.infinity,
             decoration: BoxDecoration(color: Color(0xFF71717A)),
           ),
 
-          InkWell(
+         AppConstants.userType == "subuser" ?SizedBox.shrink():    InkWell(
             onTap: () {
               launchUrl(Uri.parse(
                   "https://thegodfreymethod.com/pages/terms-conditions"));

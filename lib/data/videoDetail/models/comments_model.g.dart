@@ -12,7 +12,7 @@ _$CommentsResponseImpl _$$CommentsResponseImplFromJson(
       comments: (json['comments'] as List<dynamic>?)
           ?.map((e) => Comment.fromJson(e as Map<String, dynamic>))
           .toList(),
-      total: json['total'] as int?,
+      total: (json['total'] as num?)?.toInt(),
     );
 
 Map<String, dynamic> _$$CommentsResponseImplToJson(
@@ -66,7 +66,7 @@ _$ReplyImpl _$$ReplyImplFromJson(Map<String, dynamic> json) => _$ReplyImpl(
       createdAt: json['createdAt'] == null
           ? null
           : DateTime.parse(json['createdAt'] as String),
-      v: json['__v'] as int?,
+      v: (json['__v'] as num?)?.toInt(),
       userDetails: (json['userDetails'] as List<dynamic>?)
           ?.map((e) => ReplyUserDetail.fromJson(e as Map<String, dynamic>))
           .toList(),
@@ -113,7 +113,7 @@ _$ReplyUserDetailImpl _$$ReplyUserDetailImplFromJson(
       subsciptionReferanceId: json['subsciptionReferanceId'],
       subscription: json['subscription'] as bool?,
       role: json['role'] as String?,
-      v: json['__v'] as int?,
+      v: (json['__v'] as num?)?.toInt(),
       commentNotifications: json['commentNotifications'] as bool?,
       imageId: json['imageId'],
     );

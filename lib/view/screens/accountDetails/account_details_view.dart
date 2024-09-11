@@ -1197,5 +1197,18 @@ class _AccountDetailsViewState extends ConsumerState<AccountDetailsView>
   void navigateToScreen(AppRoute appRoute, {Map<String, String>? params}) {}
 
   @override
-  void showSnackbar(String message, {Color? color}) {}
+  void showSnackbar(String message, {Color? color}) {
+     final snackBar = SnackBar(
+      backgroundColor: color,
+      content: Text(message.toString()),
+      action: SnackBarAction(
+        label: 'Close',
+        onPressed: () {
+          ScaffoldMessenger.of(context).clearSnackBars();
+          // Some code to undo the change.
+        },
+      ),
+    );
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
 }

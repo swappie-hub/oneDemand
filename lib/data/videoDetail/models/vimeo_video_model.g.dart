@@ -15,10 +15,10 @@ _$VimeoVideoResponseImpl _$$VimeoVideoResponseImplFromJson(
       type: json['type'] as String?,
       link: json['link'] as String?,
       playerEmbedUrl: json['player_embed_url'] as String?,
-      duration: json['duration'] as int?,
-      width: json['width'] as int?,
+      duration: (json['duration'] as num?)?.toInt(),
+      width: (json['width'] as num?)?.toInt(),
       language: json['language'] as String?,
-      height: json['height'] as int?,
+      height: (json['height'] as num?)?.toInt(),
       embed: json['embed'] == null
           ? null
           : Embed.fromJson(json['embed'] as Map<String, dynamic>),
@@ -151,8 +151,8 @@ _$DownloadImpl _$$DownloadImplFromJson(Map<String, dynamic> json) =>
       quality: json['quality'] as String?,
       rendition: json['rendition'] as String?,
       type: json['type'] as String?,
-      width: json['width'] as int?,
-      height: json['height'] as int?,
+      width: (json['width'] as num?)?.toInt(),
+      height: (json['height'] as num?)?.toInt(),
       expires: json['expires'] == null
           ? null
           : DateTime.parse(json['expires'] as String),
@@ -161,7 +161,7 @@ _$DownloadImpl _$$DownloadImplFromJson(Map<String, dynamic> json) =>
           ? null
           : DateTime.parse(json['created_time'] as String),
       fps: (json['fps'] as num?)?.toDouble(),
-      size: json['size'] as int?,
+      size: (json['size'] as num?)?.toInt(),
       md5: json['md5'],
       publicName: json['public_name'] as String?,
       sizeShort: json['size_short'] as String?,
@@ -484,7 +484,7 @@ _$AlbumsImpl _$$AlbumsImplFromJson(Map<String, dynamic> json) => _$AlbumsImpl(
       uri: json['uri'] as String?,
       options:
           (json['options'] as List<dynamic>?)?.map((e) => e as String).toList(),
-      total: json['total'] as int?,
+      total: (json['total'] as num?)?.toInt(),
     );
 
 Map<String, dynamic> _$$AlbumsImplToJson(_$AlbumsImpl instance) =>
@@ -514,7 +514,7 @@ _$VersionsImpl _$$VersionsImplFromJson(Map<String, dynamic> json) =>
       uri: json['uri'] as String?,
       options:
           (json['options'] as List<dynamic>?)?.map((e) => e as String).toList(),
-      total: json['total'] as int?,
+      total: (json['total'] as num?)?.toInt(),
       currentUri: json['current_uri'] as String?,
       resourceKey: json['resource_key'] as String?,
       latestIncompleteVersion: json['latest_incomplete_version'],
@@ -718,8 +718,8 @@ Map<String, dynamic> _$$PicturesImplToJson(_$PicturesImpl instance) =>
     };
 
 _$SizeImpl _$$SizeImplFromJson(Map<String, dynamic> json) => _$SizeImpl(
-      width: json['width'] as int?,
-      height: json['height'] as int?,
+      width: (json['width'] as num?)?.toInt(),
+      height: (json['height'] as num?)?.toInt(),
       link: json['link'] as String?,
       linkWithPlayButton: json['link_with_play_button'] as String?,
     );
@@ -801,7 +801,7 @@ Map<String, dynamic> _$$ReviewPageImplToJson(_$ReviewPageImpl instance) =>
     };
 
 _$StatsImpl _$$StatsImplFromJson(Map<String, dynamic> json) => _$StatsImpl(
-      plays: json['plays'] as int?,
+      plays: (json['plays'] as num?)?.toInt(),
     );
 
 Map<String, dynamic> _$$StatsImplToJson(_$StatsImpl instance) =>

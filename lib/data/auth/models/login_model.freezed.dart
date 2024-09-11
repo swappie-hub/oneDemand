@@ -40,6 +40,8 @@ mixin _$LoginResponse {
   dynamic get app => throw _privateConstructorUsedError;
   @JsonKey(name: "userId")
   String? get userId => throw _privateConstructorUsedError;
+  @JsonKey(name: "userType")
+  String? get userType => throw _privateConstructorUsedError;
   @JsonKey(name: "message")
   String? get message => throw _privateConstructorUsedError;
 
@@ -66,6 +68,7 @@ abstract class $LoginResponseCopyWith<$Res> {
       @JsonKey(name: "imageRequiresValidation") bool? imageRequiresValidation,
       @JsonKey(name: "app") dynamic app,
       @JsonKey(name: "userId") String? userId,
+      @JsonKey(name: "userType") String? userType,
       @JsonKey(name: "message") String? message});
 }
 
@@ -92,6 +95,7 @@ class _$LoginResponseCopyWithImpl<$Res, $Val extends LoginResponse>
     Object? imageRequiresValidation = freezed,
     Object? app = freezed,
     Object? userId = freezed,
+    Object? userType = freezed,
     Object? message = freezed,
   }) {
     return _then(_value.copyWith(
@@ -135,6 +139,10 @@ class _$LoginResponseCopyWithImpl<$Res, $Val extends LoginResponse>
           ? _value.userId
           : userId // ignore: cast_nullable_to_non_nullable
               as String?,
+      userType: freezed == userType
+          ? _value.userType
+          : userType // ignore: cast_nullable_to_non_nullable
+              as String?,
       message: freezed == message
           ? _value.message
           : message // ignore: cast_nullable_to_non_nullable
@@ -162,6 +170,7 @@ abstract class _$$LoginResponseImplCopyWith<$Res>
       @JsonKey(name: "imageRequiresValidation") bool? imageRequiresValidation,
       @JsonKey(name: "app") dynamic app,
       @JsonKey(name: "userId") String? userId,
+      @JsonKey(name: "userType") String? userType,
       @JsonKey(name: "message") String? message});
 }
 
@@ -186,6 +195,7 @@ class __$$LoginResponseImplCopyWithImpl<$Res>
     Object? imageRequiresValidation = freezed,
     Object? app = freezed,
     Object? userId = freezed,
+    Object? userType = freezed,
     Object? message = freezed,
   }) {
     return _then(_$LoginResponseImpl(
@@ -229,6 +239,10 @@ class __$$LoginResponseImplCopyWithImpl<$Res>
           ? _value.userId
           : userId // ignore: cast_nullable_to_non_nullable
               as String?,
+      userType: freezed == userType
+          ? _value.userType
+          : userType // ignore: cast_nullable_to_non_nullable
+              as String?,
       message: freezed == message
           ? _value.message
           : message // ignore: cast_nullable_to_non_nullable
@@ -251,6 +265,7 @@ class _$LoginResponseImpl implements _LoginResponse {
       @JsonKey(name: "imageRequiresValidation") this.imageRequiresValidation,
       @JsonKey(name: "app") this.app,
       @JsonKey(name: "userId") this.userId,
+      @JsonKey(name: "userType") this.userType,
       @JsonKey(name: "message") this.message});
 
   factory _$LoginResponseImpl.fromJson(Map<String, dynamic> json) =>
@@ -287,12 +302,15 @@ class _$LoginResponseImpl implements _LoginResponse {
   @JsonKey(name: "userId")
   final String? userId;
   @override
+  @JsonKey(name: "userType")
+  final String? userType;
+  @override
   @JsonKey(name: "message")
   final String? message;
 
   @override
   String toString() {
-    return 'LoginResponse(firstname: $firstname, lastname: $lastname, email: $email, password: $password, role: $role, commentNotifications: $commentNotifications, image: $image, imageRequiresValidation: $imageRequiresValidation, app: $app, userId: $userId, message: $message)';
+    return 'LoginResponse(firstname: $firstname, lastname: $lastname, email: $email, password: $password, role: $role, commentNotifications: $commentNotifications, image: $image, imageRequiresValidation: $imageRequiresValidation, app: $app, userId: $userId, userType: $userType, message: $message)';
   }
 
   @override
@@ -316,6 +334,8 @@ class _$LoginResponseImpl implements _LoginResponse {
                 other.imageRequiresValidation == imageRequiresValidation) &&
             const DeepCollectionEquality().equals(other.app, app) &&
             (identical(other.userId, userId) || other.userId == userId) &&
+            (identical(other.userType, userType) ||
+                other.userType == userType) &&
             (identical(other.message, message) || other.message == message));
   }
 
@@ -333,6 +353,7 @@ class _$LoginResponseImpl implements _LoginResponse {
       imageRequiresValidation,
       const DeepCollectionEquality().hash(app),
       userId,
+      userType,
       message);
 
   @JsonKey(ignore: true)
@@ -362,6 +383,7 @@ abstract class _LoginResponse implements LoginResponse {
       final bool? imageRequiresValidation,
       @JsonKey(name: "app") final dynamic app,
       @JsonKey(name: "userId") final String? userId,
+      @JsonKey(name: "userType") final String? userType,
       @JsonKey(name: "message") final String? message}) = _$LoginResponseImpl;
 
   factory _LoginResponse.fromJson(Map<String, dynamic> json) =
@@ -397,6 +419,9 @@ abstract class _LoginResponse implements LoginResponse {
   @override
   @JsonKey(name: "userId")
   String? get userId;
+  @override
+  @JsonKey(name: "userType")
+  String? get userType;
   @override
   @JsonKey(name: "message")
   String? get message;

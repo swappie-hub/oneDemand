@@ -60,20 +60,23 @@ class ApiClient {
     }
   }
 
-  Future<Response<Map<String, dynamic>>> put(String path, dynamic data) async {
+  Future<Response<Map<String, dynamic>>> put(String path, dynamic data,{bool addCookies = false, bool sendCookies = false}) async {
     try {
       return await dio.put(path,
           data: data,
-          options: AppConstants.token == ""
-              ? Options(headers: {
-                  // "Authorization": AppConstants.token.contains("Bearer")
-                  //     ? AppConstants.token
-                  //     : "Bearer ${AppConstants.token}"
+          options: sendCookies
+              ?  Options(headers: {  "Cookie": "token=" + AppConstants.token
                 })
-              : Options(headers: {
-                  // "Cookie": AppConstants.cookies,
-                  "Authorization": AppConstants.token
-                }));
+              : addCookies
+                  ? Options(headers: {
+                      // "Authorization": AppConstants.token.contains("Bearer")
+                      //     ? AppConstants.token
+                      //     : "Bearer ${AppConstants.token}"
+                    })
+                  : Options(headers: {
+                      // "Cookie": AppConstants.cookies,
+                      "Authorization": AppConstants.token
+                    }));
     } on DioException catch (e) {
       Logger.write(e.message.toString());
       throw ApiException(e.response!.data["message"].toString());

@@ -44,7 +44,7 @@ _$ResponseDataImpl _$$ResponseDataImplFromJson(Map<String, dynamic> json) =>
       originalname: json['originalname'] as String?,
       encoding: json['encoding'] as String?,
       mimetype: json['mimetype'] as String?,
-      size: json['size'] as int?,
+      size: (json['size'] as num?)?.toInt(),
       bucket: json['bucket'] as String?,
       key: json['key'] as String?,
       acl: json['acl'] as String?,

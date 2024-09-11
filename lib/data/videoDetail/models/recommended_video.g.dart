@@ -27,7 +27,7 @@ _$RecomendedVideoResponseImpl _$$RecomendedVideoResponseImplFromJson(
       vId: json['v_id'] as String?,
       title: json['title'] as String?,
       description: json['description'] as String?,
-      duration: json['duration'] as int?,
+      duration: (json['duration'] as num?)?.toInt(),
       categoryId: json['CategoryId'] as String?,
       videolink: json['videolink'] as String?,
       thumnailLink: json['thumnailLink'] as String?,
@@ -41,7 +41,7 @@ _$RecomendedVideoResponseImpl _$$RecomendedVideoResponseImplFromJson(
       releaseDateTime: json['releaseDateTime'] == null
           ? null
           : DateTime.parse(json['releaseDateTime'] as String),
-      v: json['__v'] as int?,
+      v: (json['__v'] as num?)?.toInt(),
       products: json['products'] as List<dynamic>?,
       videoLevel: (json['videoLevel'] as List<dynamic>?)
           ?.map((e) => e as String)
@@ -91,7 +91,7 @@ _$CategoryDetailImpl _$$CategoryDetailImplFromJson(Map<String, dynamic> json) =>
     _$CategoryDetailImpl(
       id: json['_id'] as String?,
       name: json['name'] as String?,
-      v: json['__v'] as int?,
+      v: (json['__v'] as num?)?.toInt(),
     );
 
 Map<String, dynamic> _$$CategoryDetailImplToJson(
@@ -117,8 +117,8 @@ _$TagsDatumImpl _$$TagsDatumImplFromJson(Map<String, dynamic> json) =>
       id: json['_id'] as String?,
       name: json['name'] as String?,
       color: json['color'] as String?,
-      v: json['__v'] as int?,
-      priority: json['priority'] as int?,
+      v: (json['__v'] as num?)?.toInt(),
+      priority: (json['priority'] as num?)?.toInt(),
     );
 
 Map<String, dynamic> _$$TagsDatumImplToJson(_$TagsDatumImpl instance) =>
