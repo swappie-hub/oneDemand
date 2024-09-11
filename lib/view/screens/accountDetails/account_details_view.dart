@@ -884,6 +884,7 @@ class _AccountDetailsViewState extends ConsumerState<AccountDetailsView>
 
               AppConstants.userId = "";
               context.pushReplacementNamed(AppRoute.onboardingView.name);
+
             },
             child: Container(
               margin: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
@@ -1160,5 +1161,17 @@ class _AccountDetailsViewState extends ConsumerState<AccountDetailsView>
   @override
   void showSnackbar(String message, {Color? color}) {
     // TODO: implement showSnackbar
+     final snackBar = SnackBar(
+      backgroundColor: color,
+      content: Text(message.toString()),
+      action: SnackBarAction(
+        label: 'Close',
+        onPressed: () {
+          ScaffoldMessenger.of(context).clearSnackBars();
+          // Some code to undo the change.
+        },
+      ),
+    );
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 }

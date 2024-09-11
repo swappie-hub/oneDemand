@@ -17,6 +17,7 @@ _$LoginResponseImpl _$$LoginResponseImplFromJson(Map<String, dynamic> json) =>
       image: json['image'] as String?,
       imageRequiresValidation: json['imageRequiresValidation'] as bool?,
       app: json['app'],
+      userType: json['userType'] as String?,
       userId: json['userId'] as String?,
       message: json['message'] as String?,
     );
@@ -32,6 +33,7 @@ Map<String, dynamic> _$$LoginResponseImplToJson(_$LoginResponseImpl instance) =>
       'image': instance.image,
       'imageRequiresValidation': instance.imageRequiresValidation,
       'app': instance.app,
+      'userType': instance.userType,
       'userId': instance.userId,
       'message': instance.message,
     };

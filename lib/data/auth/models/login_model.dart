@@ -25,6 +25,9 @@ class LoginResponse with _$LoginResponse {
     @JsonKey(name: "image") String? image,
     @JsonKey(name: "imageRequiresValidation") bool? imageRequiresValidation,
     @JsonKey(name: "app") dynamic app,
+    @JsonKey(name: "userType") String? userType,
+
+    
     @JsonKey(name: "userId") String? userId,
     @JsonKey(name: "message") String? message,
   }) = _LoginResponse;

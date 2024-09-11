@@ -1,7 +1,12 @@
 class AppConstants {
   static const userIdPref = 'userId';
+
   static const languagePref = 'languagePref';
   static const authTokenPref = 'authTokenPref';
+  static const userTypePref = 'userTypePref';
+
+
+ 
   // static const authTokenPref = 'authTokenPref';
 
   static const String baseUrl = "https://app.thegodfreymethod.com/api";
@@ -10,6 +15,7 @@ class AppConstants {
   // static const String baseUrl = "http://10.0.2.2:9002/api";
   static String userId = "";
   static String token = "";
+    static String userType = "";
   static String cookies = "";
   static String categoryIdForExercise = "6541e9f2f1f99641d644a35a";
   static String categoryIdForLesson = "6541e9cdf1f99641d644a357";
@@ -24,3 +30,4 @@ class AppConstants {
   static bool isSubscribed = false;
   //api end points
 }
+

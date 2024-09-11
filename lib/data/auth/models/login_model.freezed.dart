@@ -38,6 +38,8 @@ mixin _$LoginResponse {
   bool? get imageRequiresValidation => throw _privateConstructorUsedError;
   @JsonKey(name: "app")
   dynamic get app => throw _privateConstructorUsedError;
+  @JsonKey(name: "userType")
+  String? get userType => throw _privateConstructorUsedError;
   @JsonKey(name: "userId")
   String? get userId => throw _privateConstructorUsedError;
   @JsonKey(name: "message")
@@ -65,6 +67,7 @@ abstract class $LoginResponseCopyWith<$Res> {
       @JsonKey(name: "image") String? image,
       @JsonKey(name: "imageRequiresValidation") bool? imageRequiresValidation,
       @JsonKey(name: "app") dynamic app,
+      @JsonKey(name: "userType") String? userType,
       @JsonKey(name: "userId") String? userId,
       @JsonKey(name: "message") String? message});
 }
@@ -91,6 +94,7 @@ class _$LoginResponseCopyWithImpl<$Res, $Val extends LoginResponse>
     Object? image = freezed,
     Object? imageRequiresValidation = freezed,
     Object? app = freezed,
+    Object? userType = freezed,
     Object? userId = freezed,
     Object? message = freezed,
   }) {
@@ -131,6 +135,10 @@ class _$LoginResponseCopyWithImpl<$Res, $Val extends LoginResponse>
           ? _value.app
           : app // ignore: cast_nullable_to_non_nullable
               as dynamic,
+      userType: freezed == userType
+          ? _value.userType
+          : userType // ignore: cast_nullable_to_non_nullable
+              as String?,
       userId: freezed == userId
           ? _value.userId
           : userId // ignore: cast_nullable_to_non_nullable
@@ -161,6 +169,7 @@ abstract class _$$LoginResponseImplCopyWith<$Res>
       @JsonKey(name: "image") String? image,
       @JsonKey(name: "imageRequiresValidation") bool? imageRequiresValidation,
       @JsonKey(name: "app") dynamic app,
+      @JsonKey(name: "userType") String? userType,
       @JsonKey(name: "userId") String? userId,
       @JsonKey(name: "message") String? message});
 }
@@ -185,6 +194,7 @@ class __$$LoginResponseImplCopyWithImpl<$Res>
     Object? image = freezed,
     Object? imageRequiresValidation = freezed,
     Object? app = freezed,
+    Object? userType = freezed,
     Object? userId = freezed,
     Object? message = freezed,
   }) {
@@ -225,6 +235,10 @@ class __$$LoginResponseImplCopyWithImpl<$Res>
           ? _value.app
           : app // ignore: cast_nullable_to_non_nullable
               as dynamic,
+      userType: freezed == userType
+          ? _value.userType
+          : userType // ignore: cast_nullable_to_non_nullable
+              as String?,
       userId: freezed == userId
           ? _value.userId
           : userId // ignore: cast_nullable_to_non_nullable
@@ -250,6 +264,7 @@ class _$LoginResponseImpl implements _LoginResponse {
       @JsonKey(name: "image") this.image,
       @JsonKey(name: "imageRequiresValidation") this.imageRequiresValidation,
       @JsonKey(name: "app") this.app,
+      @JsonKey(name: "userType") this.userType,
       @JsonKey(name: "userId") this.userId,
       @JsonKey(name: "message") this.message});
 
@@ -284,6 +299,9 @@ class _$LoginResponseImpl implements _LoginResponse {
   @JsonKey(name: "app")
   final dynamic app;
   @override
+  @JsonKey(name: "userType")
+  final String? userType;
+  @override
   @JsonKey(name: "userId")
   final String? userId;
   @override
@@ -292,7 +310,7 @@ class _$LoginResponseImpl implements _LoginResponse {
 
   @override
   String toString() {
-    return 'LoginResponse(firstname: $firstname, lastname: $lastname, email: $email, password: $password, role: $role, commentNotifications: $commentNotifications, image: $image, imageRequiresValidation: $imageRequiresValidation, app: $app, userId: $userId, message: $message)';
+    return 'LoginResponse(firstname: $firstname, lastname: $lastname, email: $email, password: $password, role: $role, commentNotifications: $commentNotifications, image: $image, imageRequiresValidation: $imageRequiresValidation, app: $app, userType: $userType, userId: $userId, message: $message)';
   }
 
   @override
@@ -315,6 +333,8 @@ class _$LoginResponseImpl implements _LoginResponse {
                     other.imageRequiresValidation, imageRequiresValidation) ||
                 other.imageRequiresValidation == imageRequiresValidation) &&
             const DeepCollectionEquality().equals(other.app, app) &&
+            (identical(other.userType, userType) ||
+                other.userType == userType) &&
             (identical(other.userId, userId) || other.userId == userId) &&
             (identical(other.message, message) || other.message == message));
   }
@@ -332,6 +352,7 @@ class _$LoginResponseImpl implements _LoginResponse {
       image,
       imageRequiresValidation,
       const DeepCollectionEquality().hash(app),
+      userType,
       userId,
       message);
 
@@ -361,6 +382,7 @@ abstract class _LoginResponse implements LoginResponse {
       @JsonKey(name: "imageRequiresValidation")
       final bool? imageRequiresValidation,
       @JsonKey(name: "app") final dynamic app,
+      @JsonKey(name: "userType") final String? userType,
       @JsonKey(name: "userId") final String? userId,
       @JsonKey(name: "message") final String? message}) = _$LoginResponseImpl;
 
@@ -394,6 +416,9 @@ abstract class _LoginResponse implements LoginResponse {
   @override
   @JsonKey(name: "app")
   dynamic get app;
+  @override
+  @JsonKey(name: "userType")
+  String? get userType;
   @override
   @JsonKey(name: "userId")
   String? get userId;

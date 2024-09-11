@@ -163,9 +163,9 @@ class AuthRepoImpl implements AuthRepo {
   Future<Either<ApiException, UpdatePasswordResponse>> updatePassword(
       UpdatePasswordRequest updatePasswordRequest) async {
     try {
-      final response = await _apiClient.post(
+      final response = await _apiClient.put(
           sendCookies: true,
-          "${AppConstants.baseUrl}update-password",
+          "${AppConstants.baseUrl}/update-password",
           updatePasswordRequestToJson(updatePasswordRequest));
 
       return Right(UpdatePasswordResponse.fromJson(response.data!));

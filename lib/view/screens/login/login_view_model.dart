@@ -37,9 +37,15 @@ class LoginViewModel extends BaseViewModel<BaseScreenView> {
             view!.showSnackbar(l.message);
           }, (r) async {
             AppConstants.userId = r.userId ?? "";
+            AppConstants.userType = r.userType ??"";
+            print("this is the usertype" +  AppConstants.userType);
             await SharedPreferenceService.setString(
               AppConstants.userIdPref,
               AppConstants.userId,
+            );
+              await SharedPreferenceService.setString(
+              AppConstants.userTypePref,
+              AppConstants.userType,
             );
             print("this is userId" + AppConstants.userId);
             getUserDetails(r.userId ?? "", context, shouldNavigate: false);
@@ -58,6 +64,7 @@ class LoginViewModel extends BaseViewModel<BaseScreenView> {
           (value) => value.fold((l) {
             view!.showSnackbar(l.message);
           }, (r) async {
+             print("this is subscription status" + r.toString());
             if (r.data == "active") {
               AppConstants.isSubscribed = true;
             } else if (r.data == "in_trial") {
@@ -67,12 +74,22 @@ class LoginViewModel extends BaseViewModel<BaseScreenView> {
             } else {
               AppConstants.isSubscribed = false;
             }
-            print("this is subscription status" + r.toString());
+            print("this is the subscription" +r.data.toString());
+                   print("this is the subscription status" +AppConstants.isSubscribed.toString() +"this is the userrole"+  AppConstants.userType);
+           
             notifyListeners();
-            if (AppConstants.isSubscribed == true) {
-              view!.navigateToScreen(AppRoute.bottomNavigationView);
-            } else {
-              view!.navigateToScreen(AppRoute.subscriptionView);
+            if (AppConstants.isSubscribed == true   && (AppConstants.userType == "studio-owner" ||  AppConstants.userType == "subuser" ||  AppConstants.userType == "" || AppConstants.userType == "user"  )  )  {
+              // view!.navigateToScreen(AppRoute.bottomNavigationView);
+
+              context.replaceNamed(AppRoute.bottomNavigationView.name);
+            } else if (AppConstants.isSubscribed == false   && (AppConstants.userType == "studio-owner" ||  AppConstants.userType == "subuser" )){
+                // view!.navigateToScreen(AppRoute.bottomNavigationView);
+                SharedPreferenceService.clearAll();
+                view!.showSnackbar("Subscription status is Inactive. Please reach out to your Studio Admin for support.");
+
+            }else{
+  // view!.navigateToScreen(AppRoute.subscriptionView);
+    context.replaceNamed(AppRoute.subscriptionView.name);
             }
             Logger.write(r.toString());
 
@@ -149,6 +166,8 @@ class LoginViewModel extends BaseViewModel<BaseScreenView> {
     await _authRepo.updatePassword(updatePasswordRequest).then(
           (value) => value.fold((l) {
             // view!.navigateToScreen(AppRoute.onboardingView);
+             view!.showSnackbar(l.message);
+
           }, (r) async {
             Logger.write(r.toString());
             // _userDetailService.setuserDetail(r);
@@ -204,6 +223,7 @@ class LoginViewModel extends BaseViewModel<BaseScreenView> {
             // view!.navigateToScreen(AppRoute.subscriptionView);
             SharedPreferenceService.clearAll();
             AppConstants.token = "";
+            AppConstants.userType ="";
             AppConstants.isSubscribed = false;
             AppConstants.userId = "";
             context.pushReplacementNamed(AppRoute.onboardingView.name);

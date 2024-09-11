@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
@@ -185,6 +186,10 @@ class HomeRepoImpl implements HomeRepo {
           sendCookies: true,
           "${AppConstants.baseUrl}/personalvideo/playlist/add",
           addPlaylistRequestToJson(addPlaylistRequest));
+           Logger.write("the playlisttt");
+            print(response.data);
+            Logger.write(addPlaylistRequest.toString());
+
       print("this is response" + response.data.toString());
       return Right(AddPlaylistResponse.fromJson(response.data));
     } catch (e) {
