@@ -165,7 +165,7 @@ class AuthRepoImpl implements AuthRepo {
     try {
       final response = await _apiClient.put(
           sendCookies: true,
-          "${AppConstants.baseUrl}update-password",
+          "${AppConstants.baseUrl}/update-password",
           updatePasswordRequestToJson(updatePasswordRequest));
 
       return Right(UpdatePasswordResponse.fromJson(response.data!));

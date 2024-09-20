@@ -1073,7 +1073,7 @@ class _LibraryItemsState extends State<LibraryItems> with BaseScreenView {
           children: [
             CachedNetworkImage(
                 height: useMobileLayout
-                    ? 80.h
+                    ? 90.h
                     : MediaQuery.of(context).size.height / 5,
                 imageUrl: widget.items.thumnailLink ?? "",
                 imageBuilder: (context, imageProvider) {
@@ -1172,11 +1172,11 @@ class _LibraryItemsState extends State<LibraryItems> with BaseScreenView {
                     fontWeight: FontWeight.bold),
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.only(right: 8, top: 8, left: 0),
-              child: Wrap(
-                runSpacing: 6,
-                children: [
+            // Padding(
+            //   padding: const EdgeInsets.only(right: 8, top: 8, left: 0),
+            //   child: Wrap(
+            //     runSpacing: 6,
+            //     children: [
                   //   Container(
                   //     padding:
                   //         EdgeInsets.symmetric(horizontal: 8, vertical: 4),
@@ -1233,21 +1233,21 @@ class _LibraryItemsState extends State<LibraryItems> with BaseScreenView {
                   //       ),
                   //     ),
                   //   )
-                ],
-              ),
-            ),
-            gapH4,
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 0),
-              child: Text(
-                timeago.format(widget.items.releaseDateTime ?? DateTime.now()),
-                style: TextStyle(
-                    fontSize: 10,
-                    color: Color(0xFF9E9E9E),
-                    fontWeight: FontWeight.bold),
-              ),
-            ),
-            gapH16,
+            //     ],
+            //   ),
+            // ),
+            // gapH4,
+            // Padding(
+            //   padding: const EdgeInsets.symmetric(horizontal: 0),
+            //   child: Text(
+            //     timeago.format(widget.items.releaseDateTime ?? DateTime.now()),
+            //     style: TextStyle(
+            //         fontSize: 10,
+            //         color: Color(0xFF9E9E9E),
+            //         fontWeight: FontWeight.bold),
+            //   ),
+            // ),
+            // gapH16,
           ],
         ),
       ),

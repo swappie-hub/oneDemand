@@ -485,18 +485,18 @@ class _HomeItemsState extends State<HomeItems> {
                 ],
               ),
             ),
-            gapH8,
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Text(
-                timeago.format(widget.items?.releaseDateTime ?? DateTime.now()),
-                style: TextStyle(
-                    fontSize: 10,
-                    color: Color(0xFF9E9E9E),
-                    fontWeight: FontWeight.bold),
-              ),
-            ),
-            // gapH16,
+            // gapH8,
+            // Padding(
+            //   padding: const EdgeInsets.symmetric(horizontal: 16),
+            //   child: Text(
+            //     timeago.format(widget.items?.releaseDateTime ?? DateTime.now()),
+            //     style: TextStyle(
+            //         fontSize: 10,
+            //         color: Color(0xFF9E9E9E),
+            //         fontWeight: FontWeight.bold),
+            //   ),
+            // ),
+            gapH16,
           ],
         ),
       ),
