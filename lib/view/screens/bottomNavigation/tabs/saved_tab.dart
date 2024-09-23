@@ -41,6 +41,7 @@ class _SavedTabState extends ConsumerState<SavedTab> with BaseScreenView {
 
   @override
   Widget build(BuildContext context) {
+  
     var shortestSide = MediaQuery.of(context).size.shortestSide;
     final bool useMobileLayout = shortestSide < 600;
     _viewModel = ref.watch(bottomNavigationViewModel);
