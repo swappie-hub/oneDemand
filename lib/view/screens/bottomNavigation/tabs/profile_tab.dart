@@ -145,34 +145,39 @@ class _ProfileTabState extends ConsumerState<ProfileTab> with BaseScreenView {
               ),
             ),
           ),
-          Container(
-            height: 1,
-            width: double.infinity,
-            decoration: BoxDecoration(color: Color(0xFF71717A)),
-          ),
-          InkWell(
-            onTap: () {
-              // navigateToScreen(AppRoute.subscriptionView);
-              launchUrl(
-                  Uri.parse("https://thegodfreymethod.chargebeeportal.com"));
-            },
-            child: Container(
-              margin: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-              child: Row(
-                children: [
-                  Icon(
-                    Icons.video_collection_rounded,
-                    color: Color(0xFFD9D9D9),
+          AppConstants.userType == "subuser"
+              ? SizedBox.shrink()
+              : Container(
+                  height: 1,
+                  width: double.infinity,
+                  decoration: BoxDecoration(color: Color(0xFF71717A)),
+                ),
+          AppConstants.userType == "subuser"
+              ? SizedBox.shrink()
+              : InkWell(
+                  onTap: () {
+                    // navigateToScreen(AppRoute.subscriptionView);
+                    launchUrl(Uri.parse(
+                        "https://thegodfreymethod.chargebeeportal.com"));
+                  },
+                  child: Container(
+                    margin: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.video_collection_rounded,
+                          color: Color(0xFFD9D9D9),
+                        ),
+                        gapW8,
+                        Text(
+                          "Manage Subscription",
+                          style:
+                              TextStyle(color: Color(0xFfC4C4C4), fontSize: 16),
+                        )
+                      ],
+                    ),
                   ),
-                  gapW8,
-                  Text(
-                    "Manage Subscription",
-                    style: TextStyle(color: Color(0xFfC4C4C4), fontSize: 16),
-                  )
-                ],
-              ),
-            ),
-          ),
+                ),
 
           Container(
             height: 1,
@@ -205,13 +210,13 @@ class _ProfileTabState extends ConsumerState<ProfileTab> with BaseScreenView {
               ),
             ),
           ),
-       AppConstants.userType == "subuser" ?SizedBox.shrink():     Container(
+          Container(
             height: 1,
             width: double.infinity,
             decoration: BoxDecoration(color: Color(0xFF71717A)),
           ),
 
-         AppConstants.userType == "subuser" ?SizedBox.shrink():    InkWell(
+          InkWell(
             onTap: () {
               launchUrl(Uri.parse(
                   "https://thegodfreymethod.com/pages/terms-conditions"));

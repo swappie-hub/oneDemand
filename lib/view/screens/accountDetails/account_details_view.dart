@@ -860,12 +860,14 @@ class _AccountDetailsViewState extends ConsumerState<AccountDetailsView>
                                         userId: AppConstants.userId,
                                         newPassword: _newPassController.text),
                                     context);
+                               
                                 setSt(() {
                                   _newPassController.clear();
                                   _oldPasswordController.clear();
                                   _confirmNewPassController.clear();
                                 });
                               }
+                              
                               // Handle the submit action
                             },
                           ),
@@ -1198,7 +1200,7 @@ class _AccountDetailsViewState extends ConsumerState<AccountDetailsView>
 
   @override
   void showSnackbar(String message, {Color? color}) {
-     final snackBar = SnackBar(
+    final snackBar = SnackBar(
       backgroundColor: color,
       content: Text(message.toString()),
       action: SnackBarAction(

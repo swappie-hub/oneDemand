@@ -36,12 +36,12 @@ class LoginViewModel extends BaseViewModel<BaseScreenView> {
             view!.showSnackbar(l.message);
           }, (r) async {
             AppConstants.userId = r.userId ?? "";
-            AppConstants.userType = r.userType ??"";
+            AppConstants.userType = r.userType ?? "";
             await SharedPreferenceService.setString(
               AppConstants.userIdPref,
               AppConstants.userId,
             );
-               await SharedPreferenceService.setString(
+            await SharedPreferenceService.setString(
               AppConstants.userTypePref,
               AppConstants.userType,
             );
@@ -58,41 +58,47 @@ class LoginViewModel extends BaseViewModel<BaseScreenView> {
 
   Future<void> isSubscribed(BuildContext context) async {
     toggleLoading();
-    await _authRepo.fetchSubscription().then(
-          (value) => value.fold((l) {
-            view!.showSnackbar(l.message);
-          }, (r) async {
-            if (r.data == "active") {
-              AppConstants.isSubscribed = true;
-            } else if (r.data == "in_trial") {
-              AppConstants.isSubscribed = true;
-            } else if (r.data == "non_renewing") {
-              AppConstants.isSubscribed = true;
-            } else {
-              AppConstants.isSubscribed = false;
-            }
-            print("this is subscription status" + r.toString());
-            notifyListeners();
-               if (AppConstants.isSubscribed == true) {
-              view!.navigateToScreen(AppRoute.bottomNavigationView);
-            } else {
-              view!.navigateToScreen(AppRoute.subscriptionView);
-            if (AppConstants.isSubscribed == true   && (AppConstants.userType == "studio-owner" ||  AppConstants.userType == "subuser" ||  AppConstants.userType == "" || AppConstants.userType == "user"  )  )  {
+    await _authRepo.fetchSubscription().then((value) => value.fold((l) {
+          view!.showSnackbar(l.message);
+        }, (r) async {
+          if (r.data == "active") {
+            AppConstants.isSubscribed = true;
+          } else if (r.data == "in_trial") {
+            AppConstants.isSubscribed = true;
+          } else if (r.data == "non_renewing") {
+            AppConstants.isSubscribed = true;
+          } else {
+            AppConstants.isSubscribed = false;
+          }
+          print("this is subscription status" + r.toString());
+          notifyListeners();
+          if (AppConstants.isSubscribed == true) {
+            view!.navigateToScreen(AppRoute.bottomNavigationView);
+          } else {
+            view!.navigateToScreen(AppRoute.subscriptionView);
+            if (AppConstants.isSubscribed == true &&
+                (AppConstants.userType == "studio-owner" ||
+                    AppConstants.userType == "subuser" ||
+                    AppConstants.userType == "" ||
+                    AppConstants.userType == "user")) {
               // view!.navigateToScreen(AppRoute.bottomNavigationView);
 
               context.replaceNamed(AppRoute.bottomNavigationView.name);
-            } else if (AppConstants.isSubscribed == false   && (AppConstants.userType == "studio-owner" ||  AppConstants.userType == "subuser" )){
-                // view!.navigateToScreen(AppRoute.bottomNavigationView);
-                SharedPreferenceService.clearAll();
-                view!.showSnackbar("Subscription status is Inactive. Please reach out to your Studio Admin for support.");
-
-            }else{
-  // view!.navigateToScreen(AppRoute.subscriptionView);
-    context.replaceNamed(AppRoute.subscriptionView.name);
+            } else if (AppConstants.isSubscribed == false &&
+                (AppConstants.userType == "studio-owner" ||
+                    AppConstants.userType == "subuser")) {
+              // view!.navigateToScreen(AppRoute.bottomNavigationView);
+              SharedPreferenceService.clearAll();
+              view!.showSnackbar(
+                  "Subscription status is Inactive. Please reach out to your Studio Admin for support.");
+            } else {
+              // view!.navigateToScreen(AppRoute.subscriptionView);
+              context.replaceNamed(AppRoute.subscriptionView.name);
             }
             Logger.write(r.toString());
-  };
-  }));
+          }
+          ;
+        }));
     toggleLoading();
   }
 
@@ -183,7 +189,7 @@ class LoginViewModel extends BaseViewModel<BaseScreenView> {
     toggleLoading();
     await _authRepo.updatePassword(updatePasswordRequest).then(
           (value) => value.fold((l) {
-                view!.showSnackbar(l.message);
+            view!.showSnackbar(l.message);
             // view!.navigateToScreen(AppRoute.onboardingView);
           }, (r) async {
             Logger.write(r.toString());
@@ -192,6 +198,7 @@ class LoginViewModel extends BaseViewModel<BaseScreenView> {
             //   context?.pushReplacementNamed(AppRoute.bottomNavigationView.name);
             // }
             // view!.navigateToScreen(AppRoute.subscriptionView);
+            view!.showSnackbar("password updated successfully");
             context.pop();
 
             notifyListeners();
@@ -240,7 +247,7 @@ class LoginViewModel extends BaseViewModel<BaseScreenView> {
             // view!.navigateToScreen(AppRoute.subscriptionView);
             SharedPreferenceService.clearAll();
             AppConstants.token = "";
-             AppConstants.userType ="";
+            AppConstants.userType = "";
             AppConstants.isSubscribed = false;
             AppConstants.userId = "";
             context.pushReplacementNamed(AppRoute.onboardingView.name);
