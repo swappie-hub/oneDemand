@@ -89,7 +89,7 @@ dependencies:
   pod_player: ^0.2.2
   dio_cookie_manager: ^3.1.1
   vimeo_player_flutter: ^0.1.0
-  chargebee_flutter: ^0.4.5
+  chargebee_flutter: ^0.4.6
   dropdown_search: ^5.0.6
   flutter_html:
   flutter_to_airplay: ^2.0.5
