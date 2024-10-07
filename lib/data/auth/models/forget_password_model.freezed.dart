@@ -24,8 +24,12 @@ mixin _$ForgetPasswordRequest {
   @JsonKey(name: "email")
   String? get email => throw _privateConstructorUsedError;
 
+  /// Serializes this ForgetPasswordRequest to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of ForgetPasswordRequest
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $ForgetPasswordRequestCopyWith<ForgetPasswordRequest> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -50,6 +54,8 @@ class _$ForgetPasswordRequestCopyWithImpl<$Res,
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of ForgetPasswordRequest
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -85,6 +91,8 @@ class __$$ForgetPasswordRequestImplCopyWithImpl<$Res>
       $Res Function(_$ForgetPasswordRequestImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of ForgetPasswordRequest
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -124,11 +132,13 @@ class _$ForgetPasswordRequestImpl implements _ForgetPasswordRequest {
             (identical(other.email, email) || other.email == email));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, email);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of ForgetPasswordRequest
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$ForgetPasswordRequestImplCopyWith<_$ForgetPasswordRequestImpl>
@@ -154,8 +164,11 @@ abstract class _ForgetPasswordRequest implements ForgetPasswordRequest {
   @override
   @JsonKey(name: "email")
   String? get email;
+
+  /// Create a copy of ForgetPasswordRequest
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$ForgetPasswordRequestImplCopyWith<_$ForgetPasswordRequestImpl>
       get copyWith => throw _privateConstructorUsedError;
 }
@@ -170,8 +183,12 @@ mixin _$ForgetPasswordResponse {
   @JsonKey(name: "Status")
   String? get status => throw _privateConstructorUsedError;
 
+  /// Serializes this ForgetPasswordResponse to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of ForgetPasswordResponse
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $ForgetPasswordResponseCopyWith<ForgetPasswordResponse> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -196,6 +213,8 @@ class _$ForgetPasswordResponseCopyWithImpl<$Res,
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of ForgetPasswordResponse
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -232,6 +251,8 @@ class __$$ForgetPasswordResponseImplCopyWithImpl<$Res>
       $Res Function(_$ForgetPasswordResponseImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of ForgetPasswordResponse
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -271,11 +292,13 @@ class _$ForgetPasswordResponseImpl implements _ForgetPasswordResponse {
             (identical(other.status, status) || other.status == status));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, status);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of ForgetPasswordResponse
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$ForgetPasswordResponseImplCopyWith<_$ForgetPasswordResponseImpl>
@@ -301,8 +324,11 @@ abstract class _ForgetPasswordResponse implements ForgetPasswordResponse {
   @override
   @JsonKey(name: "Status")
   String? get status;
+
+  /// Create a copy of ForgetPasswordResponse
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$ForgetPasswordResponseImplCopyWith<_$ForgetPasswordResponseImpl>
       get copyWith => throw _privateConstructorUsedError;
 }

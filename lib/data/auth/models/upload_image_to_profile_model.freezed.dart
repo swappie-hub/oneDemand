@@ -26,8 +26,12 @@ mixin _$UploadImageProfileRequest {
   @JsonKey(name: "imageURL")
   String? get imageUrl => throw _privateConstructorUsedError;
 
+  /// Serializes this UploadImageProfileRequest to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of UploadImageProfileRequest
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $UploadImageProfileRequestCopyWith<UploadImageProfileRequest> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -54,6 +58,8 @@ class _$UploadImageProfileRequestCopyWithImpl<$Res,
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of UploadImageProfileRequest
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -97,6 +103,8 @@ class __$$UploadImageProfileRequestImplCopyWithImpl<$Res>
       $Res Function(_$UploadImageProfileRequestImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of UploadImageProfileRequest
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -148,11 +156,13 @@ class _$UploadImageProfileRequestImpl implements _UploadImageProfileRequest {
                 other.imageUrl == imageUrl));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, userId, imageUrl);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of UploadImageProfileRequest
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$UploadImageProfileRequestImplCopyWith<_$UploadImageProfileRequestImpl>
@@ -182,8 +192,11 @@ abstract class _UploadImageProfileRequest implements UploadImageProfileRequest {
   @override
   @JsonKey(name: "imageURL")
   String? get imageUrl;
+
+  /// Create a copy of UploadImageProfileRequest
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$UploadImageProfileRequestImplCopyWith<_$UploadImageProfileRequestImpl>
       get copyWith => throw _privateConstructorUsedError;
 }
@@ -198,8 +211,12 @@ mixin _$UploadImageProfileResponse {
   @JsonKey(name: "requiresValidation")
   bool? get requiresValidation => throw _privateConstructorUsedError;
 
+  /// Serializes this UploadImageProfileResponse to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of UploadImageProfileResponse
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $UploadImageProfileResponseCopyWith<UploadImageProfileResponse>
       get copyWith => throw _privateConstructorUsedError;
 }
@@ -225,6 +242,8 @@ class _$UploadImageProfileResponseCopyWithImpl<$Res,
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of UploadImageProfileResponse
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -261,6 +280,8 @@ class __$$UploadImageProfileResponseImplCopyWithImpl<$Res>
       $Res Function(_$UploadImageProfileResponseImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of UploadImageProfileResponse
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -303,11 +324,13 @@ class _$UploadImageProfileResponseImpl implements _UploadImageProfileResponse {
                 other.requiresValidation == requiresValidation));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, requiresValidation);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of UploadImageProfileResponse
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$UploadImageProfileResponseImplCopyWith<_$UploadImageProfileResponseImpl>
@@ -334,8 +357,11 @@ abstract class _UploadImageProfileResponse
   @override
   @JsonKey(name: "requiresValidation")
   bool? get requiresValidation;
+
+  /// Create a copy of UploadImageProfileResponse
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$UploadImageProfileResponseImplCopyWith<_$UploadImageProfileResponseImpl>
       get copyWith => throw _privateConstructorUsedError;
 }

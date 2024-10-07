@@ -27,8 +27,12 @@ mixin _$UploadResponse {
   @JsonKey(name: "data")
   Data? get data => throw _privateConstructorUsedError;
 
+  /// Serializes this UploadResponse to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of UploadResponse
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $UploadResponseCopyWith<UploadResponse> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -57,6 +61,8 @@ class _$UploadResponseCopyWithImpl<$Res, $Val extends UploadResponse>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of UploadResponse
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -80,6 +86,8 @@ class _$UploadResponseCopyWithImpl<$Res, $Val extends UploadResponse>
     ) as $Val);
   }
 
+  /// Create a copy of UploadResponse
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $DataCopyWith<$Res>? get data {
@@ -118,6 +126,8 @@ class __$$UploadResponseImplCopyWithImpl<$Res>
       _$UploadResponseImpl _value, $Res Function(_$UploadResponseImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of UploadResponse
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -178,11 +188,13 @@ class _$UploadResponseImpl implements _UploadResponse {
             (identical(other.data, data) || other.data == data));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, success, message, data);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of UploadResponse
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$UploadResponseImplCopyWith<_$UploadResponseImpl> get copyWith =>
@@ -215,8 +227,11 @@ abstract class _UploadResponse implements UploadResponse {
   @override
   @JsonKey(name: "data")
   Data? get data;
+
+  /// Create a copy of UploadResponse
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$UploadResponseImplCopyWith<_$UploadResponseImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -234,8 +249,12 @@ mixin _$Data {
   @JsonKey(name: "responseData")
   ResponseData? get responseData => throw _privateConstructorUsedError;
 
+  /// Serializes this Data to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of Data
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $DataCopyWith<Data> get copyWith => throw _privateConstructorUsedError;
 }
 
@@ -262,6 +281,8 @@ class _$DataCopyWithImpl<$Res, $Val extends Data>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of Data
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -285,6 +306,8 @@ class _$DataCopyWithImpl<$Res, $Val extends Data>
     ) as $Val);
   }
 
+  /// Create a copy of Data
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $ResponseDataCopyWith<$Res>? get responseData {
@@ -321,6 +344,8 @@ class __$$DataImplCopyWithImpl<$Res>
   __$$DataImplCopyWithImpl(_$DataImpl _value, $Res Function(_$DataImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of Data
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -383,11 +408,13 @@ class _$DataImpl implements _Data {
                 other.responseData == responseData));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, fileLink, cdnLink, responseData);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of Data
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$DataImplCopyWith<_$DataImpl> get copyWith =>
@@ -419,8 +446,11 @@ abstract class _Data implements Data {
   @override
   @JsonKey(name: "responseData")
   ResponseData? get responseData;
+
+  /// Create a copy of Data
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$DataImplCopyWith<_$DataImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -464,8 +494,12 @@ mixin _$ResponseData {
   @JsonKey(name: "etag")
   String? get etag => throw _privateConstructorUsedError;
 
+  /// Serializes this ResponseData to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of ResponseData
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $ResponseDataCopyWith<ResponseData> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -505,6 +539,8 @@ class _$ResponseDataCopyWithImpl<$Res, $Val extends ResponseData>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of ResponseData
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -629,6 +665,8 @@ class __$$ResponseDataImplCopyWithImpl<$Res>
       _$ResponseDataImpl _value, $Res Function(_$ResponseDataImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of ResponseData
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -829,7 +867,7 @@ class _$ResponseDataImpl implements _ResponseData {
             (identical(other.etag, etag) || other.etag == etag));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
       runtimeType,
@@ -850,7 +888,9 @@ class _$ResponseDataImpl implements _ResponseData {
       location,
       etag);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of ResponseData
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$ResponseDataImplCopyWith<_$ResponseDataImpl> get copyWith =>
@@ -934,8 +974,11 @@ abstract class _ResponseData implements ResponseData {
   @override
   @JsonKey(name: "etag")
   String? get etag;
+
+  /// Create a copy of ResponseData
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$ResponseDataImplCopyWith<_$ResponseDataImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

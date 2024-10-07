@@ -33,7 +33,7 @@ class BottomNavigationViewModel extends BaseViewModel<BaseScreenView> {
   final HomeRepo _homeRepo;
   List<home.HomeVideoResponse>? _homeVideoResponse;
   List<home.HomeVideoResponse>? get homeVideoResponse => _homeVideoResponse;
-   
+
   SavedVideosResponse? _savedVideosResponse;
   SavedVideosResponse? get savedVideosResponse => _savedVideosResponse;
   FeaturePlaylistResponse? _featurePlaylistResponse;
@@ -49,6 +49,8 @@ class BottomNavigationViewModel extends BaseViewModel<BaseScreenView> {
       _getAllPlaylistResponse;
   List<lib.Video> libraryList = [];
   List<String> addedVideos = [];
+  List<String> instructorList = [];
+  List<String> selectedInstructorList = [];
 
   List<String> tags = [];
   bool isPlaylistLoading = false;
@@ -68,6 +70,7 @@ class BottomNavigationViewModel extends BaseViewModel<BaseScreenView> {
   final VideoRepo _videoRepo;
   List<String> durations = [];
   List<String> focus = [];
+  List<String> instructors = [];
   List<String> strength = [];
   List<VideoDetailResponse>? _videoDetailResponse;
   List<VideoDetailResponse>? get videoDetailResponse => _videoDetailResponse;
@@ -360,7 +363,7 @@ class BottomNavigationViewModel extends BaseViewModel<BaseScreenView> {
           name: selectedPlayList[i].label,
           objectId: selectedPlayList[i].value,
           videoObject: VideoObject(
-                id: _videoDetailResponse?.first.id,
+              id: _videoDetailResponse?.first.id,
               categoryDetails: newCat,
               tagsDetails: tagDetails,
               tags: newTag,
@@ -557,12 +560,23 @@ class BottomNavigationViewModel extends BaseViewModel<BaseScreenView> {
             libraryList.addAll(
                 _libraryListResponse?.libraryVideosData?.first.videos ?? []);
             Logger.write("this is library response  " + r.toString());
+
             // view!.navigateToScreen(AppRoute.subscriptionView);
 
             notifyListeners();
           }),
         );
     toggleLoading();
+  }
+
+  Future<void> getInstructors() async {
+    await _homeRepo.getInstructors().then(
+          (value) => value.fold((l) {}, (r) {
+            instructorList.addAll(r);
+            selectedInstructorList.clear();
+            print("this is instructors list " + r.toString());
+          }),
+        );
   }
 
   Future<void> getAllVideos() async {
@@ -573,6 +587,7 @@ class BottomNavigationViewModel extends BaseViewModel<BaseScreenView> {
             categoryId: null,
             startIndex: 0,
             sortby: sortBy,
+            selectedInstructors: selectedInstructorList,
             selectedDurations: durations.isEmpty ? "" : durations.join(" ,"),
             selectedLevels: strength.isEmpty ? "" : strength.join(" ,"),
             selectedTags: focus.isEmpty ? "" : focus.join(","),
@@ -656,6 +671,7 @@ class BottomNavigationViewModel extends BaseViewModel<BaseScreenView> {
                 categoryId: AppConstants.categoryIdForLesson,
                 startIndex: 0,
                 sortby: sortBy,
+                selectedInstructors: selectedInstructorList,
                 selectedDurations:
                     durations.isEmpty ? "" : durations.join(" ,"),
                 selectedLevels: strength.isEmpty ? "" : strength.join(" ,"),
@@ -673,6 +689,7 @@ class BottomNavigationViewModel extends BaseViewModel<BaseScreenView> {
                 categoryId: AppConstants.categoryIdForExercise,
                 startIndex: 0,
                 sortby: sortBy,
+                selectedInstructors: selectedInstructorList,
                 selectedDurations:
                     durations.isEmpty ? "" : durations.join(" ,"),
                 selectedLevels: strength.isEmpty ? "" : strength.join(" ,"),
@@ -685,6 +702,7 @@ class BottomNavigationViewModel extends BaseViewModel<BaseScreenView> {
               categoryId: AppConstants.categoryIdForExercise,
               startIndex: 0,
               sortby: sortBy,
+              selectedInstructors: selectedInstructorList,
               selectedDurations: durations.isEmpty ? "" : durations.join(" ,"),
               selectedLevels: strength.isEmpty ? "" : strength.join(" ,"),
               selectedTags: focus.isEmpty ? "" : focus.join(","),
@@ -699,6 +717,7 @@ class BottomNavigationViewModel extends BaseViewModel<BaseScreenView> {
                 categoryId: AppConstants.categoryIdForExercise,
                 startIndex: 0,
                 sortby: sortBy,
+                selectedInstructors: selectedInstructorList,
                 selectedDurations:
                     durations.isEmpty ? "" : durations.join(" ,"),
                 selectedLevels: strength.isEmpty ? "" : strength.join(" ,"),
@@ -713,6 +732,25 @@ class BottomNavigationViewModel extends BaseViewModel<BaseScreenView> {
                 categoryId: AppConstants.categoryIdForAccross,
                 startIndex: 0,
                 sortby: sortBy,
+                selectedInstructors: selectedInstructorList,
+                selectedDurations: durations.join(" ,"),
+                selectedLevels: strength.join(" ,"),
+                selectedTags: focus.join(","),
+                userId: AppConstants.userId,
+                endIndex: 500)
+            // LibraryListRequest(categoryId:AppCons
+
+            // )
+            );
+        notifyListeners();
+
+        break;
+      case 4:
+        await getLibraryVideos(LibraryListRequest(
+                categoryId: AppConstants.categoryIdForFollowAlong,
+                startIndex: 0,
+                sortby: sortBy,
+                selectedInstructors: selectedInstructorList,
                 selectedDurations: durations.join(" ,"),
                 selectedLevels: strength.join(" ,"),
                 selectedTags: focus.join(","),

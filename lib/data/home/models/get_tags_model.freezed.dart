@@ -31,8 +31,12 @@ mixin _$GetTagsResponse {
   @JsonKey(name: "priority")
   int? get priority => throw _privateConstructorUsedError;
 
+  /// Serializes this GetTagsResponse to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of GetTagsResponse
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $GetTagsResponseCopyWith<GetTagsResponse> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -61,6 +65,8 @@ class _$GetTagsResponseCopyWithImpl<$Res, $Val extends GetTagsResponse>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of GetTagsResponse
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -119,6 +125,8 @@ class __$$GetTagsResponseImplCopyWithImpl<$Res>
       _$GetTagsResponseImpl _value, $Res Function(_$GetTagsResponseImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of GetTagsResponse
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -200,11 +208,13 @@ class _$GetTagsResponseImpl implements _GetTagsResponse {
                 other.priority == priority));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, id, name, color, v, priority);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of GetTagsResponse
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$GetTagsResponseImplCopyWith<_$GetTagsResponseImpl> get copyWith =>
@@ -245,8 +255,11 @@ abstract class _GetTagsResponse implements GetTagsResponse {
   @override
   @JsonKey(name: "priority")
   int? get priority;
+
+  /// Create a copy of GetTagsResponse
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$GetTagsResponseImplCopyWith<_$GetTagsResponseImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

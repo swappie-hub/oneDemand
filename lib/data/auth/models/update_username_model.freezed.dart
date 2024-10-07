@@ -28,8 +28,12 @@ mixin _$UpdateUsernameRequest {
   @JsonKey(name: "userId")
   String? get userId => throw _privateConstructorUsedError;
 
+  /// Serializes this UpdateUsernameRequest to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of UpdateUsernameRequest
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $UpdateUsernameRequestCopyWith<UpdateUsernameRequest> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -57,6 +61,8 @@ class _$UpdateUsernameRequestCopyWithImpl<$Res,
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of UpdateUsernameRequest
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -105,6 +111,8 @@ class __$$UpdateUsernameRequestImplCopyWithImpl<$Res>
       $Res Function(_$UpdateUsernameRequestImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of UpdateUsernameRequest
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -167,11 +175,13 @@ class _$UpdateUsernameRequestImpl implements _UpdateUsernameRequest {
             (identical(other.userId, userId) || other.userId == userId));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, firstname, lastname, userId);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of UpdateUsernameRequest
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$UpdateUsernameRequestImplCopyWith<_$UpdateUsernameRequestImpl>
@@ -205,8 +215,11 @@ abstract class _UpdateUsernameRequest implements UpdateUsernameRequest {
   @override
   @JsonKey(name: "userId")
   String? get userId;
+
+  /// Create a copy of UpdateUsernameRequest
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$UpdateUsernameRequestImplCopyWith<_$UpdateUsernameRequestImpl>
       get copyWith => throw _privateConstructorUsedError;
 }
@@ -221,8 +234,12 @@ mixin _$UpdateUsernameResponse {
   @JsonKey(name: "message")
   String? get message => throw _privateConstructorUsedError;
 
+  /// Serializes this UpdateUsernameResponse to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of UpdateUsernameResponse
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $UpdateUsernameResponseCopyWith<UpdateUsernameResponse> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -247,6 +264,8 @@ class _$UpdateUsernameResponseCopyWithImpl<$Res,
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of UpdateUsernameResponse
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -283,6 +302,8 @@ class __$$UpdateUsernameResponseImplCopyWithImpl<$Res>
       $Res Function(_$UpdateUsernameResponseImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of UpdateUsernameResponse
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -322,11 +343,13 @@ class _$UpdateUsernameResponseImpl implements _UpdateUsernameResponse {
             (identical(other.message, message) || other.message == message));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, message);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of UpdateUsernameResponse
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$UpdateUsernameResponseImplCopyWith<_$UpdateUsernameResponseImpl>
@@ -352,8 +375,11 @@ abstract class _UpdateUsernameResponse implements UpdateUsernameResponse {
   @override
   @JsonKey(name: "message")
   String? get message;
+
+  /// Create a copy of UpdateUsernameResponse
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$UpdateUsernameResponseImplCopyWith<_$UpdateUsernameResponseImpl>
       get copyWith => throw _privateConstructorUsedError;
 }

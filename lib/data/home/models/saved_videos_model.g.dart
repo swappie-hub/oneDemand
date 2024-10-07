@@ -12,7 +12,7 @@ _$SavedVideosResponseImpl _$$SavedVideosResponseImplFromJson(
       savesVideosData: (json['savesVideosData'] as List<dynamic>?)
           ?.map((e) => SavesVideosDatum.fromJson(e as Map<String, dynamic>))
           .toList(),
-      videoCount: json['videoCount'] as int?,
+      videoCount: (json['videoCount'] as num?)?.toInt(),
     );
 
 Map<String, dynamic> _$$SavedVideosResponseImplToJson(
@@ -27,7 +27,7 @@ _$SavesVideosDatumImpl _$$SavesVideosDatumImplFromJson(
     _$SavesVideosDatumImpl(
       id: json['_id'] as String?,
       title: json['title'] as String?,
-      duration: json['duration'] as int?,
+      duration: (json['duration'] as num?)?.toInt(),
       createdAt: json['createdAt'] == null
           ? null
           : DateTime.parse(json['createdAt'] as String),
@@ -55,8 +55,8 @@ _$TagsDetailImpl _$$TagsDetailImplFromJson(Map<String, dynamic> json) =>
       id: json['_id'] as String?,
       name: json['name'] as String?,
       color: json['color'] as String?,
-      v: json['__v'] as int?,
-      priority: json['priority'] as int?,
+      v: (json['__v'] as num?)?.toInt(),
+      priority: (json['priority'] as num?)?.toInt(),
     );
 
 Map<String, dynamic> _$$TagsDetailImplToJson(_$TagsDetailImpl instance) =>
@@ -71,8 +71,8 @@ Map<String, dynamic> _$$TagsDetailImplToJson(_$TagsDetailImpl instance) =>
 _$SavedVideosRequestImpl _$$SavedVideosRequestImplFromJson(
         Map<String, dynamic> json) =>
     _$SavedVideosRequestImpl(
-      startIndex: json['startIndex'] as int?,
-      endIndex: json['endIndex'] as int?,
+      startIndex: (json['startIndex'] as num?)?.toInt(),
+      endIndex: (json['endIndex'] as num?)?.toInt(),
       selectedTags: json['selectedTags'] as String?,
       selectedDurations: json['selectedDurations'] as String?,
       selectedLevels: json['selectedLevels'] as String?,

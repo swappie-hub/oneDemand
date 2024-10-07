@@ -23,8 +23,12 @@ mixin _$SaveResponse {
   @JsonKey(name: "message")
   String? get message => throw _privateConstructorUsedError;
 
+  /// Serializes this SaveResponse to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of SaveResponse
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $SaveResponseCopyWith<SaveResponse> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -48,6 +52,8 @@ class _$SaveResponseCopyWithImpl<$Res, $Val extends SaveResponse>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of SaveResponse
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -81,6 +87,8 @@ class __$$SaveResponseImplCopyWithImpl<$Res>
       _$SaveResponseImpl _value, $Res Function(_$SaveResponseImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of SaveResponse
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -120,11 +128,13 @@ class _$SaveResponseImpl implements _SaveResponse {
             (identical(other.message, message) || other.message == message));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, message);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of SaveResponse
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$SaveResponseImplCopyWith<_$SaveResponseImpl> get copyWith =>
@@ -148,8 +158,11 @@ abstract class _SaveResponse implements SaveResponse {
   @override
   @JsonKey(name: "message")
   String? get message;
+
+  /// Create a copy of SaveResponse
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$SaveResponseImplCopyWith<_$SaveResponseImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

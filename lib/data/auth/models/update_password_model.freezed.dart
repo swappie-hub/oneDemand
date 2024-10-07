@@ -30,8 +30,12 @@ mixin _$UpdatePasswordRequest {
   @JsonKey(name: "confirmPassword")
   String? get confirmPassword => throw _privateConstructorUsedError;
 
+  /// Serializes this UpdatePasswordRequest to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of UpdatePasswordRequest
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $UpdatePasswordRequestCopyWith<UpdatePasswordRequest> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -60,6 +64,8 @@ class _$UpdatePasswordRequestCopyWithImpl<$Res,
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of UpdatePasswordRequest
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -114,6 +120,8 @@ class __$$UpdatePasswordRequestImplCopyWithImpl<$Res>
       $Res Function(_$UpdatePasswordRequestImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of UpdatePasswordRequest
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -187,12 +195,14 @@ class _$UpdatePasswordRequestImpl implements _UpdatePasswordRequest {
                 other.confirmPassword == confirmPassword));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
       runtimeType, userId, currentPassword, newPassword, confirmPassword);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of UpdatePasswordRequest
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$UpdatePasswordRequestImplCopyWith<_$UpdatePasswordRequestImpl>
@@ -230,8 +240,11 @@ abstract class _UpdatePasswordRequest implements UpdatePasswordRequest {
   @override
   @JsonKey(name: "confirmPassword")
   String? get confirmPassword;
+
+  /// Create a copy of UpdatePasswordRequest
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$UpdatePasswordRequestImplCopyWith<_$UpdatePasswordRequestImpl>
       get copyWith => throw _privateConstructorUsedError;
 }
@@ -246,8 +259,12 @@ mixin _$UpdatePasswordResponse {
   @JsonKey(name: "message")
   String? get message => throw _privateConstructorUsedError;
 
+  /// Serializes this UpdatePasswordResponse to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of UpdatePasswordResponse
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $UpdatePasswordResponseCopyWith<UpdatePasswordResponse> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -272,6 +289,8 @@ class _$UpdatePasswordResponseCopyWithImpl<$Res,
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of UpdatePasswordResponse
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -308,6 +327,8 @@ class __$$UpdatePasswordResponseImplCopyWithImpl<$Res>
       $Res Function(_$UpdatePasswordResponseImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of UpdatePasswordResponse
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -347,11 +368,13 @@ class _$UpdatePasswordResponseImpl implements _UpdatePasswordResponse {
             (identical(other.message, message) || other.message == message));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, message);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of UpdatePasswordResponse
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$UpdatePasswordResponseImplCopyWith<_$UpdatePasswordResponseImpl>
@@ -377,8 +400,11 @@ abstract class _UpdatePasswordResponse implements UpdatePasswordResponse {
   @override
   @JsonKey(name: "message")
   String? get message;
+
+  /// Create a copy of UpdatePasswordResponse
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$UpdatePasswordResponseImplCopyWith<_$UpdatePasswordResponseImpl>
       get copyWith => throw _privateConstructorUsedError;
 }

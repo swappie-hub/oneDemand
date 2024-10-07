@@ -12,8 +12,8 @@ _$GetTagsResponseImpl _$$GetTagsResponseImplFromJson(
       id: json['_id'] as String?,
       name: json['name'] as String?,
       color: json['color'] as String?,
-      v: json['__v'] as int?,
-      priority: json['priority'] as int?,
+      v: (json['__v'] as num?)?.toInt(),
+      priority: (json['priority'] as num?)?.toInt(),
     );
 
 Map<String, dynamic> _$$GetTagsResponseImplToJson(

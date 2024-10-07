@@ -26,6 +26,7 @@ class LibraryListRequest with _$LibraryListRequest {
     @JsonKey(name: "selectedDurations") String? selectedDurations,
     @JsonKey(name: "selectedLevels") String? selectedLevels,
     @JsonKey(name: "sortby") String? sortby,
+    @JsonKey(name: "selectedInstructors") List<String>? selectedInstructors,
     @JsonKey(name: "userId") String? userId,
   }) = _LibraryListRequest;
 

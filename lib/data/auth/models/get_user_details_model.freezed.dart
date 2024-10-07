@@ -36,8 +36,12 @@ mixin _$GetUserDetailResponse {
   @JsonKey(name: "imageRequiresValidation")
   bool? get imageRequiresValidation => throw _privateConstructorUsedError;
 
+  /// Serializes this GetUserDetailResponse to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of GetUserDetailResponse
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $GetUserDetailResponseCopyWith<GetUserDetailResponse> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -69,6 +73,8 @@ class _$GetUserDetailResponseCopyWithImpl<$Res,
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of GetUserDetailResponse
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -141,6 +147,8 @@ class __$$GetUserDetailResponseImplCopyWithImpl<$Res>
       $Res Function(_$GetUserDetailResponseImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of GetUserDetailResponse
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -246,12 +254,14 @@ class _$GetUserDetailResponseImpl implements _GetUserDetailResponse {
                 other.imageRequiresValidation == imageRequiresValidation));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, id, firstname, lastname, email,
       commentNotifications, image, imageRequiresValidation);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of GetUserDetailResponse
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$GetUserDetailResponseImplCopyWith<_$GetUserDetailResponseImpl>
@@ -301,8 +311,11 @@ abstract class _GetUserDetailResponse implements GetUserDetailResponse {
   @override
   @JsonKey(name: "imageRequiresValidation")
   bool? get imageRequiresValidation;
+
+  /// Create a copy of GetUserDetailResponse
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$GetUserDetailResponseImplCopyWith<_$GetUserDetailResponseImpl>
       get copyWith => throw _privateConstructorUsedError;
 }

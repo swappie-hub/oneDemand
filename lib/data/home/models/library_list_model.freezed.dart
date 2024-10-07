@@ -34,11 +34,17 @@ mixin _$LibraryListRequest {
   String? get selectedLevels => throw _privateConstructorUsedError;
   @JsonKey(name: "sortby")
   String? get sortby => throw _privateConstructorUsedError;
+  @JsonKey(name: "selectedInstructors")
+  List<String>? get selectedInstructors => throw _privateConstructorUsedError;
   @JsonKey(name: "userId")
   String? get userId => throw _privateConstructorUsedError;
 
+  /// Serializes this LibraryListRequest to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of LibraryListRequest
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $LibraryListRequestCopyWith<LibraryListRequest> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -57,6 +63,7 @@ abstract class $LibraryListRequestCopyWith<$Res> {
       @JsonKey(name: "selectedDurations") String? selectedDurations,
       @JsonKey(name: "selectedLevels") String? selectedLevels,
       @JsonKey(name: "sortby") String? sortby,
+      @JsonKey(name: "selectedInstructors") List<String>? selectedInstructors,
       @JsonKey(name: "userId") String? userId});
 }
 
@@ -70,6 +77,8 @@ class _$LibraryListRequestCopyWithImpl<$Res, $Val extends LibraryListRequest>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of LibraryListRequest
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -80,6 +89,7 @@ class _$LibraryListRequestCopyWithImpl<$Res, $Val extends LibraryListRequest>
     Object? selectedDurations = freezed,
     Object? selectedLevels = freezed,
     Object? sortby = freezed,
+    Object? selectedInstructors = freezed,
     Object? userId = freezed,
   }) {
     return _then(_value.copyWith(
@@ -111,6 +121,10 @@ class _$LibraryListRequestCopyWithImpl<$Res, $Val extends LibraryListRequest>
           ? _value.sortby
           : sortby // ignore: cast_nullable_to_non_nullable
               as String?,
+      selectedInstructors: freezed == selectedInstructors
+          ? _value.selectedInstructors
+          : selectedInstructors // ignore: cast_nullable_to_non_nullable
+              as List<String>?,
       userId: freezed == userId
           ? _value.userId
           : userId // ignore: cast_nullable_to_non_nullable
@@ -135,6 +149,7 @@ abstract class _$$LibraryListRequestImplCopyWith<$Res>
       @JsonKey(name: "selectedDurations") String? selectedDurations,
       @JsonKey(name: "selectedLevels") String? selectedLevels,
       @JsonKey(name: "sortby") String? sortby,
+      @JsonKey(name: "selectedInstructors") List<String>? selectedInstructors,
       @JsonKey(name: "userId") String? userId});
 }
 
@@ -146,6 +161,8 @@ class __$$LibraryListRequestImplCopyWithImpl<$Res>
       $Res Function(_$LibraryListRequestImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of LibraryListRequest
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -156,6 +173,7 @@ class __$$LibraryListRequestImplCopyWithImpl<$Res>
     Object? selectedDurations = freezed,
     Object? selectedLevels = freezed,
     Object? sortby = freezed,
+    Object? selectedInstructors = freezed,
     Object? userId = freezed,
   }) {
     return _then(_$LibraryListRequestImpl(
@@ -187,6 +205,10 @@ class __$$LibraryListRequestImplCopyWithImpl<$Res>
           ? _value.sortby
           : sortby // ignore: cast_nullable_to_non_nullable
               as String?,
+      selectedInstructors: freezed == selectedInstructors
+          ? _value._selectedInstructors
+          : selectedInstructors // ignore: cast_nullable_to_non_nullable
+              as List<String>?,
       userId: freezed == userId
           ? _value.userId
           : userId // ignore: cast_nullable_to_non_nullable
@@ -206,7 +228,10 @@ class _$LibraryListRequestImpl implements _LibraryListRequest {
       @JsonKey(name: "selectedDurations") this.selectedDurations,
       @JsonKey(name: "selectedLevels") this.selectedLevels,
       @JsonKey(name: "sortby") this.sortby,
-      @JsonKey(name: "userId") this.userId});
+      @JsonKey(name: "selectedInstructors")
+      final List<String>? selectedInstructors,
+      @JsonKey(name: "userId") this.userId})
+      : _selectedInstructors = selectedInstructors;
 
   factory _$LibraryListRequestImpl.fromJson(Map<String, dynamic> json) =>
       _$$LibraryListRequestImplFromJson(json);
@@ -232,13 +257,25 @@ class _$LibraryListRequestImpl implements _LibraryListRequest {
   @override
   @JsonKey(name: "sortby")
   final String? sortby;
+  final List<String>? _selectedInstructors;
+  @override
+  @JsonKey(name: "selectedInstructors")
+  List<String>? get selectedInstructors {
+    final value = _selectedInstructors;
+    if (value == null) return null;
+    if (_selectedInstructors is EqualUnmodifiableListView)
+      return _selectedInstructors;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(value);
+  }
+
   @override
   @JsonKey(name: "userId")
   final String? userId;
 
   @override
   String toString() {
-    return 'LibraryListRequest(categoryId: $categoryId, startIndex: $startIndex, endIndex: $endIndex, selectedTags: $selectedTags, selectedDurations: $selectedDurations, selectedLevels: $selectedLevels, sortby: $sortby, userId: $userId)';
+    return 'LibraryListRequest(categoryId: $categoryId, startIndex: $startIndex, endIndex: $endIndex, selectedTags: $selectedTags, selectedDurations: $selectedDurations, selectedLevels: $selectedLevels, sortby: $sortby, selectedInstructors: $selectedInstructors, userId: $userId)';
   }
 
   @override
@@ -259,15 +296,28 @@ class _$LibraryListRequestImpl implements _LibraryListRequest {
             (identical(other.selectedLevels, selectedLevels) ||
                 other.selectedLevels == selectedLevels) &&
             (identical(other.sortby, sortby) || other.sortby == sortby) &&
+            const DeepCollectionEquality()
+                .equals(other._selectedInstructors, _selectedInstructors) &&
             (identical(other.userId, userId) || other.userId == userId));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, categoryId, startIndex, endIndex,
-      selectedTags, selectedDurations, selectedLevels, sortby, userId);
+  int get hashCode => Object.hash(
+      runtimeType,
+      categoryId,
+      startIndex,
+      endIndex,
+      selectedTags,
+      selectedDurations,
+      selectedLevels,
+      sortby,
+      const DeepCollectionEquality().hash(_selectedInstructors),
+      userId);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of LibraryListRequest
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$LibraryListRequestImplCopyWith<_$LibraryListRequestImpl> get copyWith =>
@@ -291,6 +341,8 @@ abstract class _LibraryListRequest implements LibraryListRequest {
           @JsonKey(name: "selectedDurations") final String? selectedDurations,
           @JsonKey(name: "selectedLevels") final String? selectedLevels,
           @JsonKey(name: "sortby") final String? sortby,
+          @JsonKey(name: "selectedInstructors")
+          final List<String>? selectedInstructors,
           @JsonKey(name: "userId") final String? userId}) =
       _$LibraryListRequestImpl;
 
@@ -319,10 +371,16 @@ abstract class _LibraryListRequest implements LibraryListRequest {
   @JsonKey(name: "sortby")
   String? get sortby;
   @override
+  @JsonKey(name: "selectedInstructors")
+  List<String>? get selectedInstructors;
+  @override
   @JsonKey(name: "userId")
   String? get userId;
+
+  /// Create a copy of LibraryListRequest
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$LibraryListRequestImplCopyWith<_$LibraryListRequestImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -337,8 +395,12 @@ mixin _$LibraryListResponse {
   List<LibraryVideosDatum>? get libraryVideosData =>
       throw _privateConstructorUsedError;
 
+  /// Serializes this LibraryListResponse to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of LibraryListResponse
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $LibraryListResponseCopyWith<LibraryListResponse> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -364,6 +426,8 @@ class _$LibraryListResponseCopyWithImpl<$Res, $Val extends LibraryListResponse>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of LibraryListResponse
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -399,6 +463,8 @@ class __$$LibraryListResponseImplCopyWithImpl<$Res>
       $Res Function(_$LibraryListResponseImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of LibraryListResponse
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -450,12 +516,14 @@ class _$LibraryListResponseImpl implements _LibraryListResponse {
                 .equals(other._libraryVideosData, _libraryVideosData));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
       runtimeType, const DeepCollectionEquality().hash(_libraryVideosData));
 
-  @JsonKey(ignore: true)
+  /// Create a copy of LibraryListResponse
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$LibraryListResponseImplCopyWith<_$LibraryListResponseImpl> get copyWith =>
@@ -482,8 +550,11 @@ abstract class _LibraryListResponse implements LibraryListResponse {
   @override
   @JsonKey(name: "libraryVideosData")
   List<LibraryVideosDatum>? get libraryVideosData;
+
+  /// Create a copy of LibraryListResponse
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$LibraryListResponseImplCopyWith<_$LibraryListResponseImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -503,8 +574,12 @@ mixin _$LibraryVideosDatum {
   @JsonKey(name: "totalRecords")
   int? get totalRecords => throw _privateConstructorUsedError;
 
+  /// Serializes this LibraryVideosDatum to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of LibraryVideosDatum
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $LibraryVideosDatumCopyWith<LibraryVideosDatum> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -532,6 +607,8 @@ class _$LibraryVideosDatumCopyWithImpl<$Res, $Val extends LibraryVideosDatum>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of LibraryVideosDatum
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -584,6 +661,8 @@ class __$$LibraryVideosDatumImplCopyWithImpl<$Res>
       $Res Function(_$LibraryVideosDatumImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of LibraryVideosDatum
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -665,12 +744,14 @@ class _$LibraryVideosDatumImpl implements _LibraryVideosDatum {
                 other.totalRecords == totalRecords));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, categoryId, name,
       const DeepCollectionEquality().hash(_videos), totalRecords);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of LibraryVideosDatum
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$LibraryVideosDatumImplCopyWith<_$LibraryVideosDatumImpl> get copyWith =>
@@ -708,8 +789,11 @@ abstract class _LibraryVideosDatum implements LibraryVideosDatum {
   @override
   @JsonKey(name: "totalRecords")
   int? get totalRecords;
+
+  /// Create a copy of LibraryVideosDatum
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$LibraryVideosDatumImplCopyWith<_$LibraryVideosDatumImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -735,8 +819,12 @@ mixin _$Video {
   @JsonKey(name: "savedvideo")
   bool? get savedvideo => throw _privateConstructorUsedError;
 
+  /// Serializes this Video to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of Video
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $VideoCopyWith<Video> get copyWith => throw _privateConstructorUsedError;
 }
 
@@ -765,6 +853,8 @@ class _$VideoCopyWithImpl<$Res, $Val extends Video>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of Video
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -834,6 +924,8 @@ class __$$VideoImplCopyWithImpl<$Res>
       _$VideoImpl _value, $Res Function(_$VideoImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of Video
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -948,7 +1040,7 @@ class _$VideoImpl implements _Video {
                 other.savedvideo == savedvideo));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
       runtimeType,
@@ -960,7 +1052,9 @@ class _$VideoImpl implements _Video {
       const DeepCollectionEquality().hash(_tagsDetails),
       savedvideo);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of Video
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$VideoImplCopyWith<_$VideoImpl> get copyWith =>
@@ -1007,8 +1101,11 @@ abstract class _Video implements Video {
   @override
   @JsonKey(name: "savedvideo")
   bool? get savedvideo;
+
+  /// Create a copy of Video
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$VideoImplCopyWith<_$VideoImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -1030,8 +1127,12 @@ mixin _$TagsDetail {
   @JsonKey(name: "priority")
   int? get priority => throw _privateConstructorUsedError;
 
+  /// Serializes this TagsDetail to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of TagsDetail
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $TagsDetailCopyWith<TagsDetail> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -1060,6 +1161,8 @@ class _$TagsDetailCopyWithImpl<$Res, $Val extends TagsDetail>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of TagsDetail
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -1118,6 +1221,8 @@ class __$$TagsDetailImplCopyWithImpl<$Res>
       _$TagsDetailImpl _value, $Res Function(_$TagsDetailImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of TagsDetail
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -1199,11 +1304,13 @@ class _$TagsDetailImpl implements _TagsDetail {
                 other.priority == priority));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, id, name, color, v, priority);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of TagsDetail
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$TagsDetailImplCopyWith<_$TagsDetailImpl> get copyWith =>
@@ -1243,8 +1350,11 @@ abstract class _TagsDetail implements TagsDetail {
   @override
   @JsonKey(name: "priority")
   int? get priority;
+
+  /// Create a copy of TagsDetail
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$TagsDetailImplCopyWith<_$TagsDetailImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

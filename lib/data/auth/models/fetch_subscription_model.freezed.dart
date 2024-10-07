@@ -26,8 +26,12 @@ mixin _$FetchSubscriptionResponse {
   @JsonKey(name: "data")
   String? get data => throw _privateConstructorUsedError;
 
+  /// Serializes this FetchSubscriptionResponse to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of FetchSubscriptionResponse
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $FetchSubscriptionResponseCopyWith<FetchSubscriptionResponse> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -54,6 +58,8 @@ class _$FetchSubscriptionResponseCopyWithImpl<$Res,
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of FetchSubscriptionResponse
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -97,6 +103,8 @@ class __$$FetchSubscriptionResponseImplCopyWithImpl<$Res>
       $Res Function(_$FetchSubscriptionResponseImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of FetchSubscriptionResponse
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -147,11 +155,13 @@ class _$FetchSubscriptionResponseImpl implements _FetchSubscriptionResponse {
             (identical(other.data, data) || other.data == data));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, message, data);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of FetchSubscriptionResponse
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$FetchSubscriptionResponseImplCopyWith<_$FetchSubscriptionResponseImpl>
@@ -181,8 +191,11 @@ abstract class _FetchSubscriptionResponse implements FetchSubscriptionResponse {
   @override
   @JsonKey(name: "data")
   String? get data;
+
+  /// Create a copy of FetchSubscriptionResponse
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$FetchSubscriptionResponseImplCopyWith<_$FetchSubscriptionResponseImpl>
       get copyWith => throw _privateConstructorUsedError;
 }

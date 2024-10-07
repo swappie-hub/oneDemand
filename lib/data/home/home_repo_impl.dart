@@ -239,4 +239,19 @@ class HomeRepoImpl implements HomeRepo {
       return Left(ApiException(e.toString()));
     }
   }
+
+  @override
+  Future<Either<ApiException, List<String>>> getInstructors() async {
+    try {
+      final response = await _apiClient.get(
+          sendCookies: true, "${AppConstants.baseUrl}/video/instructors");
+      print("this is response" + response.data.toString());
+      List<String> instructors = [];
+      instructors = response.data.cast<String>();
+      return Right(instructors);
+    } catch (e) {
+      Logger.write(e.toString());
+      return Left(ApiException(e.toString()));
+    }
+  }
 }

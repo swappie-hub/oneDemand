@@ -23,8 +23,12 @@ mixin _$SubscriptionResponse {
   @JsonKey(name: "list")
   List<ListElement>? get list => throw _privateConstructorUsedError;
 
+  /// Serializes this SubscriptionResponse to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of SubscriptionResponse
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $SubscriptionResponseCopyWith<SubscriptionResponse> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -49,6 +53,8 @@ class _$SubscriptionResponseCopyWithImpl<$Res,
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of SubscriptionResponse
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -82,6 +88,8 @@ class __$$SubscriptionResponseImplCopyWithImpl<$Res>
       $Res Function(_$SubscriptionResponseImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of SubscriptionResponse
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -130,12 +138,14 @@ class _$SubscriptionResponseImpl implements _SubscriptionResponse {
             const DeepCollectionEquality().equals(other._list, _list));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode =>
       Object.hash(runtimeType, const DeepCollectionEquality().hash(_list));
 
-  @JsonKey(ignore: true)
+  /// Create a copy of SubscriptionResponse
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$SubscriptionResponseImplCopyWith<_$SubscriptionResponseImpl>
@@ -162,8 +172,11 @@ abstract class _SubscriptionResponse implements SubscriptionResponse {
   @override
   @JsonKey(name: "list")
   List<ListElement>? get list;
+
+  /// Create a copy of SubscriptionResponse
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$SubscriptionResponseImplCopyWith<_$SubscriptionResponseImpl>
       get copyWith => throw _privateConstructorUsedError;
 }
@@ -177,8 +190,12 @@ mixin _$ListElement {
   @JsonKey(name: "item_price")
   ItemPrice? get itemPrice => throw _privateConstructorUsedError;
 
+  /// Serializes this ListElement to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of ListElement
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $ListElementCopyWith<ListElement> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -204,6 +221,8 @@ class _$ListElementCopyWithImpl<$Res, $Val extends ListElement>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of ListElement
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -217,6 +236,8 @@ class _$ListElementCopyWithImpl<$Res, $Val extends ListElement>
     ) as $Val);
   }
 
+  /// Create a copy of ListElement
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $ItemPriceCopyWith<$Res>? get itemPrice {
@@ -252,6 +273,8 @@ class __$$ListElementImplCopyWithImpl<$Res>
       _$ListElementImpl _value, $Res Function(_$ListElementImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of ListElement
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -292,11 +315,13 @@ class _$ListElementImpl implements _ListElement {
                 other.itemPrice == itemPrice));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, itemPrice);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of ListElement
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$ListElementImplCopyWith<_$ListElementImpl> get copyWith =>
@@ -321,8 +346,11 @@ abstract class _ListElement implements ListElement {
   @override
   @JsonKey(name: "item_price")
   ItemPrice? get itemPrice;
+
+  /// Create a copy of ListElement
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$ListElementImplCopyWith<_$ListElementImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -382,8 +410,12 @@ mixin _$ItemPrice {
   @JsonKey(name: "object")
   String? get object => throw _privateConstructorUsedError;
 
+  /// Serializes this ItemPrice to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of ItemPrice
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $ItemPriceCopyWith<ItemPrice> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -434,6 +466,8 @@ class _$ItemPriceCopyWithImpl<$Res, $Val extends ItemPrice>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of ItemPrice
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -562,6 +596,8 @@ class _$ItemPriceCopyWithImpl<$Res, $Val extends ItemPrice>
     ) as $Val);
   }
 
+  /// Create a copy of ItemPrice
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $MetadataCopyWith<$Res>? get metadata {
@@ -623,6 +659,8 @@ class __$$ItemPriceImplCopyWithImpl<$Res>
       _$ItemPriceImpl _value, $Res Function(_$ItemPriceImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of ItemPrice
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -912,7 +950,7 @@ class _$ItemPriceImpl implements _ItemPrice {
             (identical(other.object, object) || other.object == object));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hashAll([
         runtimeType,
@@ -942,7 +980,9 @@ class _$ItemPriceImpl implements _ItemPrice {
         object
       ]);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of ItemPrice
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$ItemPriceImplCopyWith<_$ItemPriceImpl> get copyWith =>
@@ -1060,8 +1100,11 @@ abstract class _ItemPrice implements ItemPrice {
   @override
   @JsonKey(name: "object")
   String? get object;
+
+  /// Create a copy of ItemPrice
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$ItemPriceImplCopyWith<_$ItemPriceImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -1072,6 +1115,7 @@ Metadata _$MetadataFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$Metadata {
+  /// Serializes this Metadata to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
 }
 
@@ -1090,6 +1134,9 @@ class _$MetadataCopyWithImpl<$Res, $Val extends Metadata>
   final $Val _value;
   // ignore: unused_field
   final $Res Function($Val) _then;
+
+  /// Create a copy of Metadata
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -1106,6 +1153,9 @@ class __$$MetadataImplCopyWithImpl<$Res>
   __$$MetadataImplCopyWithImpl(
       _$MetadataImpl _value, $Res Function(_$MetadataImpl) _then)
       : super(_value, _then);
+
+  /// Create a copy of Metadata
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -1127,7 +1177,7 @@ class _$MetadataImpl implements _Metadata {
         (other.runtimeType == runtimeType && other is _$MetadataImpl);
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => runtimeType.hashCode;
 

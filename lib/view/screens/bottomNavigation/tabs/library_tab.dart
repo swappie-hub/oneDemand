@@ -22,12 +22,15 @@ class _LibraryViewState extends ConsumerState<LibraryView> with BaseScreenView {
 
   bool isDurationOpen = false;
   bool isFocusOpen = false;
+  bool isInstructorOpen = false;
+
   bool isStrengthOpen = false;
   List<String> chipsText = [
     "ALL",
     "LESSONS",
     "EXERCISES",
     "ACROSS THE FLOOR",
+    "Follow Along"
   ];
 
   late BottomNavigationViewModel _viewModel;
@@ -39,6 +42,7 @@ class _LibraryViewState extends ConsumerState<LibraryView> with BaseScreenView {
     _viewModel.attachView(this);
     Future.delayed(Duration(milliseconds: 2)).then((value) async {
       _viewModel.toggleLoading();
+      _viewModel.getInstructors();
       _viewModel.setVideoList(
         val,
       );
@@ -201,7 +205,7 @@ class _LibraryViewState extends ConsumerState<LibraryView> with BaseScreenView {
                     mainAxisSize: MainAxisSize.max,
                     children: [
                       ...List.generate(
-                          4,
+                          5,
                           (index3) => InkWell(
                                 onTap: () {
                                   setState(() {
@@ -1140,6 +1144,107 @@ class _LibraryViewState extends ConsumerState<LibraryView> with BaseScreenView {
                                 ),
                               ),
                             ),
+                          ],
+                        ),
+                      ),
+                    ),
+
+                    gapH8,
+                    //todo instructor
+                    InkWell(
+                      onTap: () {
+                        isInstructorOpen = !isInstructorOpen;
+                        setSt(() {});
+                      },
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "Instructors",
+                            style: TextStyle(
+                                color: Color(0xFF3CB4E4), fontSize: 14),
+                          ),
+                          Icon(
+                            isInstructorOpen
+                                ? Icons.expand_more
+                                : Icons.arrow_forward_ios,
+                            size: isInstructorOpen ? 35 : 25,
+                            color: Color(0xFF3CB4E4),
+                          )
+                        ],
+                      ),
+                    ),
+                    gapH4,
+                    Visibility(
+                      visible: isInstructorOpen,
+                      child: Padding(
+                        padding: const EdgeInsets.only(right: 8),
+                        child: Column(
+                          children: [
+                            ...List.generate(
+                              _viewModel.instructorList.length,
+                              (index) => Column(
+                                children: [
+                                  InkWell(
+                                    onTap: () {
+                                      setSt(() {
+                                        if (_viewModel.selectedInstructorList
+                                            .contains(
+                                                _viewModel.instructorList[index])) {
+                                          _viewModel.selectedInstructorList.remove(
+                                              _viewModel.instructorList[index]);
+                                        } else {
+                                          _viewModel.selectedInstructorList.add(
+                                              _viewModel.instructorList[index]);
+                                        }
+                                      });
+                                    },
+                                    child: Container(
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(_viewModel.instructorList[index]),
+                                          Container(
+                                            height: 18,
+                                            width: 18,
+                                            decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(2),
+                                                color: !_viewModel
+                                                        .selectedInstructorList
+                                                        .contains(_viewModel
+                                                            .instructorList[index])
+                                                    ? Colors.transparent
+                                                    : Color(0xFF008BC3),
+                                                border: Border.all(
+                                                    color: _viewModel
+                                                            .selectedInstructorList
+                                                            .contains(_viewModel
+                                                                    .instructorList[
+                                                                index])
+                                                        ? Colors.transparent
+                                                        : Colors.white)),
+                                            child: Icon(
+                                              Icons.check,
+                                              size: 10,
+                                              color:_viewModel
+                                                            .selectedInstructorList
+                                                            .contains(_viewModel
+                                                                    .instructorList[
+                                                                index])
+                                                  ? Colors.white
+                                                  : Colors.transparent,
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                  gapH4
+                                ],
+                              ),
+                            )
                           ],
                         ),
                       ),

@@ -12,7 +12,7 @@ _$SearchListResponseImpl _$$SearchListResponseImplFromJson(
       videos: (json['videos'] as List<dynamic>?)
           ?.map((e) => Video.fromJson(e as Map<String, dynamic>))
           .toList(),
-      videoCount: json['videoCount'] as int?,
+      videoCount: (json['videoCount'] as num?)?.toInt(),
     );
 
 Map<String, dynamic> _$$SearchListResponseImplToJson(
@@ -41,12 +41,12 @@ _$VideoImpl _$$VideoImplFromJson(Map<String, dynamic> json) => _$VideoImpl(
           : DateTime.parse(json['createdAt'] as String),
       videolink: json['videolink'] as String?,
       thumnailLink: json['thumnailLink'] as String?,
-      duration: json['duration'] as int?,
+      duration: (json['duration'] as num?)?.toInt(),
       releaseDateTime: json['releaseDateTime'] == null
           ? null
           : DateTime.parse(json['releaseDateTime'] as String),
       isFeatured: json['isFeatured'] as bool?,
-      v: json['__v'] as int?,
+      v: (json['__v'] as num?)?.toInt(),
       updatedAt: json['updatedAt'] == null
           ? null
           : DateTime.parse(json['updatedAt'] as String),
@@ -92,8 +92,8 @@ _$ReferalIdImpl _$$ReferalIdImplFromJson(Map<String, dynamic> json) =>
       id: json['_id'] as String?,
       name: json['name'] as String?,
       color: json['color'] as String?,
-      v: json['__v'] as int?,
-      priority: json['priority'] as int?,
+      v: (json['__v'] as num?)?.toInt(),
+      priority: (json['priority'] as num?)?.toInt(),
     );
 
 Map<String, dynamic> _$$ReferalIdImplToJson(_$ReferalIdImpl instance) =>

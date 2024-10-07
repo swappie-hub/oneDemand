@@ -35,4 +35,5 @@ abstract class HomeRepo {
   Future<Either<ApiException, List<FetchAllPlaylistResponse>>> fetchAllVideos();
   Future<Either<ApiException, CreatePlaylistResponse>> createPlay(
       AddPlaylistVidieoRequest addPlaylistVidieoRequest);
+  Future<Either<ApiException, List<String>>> getInstructors();
 }

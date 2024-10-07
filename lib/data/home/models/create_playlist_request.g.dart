@@ -31,7 +31,7 @@ _$VideoImpl _$$VideoImplFromJson(Map<String, dynamic> json) => _$VideoImpl(
       vId: json['v_id'] as String?,
       title: json['title'] as String?,
       description: json['description'],
-      duration: json['duration'] as int?,
+      duration: (json['duration'] as num?)?.toInt(),
       categoryId: json['CategoryId'] as String?,
       videolink: json['videolink'] as String?,
       thumnailLink: json['thumnailLink'] as String?,
@@ -45,7 +45,7 @@ _$VideoImpl _$$VideoImplFromJson(Map<String, dynamic> json) => _$VideoImpl(
       releaseDateTime: json['releaseDateTime'] == null
           ? null
           : DateTime.parse(json['releaseDateTime'] as String),
-      v: json['__v'] as int?,
+      v: (json['__v'] as num?)?.toInt(),
       updatedAt: json['updatedAt'] == null
           ? null
           : DateTime.parse(json['updatedAt'] as String),
@@ -97,7 +97,7 @@ _$CategoryDetailImpl _$$CategoryDetailImplFromJson(Map<String, dynamic> json) =>
     _$CategoryDetailImpl(
       id: json['_id'] as String?,
       name: json['name'] as String?,
-      v: json['__v'] as int?,
+      v: (json['__v'] as num?)?.toInt(),
     );
 
 Map<String, dynamic> _$$CategoryDetailImplToJson(
@@ -131,7 +131,7 @@ _$ProductsDatumImpl _$$ProductsDatumImplFromJson(Map<String, dynamic> json) =>
       images: (json['images'] as List<dynamic>?)
           ?.map((e) => Image.fromJson(e as Map<String, dynamic>))
           .toList(),
-      v: json['__v'] as int?,
+      v: (json['__v'] as num?)?.toInt(),
     );
 
 Map<String, dynamic> _$$ProductsDatumImplToJson(_$ProductsDatumImpl instance) =>
@@ -188,8 +188,8 @@ _$TagsDatumImpl _$$TagsDatumImplFromJson(Map<String, dynamic> json) =>
       id: json['_id'] as String?,
       name: json['name'] as String?,
       color: json['color'] as String?,
-      v: json['__v'] as int?,
-      priority: json['priority'] as int?,
+      v: (json['__v'] as num?)?.toInt(),
+      priority: (json['priority'] as num?)?.toInt(),
     );
 
 Map<String, dynamic> _$$TagsDatumImplToJson(_$TagsDatumImpl instance) =>

@@ -25,8 +25,12 @@ mixin _$HomeVideoResponse {
   @JsonKey(name: "videos")
   List<Video>? get videos => throw _privateConstructorUsedError;
 
+  /// Serializes this HomeVideoResponse to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of HomeVideoResponse
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $HomeVideoResponseCopyWith<HomeVideoResponse> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -52,6 +56,8 @@ class _$HomeVideoResponseCopyWithImpl<$Res, $Val extends HomeVideoResponse>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of HomeVideoResponse
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -92,6 +98,8 @@ class __$$HomeVideoResponseImplCopyWithImpl<$Res>
       $Res Function(_$HomeVideoResponseImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of HomeVideoResponse
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -150,12 +158,14 @@ class _$HomeVideoResponseImpl implements _HomeVideoResponse {
             const DeepCollectionEquality().equals(other._videos, _videos));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
       runtimeType, name, const DeepCollectionEquality().hash(_videos));
 
-  @JsonKey(ignore: true)
+  /// Create a copy of HomeVideoResponse
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$HomeVideoResponseImplCopyWith<_$HomeVideoResponseImpl> get copyWith =>
@@ -185,8 +195,11 @@ abstract class _HomeVideoResponse implements HomeVideoResponse {
   @override
   @JsonKey(name: "videos")
   List<Video>? get videos;
+
+  /// Create a copy of HomeVideoResponse
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$HomeVideoResponseImplCopyWith<_$HomeVideoResponseImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -212,8 +225,12 @@ mixin _$Video {
   @JsonKey(name: "savedvideo")
   bool? get savedvideo => throw _privateConstructorUsedError;
 
+  /// Serializes this Video to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of Video
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $VideoCopyWith<Video> get copyWith => throw _privateConstructorUsedError;
 }
 
@@ -242,6 +259,8 @@ class _$VideoCopyWithImpl<$Res, $Val extends Video>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of Video
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -311,6 +330,8 @@ class __$$VideoImplCopyWithImpl<$Res>
       _$VideoImpl _value, $Res Function(_$VideoImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of Video
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -425,7 +446,7 @@ class _$VideoImpl implements _Video {
                 other.savedvideo == savedvideo));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
       runtimeType,
@@ -437,7 +458,9 @@ class _$VideoImpl implements _Video {
       const DeepCollectionEquality().hash(_tagsDetails),
       savedvideo);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of Video
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$VideoImplCopyWith<_$VideoImpl> get copyWith =>
@@ -484,8 +507,11 @@ abstract class _Video implements Video {
   @override
   @JsonKey(name: "savedvideo")
   bool? get savedvideo;
+
+  /// Create a copy of Video
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$VideoImplCopyWith<_$VideoImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -507,8 +533,12 @@ mixin _$TagsDetail {
   @JsonKey(name: "priority")
   int? get priority => throw _privateConstructorUsedError;
 
+  /// Serializes this TagsDetail to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of TagsDetail
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $TagsDetailCopyWith<TagsDetail> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -537,6 +567,8 @@ class _$TagsDetailCopyWithImpl<$Res, $Val extends TagsDetail>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of TagsDetail
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -595,6 +627,8 @@ class __$$TagsDetailImplCopyWithImpl<$Res>
       _$TagsDetailImpl _value, $Res Function(_$TagsDetailImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of TagsDetail
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -676,11 +710,13 @@ class _$TagsDetailImpl implements _TagsDetail {
                 other.priority == priority));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, id, name, color, v, priority);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of TagsDetail
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$TagsDetailImplCopyWith<_$TagsDetailImpl> get copyWith =>
@@ -720,8 +756,11 @@ abstract class _TagsDetail implements TagsDetail {
   @override
   @JsonKey(name: "priority")
   int? get priority;
+
+  /// Create a copy of TagsDetail
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$TagsDetailImplCopyWith<_$TagsDetailImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

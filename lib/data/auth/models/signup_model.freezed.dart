@@ -30,9 +30,15 @@ mixin _$SignupRequest {
   String? get firstname => throw _privateConstructorUsedError;
   @JsonKey(name: "device_token")
   String? get devicetoken => throw _privateConstructorUsedError;
+  @JsonKey(name: "roleType")
+  String? get roleType => throw _privateConstructorUsedError;
 
+  /// Serializes this SignupRequest to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of SignupRequest
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $SignupRequestCopyWith<SignupRequest> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -48,7 +54,8 @@ abstract class $SignupRequestCopyWith<$Res> {
       @JsonKey(name: "password") String? password,
       @JsonKey(name: "lastname") String? lastname,
       @JsonKey(name: "firstname") String? firstname,
-      @JsonKey(name: "device_token") String? devicetoken});
+      @JsonKey(name: "device_token") String? devicetoken,
+      @JsonKey(name: "roleType") String? roleType});
 }
 
 /// @nodoc
@@ -61,6 +68,8 @@ class _$SignupRequestCopyWithImpl<$Res, $Val extends SignupRequest>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of SignupRequest
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -69,6 +78,7 @@ class _$SignupRequestCopyWithImpl<$Res, $Val extends SignupRequest>
     Object? lastname = freezed,
     Object? firstname = freezed,
     Object? devicetoken = freezed,
+    Object? roleType = freezed,
   }) {
     return _then(_value.copyWith(
       email: freezed == email
@@ -91,6 +101,10 @@ class _$SignupRequestCopyWithImpl<$Res, $Val extends SignupRequest>
           ? _value.devicetoken
           : devicetoken // ignore: cast_nullable_to_non_nullable
               as String?,
+      roleType: freezed == roleType
+          ? _value.roleType
+          : roleType // ignore: cast_nullable_to_non_nullable
+              as String?,
     ) as $Val);
   }
 }
@@ -108,7 +122,8 @@ abstract class _$$SignupRequestImplCopyWith<$Res>
       @JsonKey(name: "password") String? password,
       @JsonKey(name: "lastname") String? lastname,
       @JsonKey(name: "firstname") String? firstname,
-      @JsonKey(name: "device_token") String? devicetoken});
+      @JsonKey(name: "device_token") String? devicetoken,
+      @JsonKey(name: "roleType") String? roleType});
 }
 
 /// @nodoc
@@ -119,6 +134,8 @@ class __$$SignupRequestImplCopyWithImpl<$Res>
       _$SignupRequestImpl _value, $Res Function(_$SignupRequestImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of SignupRequest
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -127,6 +144,7 @@ class __$$SignupRequestImplCopyWithImpl<$Res>
     Object? lastname = freezed,
     Object? firstname = freezed,
     Object? devicetoken = freezed,
+    Object? roleType = freezed,
   }) {
     return _then(_$SignupRequestImpl(
       email: freezed == email
@@ -149,6 +167,10 @@ class __$$SignupRequestImplCopyWithImpl<$Res>
           ? _value.devicetoken
           : devicetoken // ignore: cast_nullable_to_non_nullable
               as String?,
+      roleType: freezed == roleType
+          ? _value.roleType
+          : roleType // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -161,7 +183,8 @@ class _$SignupRequestImpl implements _SignupRequest {
       @JsonKey(name: "password") this.password,
       @JsonKey(name: "lastname") this.lastname,
       @JsonKey(name: "firstname") this.firstname,
-      @JsonKey(name: "device_token") this.devicetoken});
+      @JsonKey(name: "device_token") this.devicetoken,
+      @JsonKey(name: "roleType") this.roleType});
 
   factory _$SignupRequestImpl.fromJson(Map<String, dynamic> json) =>
       _$$SignupRequestImplFromJson(json);
@@ -181,10 +204,13 @@ class _$SignupRequestImpl implements _SignupRequest {
   @override
   @JsonKey(name: "device_token")
   final String? devicetoken;
+  @override
+  @JsonKey(name: "roleType")
+  final String? roleType;
 
   @override
   String toString() {
-    return 'SignupRequest(email: $email, password: $password, lastname: $lastname, firstname: $firstname, devicetoken: $devicetoken)';
+    return 'SignupRequest(email: $email, password: $password, lastname: $lastname, firstname: $firstname, devicetoken: $devicetoken, roleType: $roleType)';
   }
 
   @override
@@ -200,15 +226,19 @@ class _$SignupRequestImpl implements _SignupRequest {
             (identical(other.firstname, firstname) ||
                 other.firstname == firstname) &&
             (identical(other.devicetoken, devicetoken) ||
-                other.devicetoken == devicetoken));
+                other.devicetoken == devicetoken) &&
+            (identical(other.roleType, roleType) ||
+                other.roleType == roleType));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
-      runtimeType, email, password, lastname, firstname, devicetoken);
+      runtimeType, email, password, lastname, firstname, devicetoken, roleType);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of SignupRequest
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$SignupRequestImplCopyWith<_$SignupRequestImpl> get copyWith =>
@@ -224,12 +254,12 @@ class _$SignupRequestImpl implements _SignupRequest {
 
 abstract class _SignupRequest implements SignupRequest {
   const factory _SignupRequest(
-          {@JsonKey(name: "email") final String? email,
-          @JsonKey(name: "password") final String? password,
-          @JsonKey(name: "lastname") final String? lastname,
-          @JsonKey(name: "firstname") final String? firstname,
-          @JsonKey(name: "device_token") final String? devicetoken}) =
-      _$SignupRequestImpl;
+      {@JsonKey(name: "email") final String? email,
+      @JsonKey(name: "password") final String? password,
+      @JsonKey(name: "lastname") final String? lastname,
+      @JsonKey(name: "firstname") final String? firstname,
+      @JsonKey(name: "device_token") final String? devicetoken,
+      @JsonKey(name: "roleType") final String? roleType}) = _$SignupRequestImpl;
 
   factory _SignupRequest.fromJson(Map<String, dynamic> json) =
       _$SignupRequestImpl.fromJson;
@@ -250,7 +280,13 @@ abstract class _SignupRequest implements SignupRequest {
   @JsonKey(name: "device_token")
   String? get devicetoken;
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(name: "roleType")
+  String? get roleType;
+
+  /// Create a copy of SignupRequest
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$SignupRequestImplCopyWith<_$SignupRequestImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -270,8 +306,12 @@ mixin _$SignupResponse {
   @JsonKey(name: "email")
   String? get email => throw _privateConstructorUsedError;
 
+  /// Serializes this SignupResponse to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of SignupResponse
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $SignupResponseCopyWith<SignupResponse> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -299,6 +339,8 @@ class _$SignupResponseCopyWithImpl<$Res, $Val extends SignupResponse>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of SignupResponse
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -351,6 +393,8 @@ class __$$SignupResponseImplCopyWithImpl<$Res>
       _$SignupResponseImpl _value, $Res Function(_$SignupResponseImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of SignupResponse
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -421,11 +465,13 @@ class _$SignupResponseImpl implements _SignupResponse {
             (identical(other.email, email) || other.email == email));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, message, role, userId, email);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of SignupResponse
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$SignupResponseImplCopyWith<_$SignupResponseImpl> get copyWith =>
@@ -462,8 +508,11 @@ abstract class _SignupResponse implements SignupResponse {
   @override
   @JsonKey(name: "email")
   String? get email;
+
+  /// Create a copy of SignupResponse
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$SignupResponseImplCopyWith<_$SignupResponseImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

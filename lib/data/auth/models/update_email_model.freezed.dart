@@ -25,8 +25,12 @@ mixin _$UpdateEmailRequest {
   @JsonKey(name: "userId")
   String? get userId => throw _privateConstructorUsedError;
 
+  /// Serializes this UpdateEmailRequest to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of UpdateEmailRequest
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $UpdateEmailRequestCopyWith<UpdateEmailRequest> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -52,6 +56,8 @@ class _$UpdateEmailRequestCopyWithImpl<$Res, $Val extends UpdateEmailRequest>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of UpdateEmailRequest
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -92,6 +98,8 @@ class __$$UpdateEmailRequestImplCopyWithImpl<$Res>
       $Res Function(_$UpdateEmailRequestImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of UpdateEmailRequest
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -142,11 +150,13 @@ class _$UpdateEmailRequestImpl implements _UpdateEmailRequest {
             (identical(other.userId, userId) || other.userId == userId));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, email, userId);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of UpdateEmailRequest
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$UpdateEmailRequestImplCopyWith<_$UpdateEmailRequestImpl> get copyWith =>
@@ -176,8 +186,11 @@ abstract class _UpdateEmailRequest implements UpdateEmailRequest {
   @override
   @JsonKey(name: "userId")
   String? get userId;
+
+  /// Create a copy of UpdateEmailRequest
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$UpdateEmailRequestImplCopyWith<_$UpdateEmailRequestImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -191,8 +204,12 @@ mixin _$UpdateEmailResponse {
   @JsonKey(name: "message")
   String? get message => throw _privateConstructorUsedError;
 
+  /// Serializes this UpdateEmailResponse to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of UpdateEmailResponse
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $UpdateEmailResponseCopyWith<UpdateEmailResponse> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -216,6 +233,8 @@ class _$UpdateEmailResponseCopyWithImpl<$Res, $Val extends UpdateEmailResponse>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of UpdateEmailResponse
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -249,6 +268,8 @@ class __$$UpdateEmailResponseImplCopyWithImpl<$Res>
       $Res Function(_$UpdateEmailResponseImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of UpdateEmailResponse
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -288,11 +309,13 @@ class _$UpdateEmailResponseImpl implements _UpdateEmailResponse {
             (identical(other.message, message) || other.message == message));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, message);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of UpdateEmailResponse
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$UpdateEmailResponseImplCopyWith<_$UpdateEmailResponseImpl> get copyWith =>
@@ -318,8 +341,11 @@ abstract class _UpdateEmailResponse implements UpdateEmailResponse {
   @override
   @JsonKey(name: "message")
   String? get message;
+
+  /// Create a copy of UpdateEmailResponse
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$UpdateEmailResponseImplCopyWith<_$UpdateEmailResponseImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

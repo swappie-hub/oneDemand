@@ -27,8 +27,12 @@ mixin _$AddCommentsRequest {
   @JsonKey(name: "replyTo")
   String? get replyTo => throw _privateConstructorUsedError;
 
+  /// Serializes this AddCommentsRequest to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of AddCommentsRequest
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $AddCommentsRequestCopyWith<AddCommentsRequest> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -55,6 +59,8 @@ class _$AddCommentsRequestCopyWithImpl<$Res, $Val extends AddCommentsRequest>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of AddCommentsRequest
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -101,6 +107,8 @@ class __$$AddCommentsRequestImplCopyWithImpl<$Res>
       $Res Function(_$AddCommentsRequestImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of AddCommentsRequest
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -161,11 +169,13 @@ class _$AddCommentsRequestImpl implements _AddCommentsRequest {
             (identical(other.replyTo, replyTo) || other.replyTo == replyTo));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, videoId, content, replyTo);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of AddCommentsRequest
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$AddCommentsRequestImplCopyWith<_$AddCommentsRequestImpl> get copyWith =>
@@ -199,8 +209,11 @@ abstract class _AddCommentsRequest implements AddCommentsRequest {
   @override
   @JsonKey(name: "replyTo")
   String? get replyTo;
+
+  /// Create a copy of AddCommentsRequest
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$AddCommentsRequestImplCopyWith<_$AddCommentsRequestImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -214,8 +227,12 @@ mixin _$AddCommentsResponse {
   @JsonKey(name: "success")
   bool? get success => throw _privateConstructorUsedError;
 
+  /// Serializes this AddCommentsResponse to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of AddCommentsResponse
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $AddCommentsResponseCopyWith<AddCommentsResponse> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -239,6 +256,8 @@ class _$AddCommentsResponseCopyWithImpl<$Res, $Val extends AddCommentsResponse>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of AddCommentsResponse
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -272,6 +291,8 @@ class __$$AddCommentsResponseImplCopyWithImpl<$Res>
       $Res Function(_$AddCommentsResponseImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of AddCommentsResponse
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -311,11 +332,13 @@ class _$AddCommentsResponseImpl implements _AddCommentsResponse {
             (identical(other.success, success) || other.success == success));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, success);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of AddCommentsResponse
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$AddCommentsResponseImplCopyWith<_$AddCommentsResponseImpl> get copyWith =>
@@ -341,8 +364,11 @@ abstract class _AddCommentsResponse implements AddCommentsResponse {
   @override
   @JsonKey(name: "success")
   bool? get success;
+
+  /// Create a copy of AddCommentsResponse
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$AddCommentsResponseImplCopyWith<_$AddCommentsResponseImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

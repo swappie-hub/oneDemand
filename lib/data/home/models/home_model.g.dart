@@ -25,7 +25,7 @@ Map<String, dynamic> _$$HomeVideoResponseImplToJson(
 _$VideoImpl _$$VideoImplFromJson(Map<String, dynamic> json) => _$VideoImpl(
       id: json['_id'] as String?,
       title: json['title'] as String?,
-      duration: json['duration'] as int?,
+      duration: (json['duration'] as num?)?.toInt(),
       releaseDateTime: json['releaseDateTime'] == null
           ? null
           : DateTime.parse(json['releaseDateTime'] as String),
@@ -52,8 +52,8 @@ _$TagsDetailImpl _$$TagsDetailImplFromJson(Map<String, dynamic> json) =>
       id: json['_id'] as String?,
       name: json['name'] as String?,
       color: json['color'] as String?,
-      v: json['__v'] as int?,
-      priority: json['priority'] as int?,
+      v: (json['__v'] as num?)?.toInt(),
+      priority: (json['priority'] as num?)?.toInt(),
     );
 
 Map<String, dynamic> _$$TagsDetailImplToJson(_$TagsDetailImpl instance) =>

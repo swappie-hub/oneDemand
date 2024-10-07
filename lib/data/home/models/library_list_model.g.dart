@@ -10,12 +10,15 @@ _$LibraryListRequestImpl _$$LibraryListRequestImplFromJson(
         Map<String, dynamic> json) =>
     _$LibraryListRequestImpl(
       categoryId: json['categoryId'] as String?,
-      startIndex: json['startIndex'] as int?,
-      endIndex: json['endIndex'] as int?,
+      startIndex: (json['startIndex'] as num?)?.toInt(),
+      endIndex: (json['endIndex'] as num?)?.toInt(),
       selectedTags: json['selectedTags'] as String?,
       selectedDurations: json['selectedDurations'] as String?,
       selectedLevels: json['selectedLevels'] as String?,
       sortby: json['sortby'] as String?,
+      selectedInstructors: (json['selectedInstructors'] as List<dynamic>?)
+          ?.map((e) => e as String)
+          .toList(),
       userId: json['userId'] as String?,
     );
 
@@ -29,6 +32,7 @@ Map<String, dynamic> _$$LibraryListRequestImplToJson(
       'selectedDurations': instance.selectedDurations,
       'selectedLevels': instance.selectedLevels,
       'sortby': instance.sortby,
+      'selectedInstructors': instance.selectedInstructors,
       'userId': instance.userId,
     };
 
@@ -54,7 +58,7 @@ _$LibraryVideosDatumImpl _$$LibraryVideosDatumImplFromJson(
       videos: (json['videos'] as List<dynamic>?)
           ?.map((e) => Video.fromJson(e as Map<String, dynamic>))
           .toList(),
-      totalRecords: json['totalRecords'] as int?,
+      totalRecords: (json['totalRecords'] as num?)?.toInt(),
     );
 
 Map<String, dynamic> _$$LibraryVideosDatumImplToJson(
@@ -69,7 +73,7 @@ Map<String, dynamic> _$$LibraryVideosDatumImplToJson(
 _$VideoImpl _$$VideoImplFromJson(Map<String, dynamic> json) => _$VideoImpl(
       id: json['_id'] as String?,
       title: json['title'] as String?,
-      duration: json['duration'] as int?,
+      duration: (json['duration'] as num?)?.toInt(),
       releaseDateTime: json['releaseDateTime'] == null
           ? null
           : DateTime.parse(json['releaseDateTime'] as String),
@@ -96,8 +100,8 @@ _$TagsDetailImpl _$$TagsDetailImplFromJson(Map<String, dynamic> json) =>
       id: json['_id'] as String?,
       name: json['name'] as String?,
       color: json['color'] as String?,
-      v: json['__v'] as int?,
-      priority: json['priority'] as int?,
+      v: (json['__v'] as num?)?.toInt(),
+      priority: (json['priority'] as num?)?.toInt(),
     );
 
 Map<String, dynamic> _$$TagsDetailImplToJson(_$TagsDetailImpl instance) =>

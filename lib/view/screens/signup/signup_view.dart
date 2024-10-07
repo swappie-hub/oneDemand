@@ -22,7 +22,8 @@ class _SignupViewState extends ConsumerState<SignupView> with BaseScreenView {
   bool isChecked = false;
   bool isObscuredPassword = true;
   bool isObscuredCPassword = true;
-
+  List<String> roles = ['Dancer/Parent', 'Dance Instructor', 'Other'];
+  int selectedRole = -1;
   final _formkey = GlobalKey<FormState>();
   @override
   void initState() {
@@ -89,7 +90,7 @@ class _SignupViewState extends ConsumerState<SignupView> with BaseScreenView {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 SizedBox(
-                  height: MediaQuery.of(context).size.height / 8,
+                  height: MediaQuery.of(context).size.height / 11,
                 ),
                 Text(
                   "SIGN-UP",
@@ -338,6 +339,48 @@ class _SignupViewState extends ConsumerState<SignupView> with BaseScreenView {
                           ))),
                 ),
                 gapH8,
+                Wrap(
+                  alignment: WrapAlignment.start,
+                  runSpacing: 16,
+                  children: [
+                    ...List.generate(
+                        roles.length,
+                        (index) => Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                InkWell(
+                                  onTap: () {
+                                    selectedRole = index;
+                                    setState(() {});
+                                  },
+                                  child: Container(
+                                    height: 17,
+                                    width: 17,
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(5),
+                                        color: selectedRole == index
+                                            ? Colors.white
+                                            : Colors.transparent,
+                                        border: Border.all(
+                                            color: Color(0xFFC4C4C4))),
+                                    child: Center(
+                                      child: Icon(
+                                        Icons.check,
+                                        size: 16,
+                                        color: Colors.black,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                gapW12,
+                                Text(roles[index]),
+                                gapW16,
+                              ],
+                            ))
+                  ],
+                ),
+                gapH16,
                 Row(
                   children: [
                     InkWell(
@@ -363,35 +406,37 @@ class _SignupViewState extends ConsumerState<SignupView> with BaseScreenView {
                       ),
                     ),
                     gapW8,
-                    InkWell(
-                      onTap: () {
-                        launchUrl(Uri.parse(
-                            "https://thegodfreymethod.com/pages/terms-conditions"));
-                      },
-                      child: RichText(
-                          text: TextSpan(children: [
-                        TextSpan(
-                          text: "I agree with the ",
-                          style: TextStyle(
-                              color: Color(0xFF71717A),
-                              fontWeight: FontWeight.w400,
-                              fontSize: 12),
-                        ),
-                        TextSpan(
-                            text: "Terms & Conditions",
+                    Expanded(
+                      child: InkWell(
+                        onTap: () {
+                          launchUrl(Uri.parse(
+                              "https://thegodfreymethod.com/pages/terms-conditions"));
+                        },
+                        child: RichText(
+                            text: TextSpan(children: [
+                          TextSpan(
+                            text: "I agree with the ",
                             style: TextStyle(
-                                // decoration: TextDecoration.underline,
-                                color: Color(0xFF0B6386),
-                                fontWeight: FontWeight.bold,
-                                fontSize: 12)),
-                        TextSpan(
-                          text: " of the Godfrey Method",
-                          style: TextStyle(
-                              color: Color(0xFF71717A),
-                              fontWeight: FontWeight.w400,
-                              fontSize: 12),
-                        ),
-                      ])),
+                                color: Color(0xFF71717A),
+                                fontWeight: FontWeight.w400,
+                                fontSize: 12),
+                          ),
+                          TextSpan(
+                              text: "Terms & Conditions",
+                              style: TextStyle(
+                                  // decoration: TextDecoration.underline,
+                                  color: Color(0xFF0B6386),
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 12)),
+                          TextSpan(
+                            text: " of the Godfrey Method",
+                            style: TextStyle(
+                                color: Color(0xFF71717A),
+                                fontWeight: FontWeight.w400,
+                                fontSize: 12),
+                          ),
+                        ])),
+                      ),
                     )
                   ],
                 ),
@@ -400,6 +445,8 @@ class _SignupViewState extends ConsumerState<SignupView> with BaseScreenView {
                   onTap: () {
                     if (!isChecked) {
                       showSnackbar("Please accept the terms and conditions");
+                    } else if (selectedRole == -1) {
+                      showSnackbar("Please select a role");
                     } else {
                       if (_formkey.currentState!.validate()) {
                         _viewModel.signup(
@@ -408,6 +455,7 @@ class _SignupViewState extends ConsumerState<SignupView> with BaseScreenView {
                                 email: _emailController.text,
                                 firstname: _firstNameController.text,
                                 lastname: _lastNameController.text,
+                                roleType: roles[selectedRole],
                                 password: _passwordController.text),
                             context);
                       }
