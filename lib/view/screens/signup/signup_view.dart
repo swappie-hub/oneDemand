@@ -368,7 +368,9 @@ class _SignupViewState extends ConsumerState<SignupView> with BaseScreenView {
                                       child: Icon(
                                         Icons.check,
                                         size: 16,
-                                        color: Colors.black,
+                                        color: selectedRole == index
+                                            ? Colors.black
+                                            : Colors.transparent,
                                       ),
                                     ),
                                   ),
